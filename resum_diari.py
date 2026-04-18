@@ -48,4 +48,22 @@ def obtenir_variacio(ticker):
 def main():
     resultats = []
 
-    for
+    for actiu in ACTIUS:
+        try:
+            preu, var = obtenir_variacio(actiu["ticker"])
+            resultats.append((actiu["nom"], actiu["capa"], var, preu))
+        except Exception as e:
+            print(f"Error amb {actiu['nom']}: {e}")
+
+    pujades = sorted(resultats, key=lambda x: x[2], reverse=True)[:5]
+    caigudes = sorted(resultats, key=lambda x: x[2])[:5]
+
+    missatge = "📊 *Resum diari — Tancament EUA*\n\n"
+
+    missatge += "🔺 *Top pujades*\n"
+    for nom, capa, var, preu in pujades:
+        missatge += f"{nom}: +{var:.2f}% — {preu}\n"
+
+    missatge += "\n🔻 *Top caigudes*\n"
+    for nom, capa, var, preu in caigudes:
+        missatge
