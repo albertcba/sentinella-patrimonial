@@ -1,0 +1,21 @@
+name: Backup Sentinella
+
+on:
+  schedule:
+    - cron: "0 3 1 * *"   # Cada dia 1 a les 03:00 UTC
+  workflow_dispatch:       # Permet executar-lo manualment
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout mirror
+        run: |
+          git clone --mirror https://github.com/albertcba/sentinella.git mirror
+
+      - name: Push to private backup repo
+        run: |
+          cd mirror
+          git remote set-url --push origin https://albertcba:${{ secrets.BACKUP_TOKEN }}@github.com/albertcba/sentinella-backup.git
+          git push --mirror
