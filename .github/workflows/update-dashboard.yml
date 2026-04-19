@@ -48,43 +48,41 @@ jobs:
       - name: Generar data.json per al dashboard
         run: |
           if [ "$TIPUS" = "alerta" ]; then
-            cat <<EOF > data.json
-{
-  "ultima_alerta": {
-    "actiu": "${ACTIU}",
-    "ticker": "${TICKER}",
-    "capa": "${CAPA}",
-    "variacio": ${VARIACIO},
-    "preu": ${PREU},
-    "hora": "${HORA}",
-    "playbook": "${PLAYBOOK}"
-  },
-  "sistema": {
-    "workflow": "sentinella.yml",
-    "freq": "Cada 5 minuts",
-    "estat": "OK",
-    "errors": 0,
-    "actius_monitoritzats": 12
-  }
-}
-EOF
+            printf '%s\n' \
+            "{" \
+            "  \"ultima_alerta\": {" \
+            "    \"actiu\": \"${ACTIU}\"," \
+            "    \"ticker\": \"${TICKER}\"," \
+            "    \"capa\": \"${CAPA}\"," \
+            "    \"variacio\": ${VARIACIO}," \
+            "    \"preu\": ${PREU}," \
+            "    \"hora\": \"${HORA}\"," \
+            "    \"playbook\": \"${PLAYBOOK}\"" \
+            "  }," \
+            "  \"sistema\": {" \
+            "    \"workflow\": \"sentinella.yml\"," \
+            "    \"freq\": \"Cada 5 minuts\"," \
+            "    \"estat\": \"OK\"," \
+            "    \"errors\": 0," \
+            "    \"actius_monitoritzats\": 12" \
+            "  }" \
+            "}" > data.json
           else
-            cat <<EOF > data.json
-{
-  "heartbeat": {
-    "estat": "OK",
-    "hora": "${HEARTBEAT_HORA}",
-    "missatge": "${HEARTBEAT_MSG}"
-  },
-  "sistema": {
-    "workflow": "sentinella.yml",
-    "freq": "Cada 5 minuts",
-    "estat": "OK",
-    "errors": 0,
-    "actius_monitoritzats": 12
-  }
-}
-EOF
+            printf '%s\n' \
+            "{" \
+            "  \"heartbeat\": {" \
+            "    \"estat\": \"OK\"," \
+            "    \"hora\": \"${HEARTBEAT_HORA}\"," \
+            "    \"missatge\": \"${HEARTBEAT_MSG}\"" \
+            "  }," \
+            "  \"sistema\": {" \
+            "    \"workflow\": \"sentinella.yml\"," \
+            "    \"freq\": \"Cada 5 minuts\"," \
+            "    \"estat\": \"OK\"," \
+            "    \"errors\": 0," \
+            "    \"actius_monitoritzats\": 12" \
+            "  }" \
+            "}" > data.json
           fi
 
       - name: Checkout dashboard repo
