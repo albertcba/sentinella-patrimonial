@@ -27,6 +27,13 @@ jobs:
           echo "JSON generat:"
           cat alerta.json
 
+      - name: Comprovar que alerta.json existeix
+        run: |
+          echo "Llistant fitxers:"
+          ls -l
+          echo "Contingut d'alerta.json:"
+          cat alerta.json || echo "alerta.json NO existeix"
+
       - name: Upload alerta.json
         uses: actions/upload-artifact@v4
         with:
