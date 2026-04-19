@@ -20,7 +20,7 @@ jobs:
         run: |
           for i in {1..10}; do
             echo "Intent $i de descarregar artifact..."
-            if gh run download --name alerta --dir alerta 2>/dev/null; then
+            if gh run download ${{ github.event.workflow_run.id }} --name alerta --dir alerta 2>/dev/null; then
               echo "Artifact descarregat!"
               exit 0
             fi
@@ -31,7 +31,6 @@ jobs:
           exit 1
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 
       - name: Checkout dashboard repo
         uses: actions/checkout@v4
