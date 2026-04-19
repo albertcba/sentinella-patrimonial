@@ -1,8 +1,8 @@
 import requests
 import traceback
 from datetime import datetime
-
 import os
+import json
 
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
@@ -44,11 +44,13 @@ ACTIUS = [
     {"ticker": "IBIT",   "nom": "iShares Bitcoin Trust (IBIT)",     "capa": "Macro Hard Assets"},
     {"ticker": "ABTC.SW", "nom": "21Shares Bitcoin ETP (ABTC.SW)",  "capa": "Macro Hard Assets"},
 
-
     # BTC / ETH directes (macro/creixement)
     {"ticker": "BTC-USD","nom": "Bitcoin Spot",                     "capa": "Macro / Creixement"},
     {"ticker": "ETH-USD","nom": "Ethereum Spot",                    "capa": "Macro / Creixement"},
 ]
+
+# --- NOVETAT: variable global per guardar l’última alerta ---
+ULTIMA_ALERTA = None
 
 
 def obtenir_variacio_yahoo(ticker):
@@ -82,15 +84,16 @@ def format_missatge(actiu, preu, variacio):
 
 
 def llindar_variacio(actiu):
-    # Pots refinar per actiu/capa; de moment, simple:
     if actiu["capa"] == "Macro Hard Assets":
-        return -3.0  # alerta si cau més d’un -3%
+        return -3.0
     if "Bitcoin" in actiu["nom"] or "Ethereum" in actiu["nom"]:
         return -4.0
     return -4.0
 
 
 def processar_actiu(actiu):
+    global ULTIMA_ALERTA
+
     ticker = actiu["ticker"]
     print(f"Processant {ticker}...")
 
@@ -109,9 +112,8 @@ def processar_actiu(actiu):
     if variacio <= llindar:
         missatge = format_missatge(actiu, preu, variacio)
         enviar_missatge(missatge)
-        # --- NOVETAT: generar JSON per al workflow ---
-        # Guardar alerta per al JSON final
-        global ULTIMA_ALERTA
+
+        # --- NOVETAT: guardar alerta per al JSON final ---
         ULTIMA_ALERTA = {
             "actiu": actiu["nom"],
             "ticker": actiu["ticker"],
@@ -121,9 +123,7 @@ def processar_actiu(actiu):
             "hora": datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC'),
             "playbook": "revisar possibles entrades / acumulació"
         }
-        # ---------------------------------------------        
     else:
-        # No enviem res si no arriba al llindar; només log
         print(f"{ticker}: variació {variacio:.2f}% (no arriba al llindar {llindar}%)")
 
 
@@ -132,9 +132,8 @@ def main():
     for actiu in ACTIUS:
         processar_actiu(actiu)
     print("Fi sentinella.")
-    
+
     # --- NOVETAT: imprimir JSON final per al workflow ---
-    import json
     if ULTIMA_ALERTA:
         print(json.dumps({"alerta": ULTIMA_ALERTA}))
     else:
@@ -145,7 +144,6 @@ def main():
         }
         print(json.dumps({"heartbeat": heartbeat}))
     # ----------------------------------------------------
-
 
 
 if __name__ == "__main__":
