@@ -9,6 +9,14 @@ DADES_ACTIUS = []
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
+def es_cripto(actiu):
+    return actiu["ticker"] in ["BTC-USD", "ETH-USD"]
+
+def mercat_obert():
+    # Horari ampliat que cobreix Europa i USA
+    hora = datetime.utcnow().hour
+    return 7 <= hora <= 20
+
 if not TOKEN or not CHAT_ID:
     print("⚠️ Falten variables d'entorn TELEGRAM_TOKEN o TELEGRAM_CHAT_ID")
     # No fem raise per no fer fallar el workflow
@@ -96,6 +104,11 @@ def llindar_variacio(actiu):
 def processar_actiu(actiu):
     global ULTIMA_ALERTA
 
+    # Saltar ETFs fora d’horari de mercat
+    if actiu["capa"] == "Macro Hard Assets" and not mercat_obert():
+        print(f"Saltant {actiu['ticker']} (mercat tancat)")
+        return
+    
     ticker = actiu["ticker"]
     print(f"Processant {ticker}...")
 
