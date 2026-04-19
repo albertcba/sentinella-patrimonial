@@ -228,24 +228,24 @@
   <script>
     async function carregarDades() {
       try {
-        const resposta = await fetch('data.json');
+        const resposta = await fetch('data.json?cache=' + Date.now());
         const dades = await resposta.json();
 
         const alertaCard = document.getElementById('alerta-card');
         const heartbeatCard = document.getElementById('heartbeat-card');
 
         // ALERTA
-        if (dades.ultima_alerta) {
+        if (dades.alerta) {
           alertaCard.style.display = "block";
           heartbeatCard.style.display = "none";
 
-          document.getElementById('alert-actiu').textContent = dades.ultima_alerta.actiu;
-          document.getElementById('alert-ticker').textContent = dades.ultima_alerta.ticker;
-          document.getElementById('alert-capa').textContent = dades.ultima_alerta.capa;
-          document.getElementById('alert-variacio').textContent = dades.ultima_alerta.variacio + "%";
-          document.getElementById('alert-preu').textContent = dades.ultima_alerta.preu;
-          document.getElementById('alert-hora').textContent = dades.ultima_alerta.hora;
-          document.getElementById('alert-playbook').textContent = dades.ultima_alerta.playbook;
+          document.getElementById('alert-actiu').textContent = dades.alerta.actiu;
+          document.getElementById('alert-ticker').textContent = dades.alerta.ticker;
+          document.getElementById('alert-capa').textContent = dades.alerta.capa;
+          document.getElementById('alert-variacio').textContent = dades.alerta.variacio + "%";
+          document.getElementById('alert-preu').textContent = dades.alerta.preu;
+          document.getElementById('alert-hora').textContent = dades.alerta.hora;
+          document.getElementById('alert-playbook').textContent = dades.alerta.playbook;
 
         // HEARTBEAT
         } else if (dades.heartbeat) {
@@ -271,6 +271,7 @@
     }
 
     carregarDades();
+    setInterval(carregarDades, 30000); // refresc automàtic 30s
   </script>
 
 </body>
