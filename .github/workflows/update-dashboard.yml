@@ -98,5 +98,5 @@ EOF
           git config user.name "Sentinella Bot"
           git config user.email "bot@github.com"
           git add docs/data.json
-          git commit -m "Actualització automàtica del dashboard" || echo "No hi ha canvis"
+          git commit -m "Actualització automàtica del dashboard" || echo "Sense canvis"
           git push
