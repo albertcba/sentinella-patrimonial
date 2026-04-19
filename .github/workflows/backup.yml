@@ -23,11 +23,3 @@ jobs:
       - name: Clone private backup repo
         run: |
           git clone https://albertcba:${{ secrets.BACKUP_TOKEN }}@github.com/albertcba/sentinella-patrimonial.git backup_repo
-
-      - name: Copy backup into private repo
-        run: |
-          cp sentinella_backup.zip backup_repo/
-          cd backup_repo
-          git add .
-          git commit -m "Backup $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
-          git push https://albertcba:${{ secrets.BACKUP_TOKEN }}@github.com/albertcba/sentinella-backup.git
