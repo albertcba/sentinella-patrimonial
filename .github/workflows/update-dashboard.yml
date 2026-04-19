@@ -2,9 +2,12 @@ name: Actualitzar Dashboard
 
 on:
   workflow_run:
-    workflows: ["sentinella"]
+    workflows:
+      - sentinella
     types:
       - completed
+    branches:
+      - main
 
 jobs:
   update-dashboard:
