@@ -48,7 +48,7 @@ jobs:
       - name: Generar data.json per al dashboard
         run: |
           if [ "$TIPUS" = "alerta" ]; then
-cat <<EOF > data.json
+            cat <<EOF > data.json
 {
   "ultima_alerta": {
     "actiu": "${ACTIU}",
@@ -69,7 +69,7 @@ cat <<EOF > data.json
 }
 EOF
           else
-cat <<EOF > data.json
+            cat <<EOF > data.json
 {
   "heartbeat": {
     "estat": "OK",
