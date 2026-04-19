@@ -1,11 +1,12 @@
 name: sentinella
 
 on:
-  schedule:
-    - cron: "*/5 * * * *"
   workflow_dispatch:
+  schedule:
+    - cron: "*/30 7-17 * * 1-5"
 
 jobs:
+
   run-sentinella:
     runs-on: ubuntu-latest
 
@@ -18,26 +19,49 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install requests
+      - name: Install dependencies
         run: pip install requests
 
-      - name: Executar sentinella
-        run: |
-          python sentinella.py > alerta.json
-          echo "JSON generat:"
-          cat alerta.json
-
-      - name: Comprovar que alerta.json existeix
-        run: |
-          echo "Llistant fitxers:"
-          ls -l
-          echo "Contingut d'alerta.json:"
-          cat alerta.json || echo "alerta.json NO existeix"
+      - name: Run Sentinella
+        run: python sentinella.py
 
       - name: Upload alerta.json
         uses: actions/upload-artifact@v4
         with:
           name: alerta
           path: alerta.json
-      - name: Delay per assegurar indexació d'artifacts
-        run: sleep 15          
+
+
+  update-dashboard:
+    needs: run-sentinella
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+
+      - name: Download alerta.json
+        uses: actions/download-artifact@v4
+        with:
+          name: alerta
+          path: alerta
+
+      - name: Checkout dashboard repo
+        uses: actions/checkout@v4
+        with:
+          repository: albertcba/sentinella-dashboard
+          token: ${{ secrets.DASHBOARD_TOKEN }}
+          path: dashboard
+
+      - name: Copiar JSON al dashboard
+        run: cp alerta/alerta.json dashboard/docs/data.json
+
+      - name: Commit & Push
+        run: |
+          cd dashboard
+          git config user.name "Sentinella Bot"
+          git config user.email "bot@github.com"
+          git add docs/data.json
+          git commit -m "Actualització automàtica del dashboard" || echo "Sense canvis"
+          git push
