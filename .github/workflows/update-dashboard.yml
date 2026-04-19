@@ -29,7 +29,7 @@ jobs:
           path: dashboard
 
       - name: Copiar JSON al dashboard
-        run: cp alerta.json dashboard/docs/data.json
+        run: cp alerta/alerta.json dashboard/docs/data.json
 
       - name: Commit & Push
         run: |
