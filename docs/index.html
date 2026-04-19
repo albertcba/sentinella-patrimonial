@@ -17,14 +17,8 @@
       --success: #48bb78;
       --warning: #ecc94b;
       --border: #2d3748;
-      --font-mono: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --font-mono: "SF Mono", Menlo, Monaco, Consolas, monospace;
       --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
@@ -130,21 +124,11 @@
       text-align: right;
     }
 
-    .value.red {
-      color: var(--danger);
-    }
+    .value.red { color: var(--danger); }
+    .value.green { color: var(--success); }
+    .value.yellow { color: var(--warning); }
 
-    .value.green {
-      color: var(--success);
-    }
-
-    .value.yellow {
-      color: var(--warning);
-    }
-
-    .mono {
-      font-family: var(--font-mono);
-    }
+    .mono { font-family: var(--font-mono); }
 
     .footer {
       margin-top: 10px;
@@ -156,12 +140,11 @@
     }
 
     @media (max-width: 800px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
+      .grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
+
 <body>
   <div class="shell">
     <div class="header">
@@ -175,82 +158,120 @@
     </div>
 
     <div class="grid">
-      <!-- Bloc esquerre: última alerta -->
-      <div class="card">
+
+      <!-- TARGETA ALERTA -->
+      <div class="card" id="alerta-card" style="display:none;">
         <div class="card-header">
           <div class="card-title">Última alerta</div>
           <div class="pill">LIVE FEED</div>
         </div>
+
         <div class="list">
-          <!-- Aquí pots enganxar manualment l’última alerta del bot, o automatitzar-ho més endavant -->
+          <div class="row"><span class="label">Actiu</span><span class="value mono" id="alert-actiu"></span></div>
+          <div class="row"><span class="label">Ticker</span><span class="value mono" id="alert-ticker"></span></div>
+          <div class="row"><span class="label">Capa</span><span class="value mono" id="alert-capa"></span></div>
+          <div class="row"><span class="label">Variació diària</span><span class="value mono red" id="alert-variacio"></span></div>
+          <div class="row"><span class="label">Preu actual</span><span class="value mono" id="alert-preu"></span></div>
+          <div class="row"><span class="label">Hora (UTC)</span><span class="value mono" id="alert-hora"></span></div>
+          <div class="row"><span class="label">Playbook</span><span class="value mono" id="alert-playbook"></span></div>
+        </div>
+      </div>
+
+      <!-- TARGETA HEARTBEAT -->
+      <div class="card" id="heartbeat-card" style="display:none;">
+        <div class="card-header">
+          <div class="card-title">Estat del sistema</div>
+          <div class="pill">HEARTBEAT</div>
+        </div>
+
+        <div class="list">
           <div class="row">
-            <span class="label">Actiu</span>
-            <span class="value mono">iShares S&amp;P 500 Energy (IUES)</span>
+            <span class="label">Estat</span>
+            <span class="value mono green">OK</span>
           </div>
           <div class="row">
-            <span class="label">Ticker</span>
-            <span class="value mono">IUES.L</span>
+            <span class="label">Hora</span>
+            <span class="value mono" id="hb-hora"></span>
           </div>
           <div class="row">
-            <span class="label">Capa</span>
-            <span class="value mono">Macro Hard Assets</span>
-          </div>
-          <div class="row">
-            <span class="label">Variació diària</span>
-            <span class="value mono red">-4.46%</span>
-          </div>
-          <div class="row">
-            <span class="label">Preu actual</span>
-            <span class="value mono">11.36</span>
-          </div>
-          <div class="row">
-            <span class="label">Hora (UTC)</span>
-            <span class="value mono">2026-04-19 06:13</span>
-          </div>
-          <div class="row">
-            <span class="label">Playbook</span>
-            <span class="value mono">Revisar possibles entrades / acumulació</span>
+            <span class="label">Missatge</span>
+            <span class="value mono" id="hb-msg"></span>
           </div>
         </div>
       </div>
 
-      <!-- Bloc dret: estat sistema -->
+      <!-- TARGETA SISTEMA -->
       <div class="card">
         <div class="card-header">
           <div class="card-title">Estat del sistema</div>
           <div class="pill">SENTINEL·LA</div>
         </div>
+
         <div class="list">
-          <div class="row">
-            <span class="label">Workflow</span>
-            <span class="value mono">sentinella.yml</span>
-          </div>
-          <div class="row">
-            <span class="label">Freqüència</span>
-            <span class="value mono">Cada 5 minuts</span>
-          </div>
-          <div class="row">
-            <span class="label">Backend</span>
-            <span class="value mono">Python · GitHub Actions · Telegram Bot</span>
-          </div>
-          <div class="row">
-            <span class="label">Últim estat</span>
-            <span class="value mono green">OK · 0 errors</span>
-          </div>
-          <div class="row">
-            <span class="label">Actius monitoritzats</span>
-            <span class="value mono">Macro Hard Assets layer</span>
-          </div>
+          <div class="row"><span class="label">Workflow</span><span class="value mono" id="sys-workflow"></span></div>
+          <div class="row"><span class="label">Freqüència</span><span class="value mono" id="sys-freq"></span></div>
+          <div class="row"><span class="label">Últim estat</span><span class="value mono green" id="sys-estat"></span></div>
+          <div class="row"><span class="label">Errors</span><span class="value mono" id="sys-errors"></span></div>
+          <div class="row"><span class="label">Actius monitoritzats</span><span class="value mono" id="sys-actius"></span></div>
         </div>
       </div>
+
     </div>
 
-    <!-- Peu -->
     <div class="footer">
       <div>Mode: <span class="mono">Dark · Minimal</span></div>
-      <div>Arquitectura: <span class="mono">Modular · Antifràgil · Read-only dashboard</span></div>
+      <div>Arquitectura: <span class="mono">Modular · Antifràgil</span></div>
     </div>
   </div>
+
+  <!-- JS per carregar el JSON -->
+  <script>
+    async function carregarDades() {
+      try {
+        const resposta = await fetch('data.json');
+        const dades = await resposta.json();
+
+        const alertaCard = document.getElementById('alerta-card');
+        const heartbeatCard = document.getElementById('heartbeat-card');
+
+        // ALERTA
+        if (dades.ultima_alerta) {
+          alertaCard.style.display = "block";
+          heartbeatCard.style.display = "none";
+
+          document.getElementById('alert-actiu').textContent = dades.ultima_alerta.actiu;
+          document.getElementById('alert-ticker').textContent = dades.ultima_alerta.ticker;
+          document.getElementById('alert-capa').textContent = dades.ultima_alerta.capa;
+          document.getElementById('alert-variacio').textContent = dades.ultima_alerta.variacio + "%";
+          document.getElementById('alert-preu').textContent = dades.ultima_alerta.preu;
+          document.getElementById('alert-hora').textContent = dades.ultima_alerta.hora;
+          document.getElementById('alert-playbook').textContent = dades.ultima_alerta.playbook;
+
+        // HEARTBEAT
+        } else if (dades.heartbeat) {
+          alertaCard.style.display = "none";
+          heartbeatCard.style.display = "block";
+
+          document.getElementById('hb-hora').textContent = dades.heartbeat.hora;
+          document.getElementById('hb-msg').textContent = dades.heartbeat.missatge;
+        }
+
+        // SISTEMA
+        if (dades.sistema) {
+          document.getElementById('sys-workflow').textContent = dades.sistema.workflow;
+          document.getElementById('sys-freq').textContent = dades.sistema.freq;
+          document.getElementById('sys-estat').textContent = dades.sistema.estat;
+          document.getElementById('sys-errors').textContent = dades.sistema.errors;
+          document.getElementById('sys-actius').textContent = dades.sistema.actius_monitoritzats;
+        }
+
+      } catch (e) {
+        console.error("Error carregant dades:", e);
+      }
+    }
+
+    carregarDades();
+  </script>
+
 </body>
 </html>
-
