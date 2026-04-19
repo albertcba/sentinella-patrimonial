@@ -109,6 +109,19 @@ def processar_actiu(actiu):
     if variacio <= llindar:
         missatge = format_missatge(actiu, preu, variacio)
         enviar_missatge(missatge)
+        # --- NOVETAT: generar JSON per al workflow ---
+        # Guardar alerta per al JSON final
+        global ULTIMA_ALERTA
+        ULTIMA_ALERTA = {
+            "actiu": actiu["nom"],
+            "ticker": actiu["ticker"],
+            "capa": actiu["capa"],
+            "variacio": round(variacio, 2),
+            "preu": preu,
+            "hora": datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC'),
+            "playbook": "revisar possibles entrades / acumulació"
+        }
+        # ---------------------------------------------        
     else:
         # No enviem res si no arriba al llindar; només log
         print(f"{ticker}: variació {variacio:.2f}% (no arriba al llindar {llindar}%)")
@@ -119,6 +132,20 @@ def main():
     for actiu in ACTIUS:
         processar_actiu(actiu)
     print("Fi sentinella.")
+    
+    # --- NOVETAT: imprimir JSON final per al workflow ---
+    import json
+    if ULTIMA_ALERTA:
+        print(json.dumps({"alerta": ULTIMA_ALERTA}))
+    else:
+        heartbeat = {
+            "estat": "OK",
+            "hora": datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC'),
+            "missatge": "Sense alertes"
+        }
+        print(json.dumps({"heartbeat": heartbeat}))
+    # ----------------------------------------------------
+
 
 
 if __name__ == "__main__":
