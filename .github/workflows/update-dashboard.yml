@@ -16,6 +16,9 @@ jobs:
         with:
           name: alerta
 
+      - name: Checkout sentinella repo
+        uses: actions/checkout@v4
+
       - name: Mostrar JSON rebut
         run: cat alerta.json
 
