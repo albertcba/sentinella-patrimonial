@@ -28,21 +28,11 @@ jobs:
           echo "JSON generat:"
           cat alerta.json
 
-      - name: Comprovar que alerta.json existeix
-        run: |
-          echo "Llistant fitxers:"
-          ls -l
-          echo "Contingut d'alerta.json:"
-          cat alerta.json || echo "alerta.json NO existeix"
-
       - name: Upload alerta.json
         uses: actions/upload-artifact@v4
         with:
           name: alerta
           path: alerta.json
-
-      - name: Delay per assegurar indexació d'artifacts
-        run: sleep 10
 
 
   update-dashboard:
@@ -53,6 +43,8 @@ jobs:
       contents: write
 
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
       - name: Download alerta.json
         uses: actions/download-artifact@v4
@@ -60,19 +52,11 @@ jobs:
           name: alerta
           path: alerta
 
-      - name: Checkout dashboard repo
-        uses: actions/checkout@v4
-        with:
-          repository: albertcba/sentinella-dashboard
-          token: ${{ secrets.DASHBOARD_TOKEN }}
-          path: dashboard
-
-      - name: Copiar JSON al dashboard
-        run: cp alerta/alerta.json dashboard/docs/data.json
+      - name: Actualitzar dashboard
+        run: cp alerta/alerta.json docs/data.json
 
       - name: Commit & Push
         run: |
-          cd dashboard
           git config user.name "Sentinella Bot"
           git config user.email "bot@github.com"
           git add docs/data.json
