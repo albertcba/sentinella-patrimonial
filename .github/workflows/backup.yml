@@ -1,8 +1,8 @@
-name: Backup Sentinella
+name: Backup Sentinella (Clean)
 
 on:
   schedule:
-    - cron: "0 3 1 * *"
+    - cron: "0 3 1 * *"   # Cada dia 1 a les 03:00 UTC
   workflow_dispatch:
 
 jobs:
@@ -10,12 +10,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clone public repo (mirror)
-        run: |
-          git clone --mirror https://albertcba:${{ secrets.BACKUP_TOKEN }}@github.com/albertcba/sentinella-patrimonial.git mirror
+      - name: Checkout public repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
-      - name: Push to private backup repo
+      - name: Prepare clean backup
         run: |
-          cd mirror
-          git remote set-url --push origin https://albertcba:${{ secrets.BACKUP_TOKEN }}@github.com/albertcba/sentinella-backup.git
-          git push --mirror
+          rm -rf .git
+          zip -r sentinella_backup.zip .
+
+      - name: Clone private backup repo
+        run: |
+          git clone https://albertcba:${{ secrets.BACKUP_TOKEN }}@github.com/albertcba/sentinella-patrimonial.git backup_repo
+
+      - name: Copy backup into private repo
+        run: |
+          cp sentinella_backup.zip backup_repo/
+          cd backup_repo
+          git add .
+          git commit -m "Backup $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+          git push https://albertcba:${{ secrets.BACKUP_TOKEN }}@github.com/albertcba/sentinella-backup.git
