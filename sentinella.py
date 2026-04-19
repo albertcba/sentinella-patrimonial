@@ -168,6 +168,9 @@ def main():
         "actius_monitoritzats": len(ACTIUS)
     }
 
+    # NOVETAT: timestamp d’última execució
+    resultat["ultima_execucio"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+
     # SORTIDA JSON FINAL
     print(json.dumps(resultat))
 
