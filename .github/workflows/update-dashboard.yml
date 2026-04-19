@@ -3,7 +3,7 @@ name: Actualitzar Dashboard
 on:
   workflow_run:
     workflows:
-      - sentinella.yml
+      - sentinella
     types:
       - completed
 
