@@ -4,6 +4,8 @@ from datetime import datetime
 import os
 import json
 
+DADES_ACTIUS = []
+
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
@@ -107,6 +109,17 @@ def processar_actiu(actiu):
 
     print(f"{ticker}: {variacio:.2f}%  preu={preu}")
 
+    # Guardar dades per al dashboard
+    DADES_ACTIUS.append({
+        "ticker": actiu["ticker"],
+        "nom": actiu["nom"],
+        "capa": actiu["capa"],
+        "preu": preu,
+        "variacio": round(variacio, 2),
+        "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+    })
+
+    
     llindar = llindar_variacio(actiu)
 
     if variacio <= llindar:
@@ -168,7 +181,10 @@ def main():
         "actius_monitoritzats": len(ACTIUS)
     }
 
-    # NOVETAT: timestamp d’última execució
+    # TAULA D'ACTIUS
+    resultat["actius"] = DADES_ACTIUS
+
+    # TIMESTAMP D'ÚLTIMA EXECUCIÓ
     resultat["ultima_execucio"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
 
     # SORTIDA JSON FINAL
