@@ -42,7 +42,8 @@ ACTIUS = [
     {"ticker": "GLDM",   "nom": "SPDR Gold MiniShares (GLDM)",      "capa": "Macro Hard Assets"},
     {"ticker": "ZGLD.SW","nom": "21Shares Physical Gold (ZGLD)",    "capa": "Macro Hard Assets"},
     {"ticker": "IBIT",   "nom": "iShares Bitcoin Trust (IBIT)",     "capa": "Macro Hard Assets"},
-    {"ticker": "ABTCEUR","nom": "21Shares Bitcoin ETP (ABTCEUR)",   "capa": "Macro Hard Assets"},
+    {"ticker": "ABTC.SW", "nom": "21Shares Bitcoin ETP (ABTC.SW)",  "capa": "Macro Hard Assets"},
+
 
     # BTC / ETH directes (macro/creixement)
     {"ticker": "BTC-USD","nom": "Bitcoin Spot",                     "capa": "Macro / Creixement"},
