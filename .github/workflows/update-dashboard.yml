@@ -1,0 +1,99 @@
+name: Actualitzar Dashboard
+
+on:
+  workflow_run:
+    workflows: ["sentinella"]
+    types:
+      - completed
+
+jobs:
+  update-dashboard:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descarregar artifact alerta.json
+        uses: actions/download-artifact@v4
+        with:
+          name: alerta
+
+      - name: Mostrar JSON rebut
+        run: cat alerta.json
+
+      - name: Llegir JSON del sentinella
+        id: parse
+        run: |
+          if jq -e '.alerta' alerta.json > /dev/null; then
+            echo "TIPUS=alerta" >> $GITHUB_ENV
+            echo "ACTIU=$(jq -r '.alerta.actiu' alerta.json)" >> $GITHUB_ENV
+            echo "TICKER=$(jq -r '.alerta.ticker' alerta.json)" >> $GITHUB_ENV
+            echo "CAPA=$(jq -r '.alerta.capa' alerta.json)" >> $GITHUB_ENV
+            echo "VARIACIO=$(jq -r '.alerta.variacio' alerta.json)" >> $GITHUB_ENV
+            echo "PREU=$(jq -r '.alerta.preu' alerta.json)" >> $GITHUB_ENV
+            echo "HORA=$(jq -r '.alerta.hora' alerta.json)" >> $GITHUB_ENV
+            echo "PLAYBOOK=$(jq -r '.alerta.playbook' alerta.json)" >> $GITHUB_ENV
+          else
+            echo "TIPUS=heartbeat" >> $GITHUB_ENV
+            echo "HEARTBEAT_HORA=$(jq -r '.heartbeat.hora' alerta.json)" >> $GITHUB_ENV
+            echo "HEARTBEAT_MSG=$(jq -r '.heartbeat.missatge' alerta.json)" >> $GITHUB_ENV
+          fi
+
+      - name: Generar data.json per al dashboard
+        run: |
+          if [ "$TIPUS" = "alerta" ]; then
+            cat <<EOF > data.json
+            {
+              "ultima_alerta": {
+                "actiu": "${ACTIU}",
+                "ticker": "${TICKER}",
+                "capa": "${CAPA}",
+                "variacio": ${VARIACIO},
+                "preu": ${PREU},
+                "hora": "${HORA}",
+                "playbook": "${PLAYBOOK}"
+              },
+              "sistema": {
+                "workflow": "sentinella.yml",
+                "freq": "Cada 5 minuts",
+                "estat": "OK",
+                "errors": 0,
+                "actius_monitoritzats": 12
+              }
+            }
+EOF
+          else
+            cat <<EOF > data.json
+            {
+              "heartbeat": {
+                "estat": "OK",
+                "hora": "${HEARTBEAT_HORA}",
+                "missatge": "${HEARTBEAT_MSG}"
+              },
+              "sistema": {
+                "workflow": "sentinella.yml",
+                "freq": "Cada 5 minuts",
+                "estat": "OK",
+                "errors": 0,
+                "actius_monitoritzats": 12
+              }
+            }
+EOF
+          fi
+
+      - name: Checkout dashboard repo
+        uses: actions/checkout@v4
+        with:
+          repository: albertcba/sentinella-dashboard
+          token: ${{ secrets.DASHBOARD_TOKEN }}
+          path: dashboard
+
+      - name: Copiar JSON al dashboard
+        run: cp data.json dashboard/docs/data.json
+
+      - name: Commit & Push
+        run: |
+          cd dashboard
+          git config user.name "Sentinella Bot"
+          git config user.email "bot@github.com"
+          git add docs/data.json
+          git commit -m "Actualització automàtica del dashboard"
+          git push
