@@ -39,3 +39,5 @@ jobs:
         with:
           name: alerta
           path: alerta.json
+      - name: Delay per assegurar indexació d'artifacts
+        run: sleep 15          
