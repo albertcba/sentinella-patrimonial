@@ -11,26 +11,21 @@ jobs:
   update-dashboard:
     runs-on: ubuntu-latest
 
+    permissions:
+      actions: read
+      contents: write
+
     steps:
 
       - name: Esperar 10 segons perquè els artifacts estiguin disponibles
         run: sleep 10      
 
-      - name: Esperar fins que l'artifact estigui disponible
-        run: |
-          for i in {1..10}; do
-            echo "Intent $i de descarregar artifact..."
-            if gh run download ${{ github.event.workflow_run.id }} --name alerta --dir alerta 2>/dev/null; then
-              echo "Artifact descarregat!"
-              exit 0
-            fi
-            echo "No disponible encara. Esperant 3 segons..."
-            sleep 3
-          done
-          echo "ERROR: No s'ha pogut descarregar l'artifact després de 10 intents."
-          exit 1
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Descarregar artifact alerta.json
+        uses: actions/download-artifact@v4
+        with:
+          name: alerta
+          run-id: ${{ github.event.workflow_run.id }}
+          path: alerta
 
       - name: Checkout dashboard repo
         uses: actions/checkout@v4
