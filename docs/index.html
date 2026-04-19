@@ -1,1 +1,256 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <title>Sentinella Patrimonial</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --bg: #05060a;
+      --bg-alt: #0c0f18;
+      --card: #111623;
+      --accent: #4fd1c5;
+      --accent-soft: #2c7a7b;
+      --text: #e2e8f0;
+      --text-muted: #718096;
+      --danger: #f56565;
+      --success: #48bb78;
+      --warning: #ecc94b;
+      --border: #2d3748;
+      --font-mono: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #111827 0, #05060a 55%);
+      color: var(--text);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1100px;
+      background: linear-gradient(135deg, rgba(79,209,197,0.08), transparent);
+      border-radius: 18px;
+      border: 1px solid rgba(79,209,197,0.25);
+      padding: 18px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 12px;
+    }
+
+    .title {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 2fr 1.5fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 12px 14px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+    }
+
+    .pill {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--accent-soft);
+      color: var(--accent);
+      font-family: var(--font-mono);
+    }
+
+    .list {
+      margin-top: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      padding: 3px 0;
+      border-bottom: 1px dashed rgba(45,55,72,0.7);
+    }
+
+    .row:last-child {
+      border-bottom: none;
+    }
+
+    .label {
+      color: var(--text-muted);
+    }
+
+    .value {
+      text-align: right;
+    }
+
+    .value.red {
+      color: var(--danger);
+    }
+
+    .value.green {
+      color: var(--success);
+    }
+
+    .value.yellow {
+      color: var(--warning);
+    }
+
+    .mono {
+      font-family: var(--font-mono);
+    }
+
+    .footer {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    @media (max-width: 800px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="header">
+      <div>
+        <div class="title">Sentinella Patrimonial</div>
+        <div class="subtitle">Monitorització 24/7 · Macro Hard Assets · Alertes Telegram</div>
+      </div>
+      <div class="mono" style="font-size:11px;color:#a0aec0;">
+        Estat: <span style="color:#48bb78;">ONLINE</span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- Bloc esquerre: última alerta -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Última alerta</div>
+          <div class="pill">LIVE FEED</div>
+        </div>
+        <div class="list">
+          <!-- Aquí pots enganxar manualment l’última alerta del bot, o automatitzar-ho més endavant -->
+          <div class="row">
+            <span class="label">Actiu</span>
+            <span class="value mono">iShares S&amp;P 500 Energy (IUES)</span>
+          </div>
+          <div class="row">
+            <span class="label">Ticker</span>
+            <span class="value mono">IUES.L</span>
+          </div>
+          <div class="row">
+            <span class="label">Capa</span>
+            <span class="value mono">Macro Hard Assets</span>
+          </div>
+          <div class="row">
+            <span class="label">Variació diària</span>
+            <span class="value mono red">-4.46%</span>
+          </div>
+          <div class="row">
+            <span class="label">Preu actual</span>
+            <span class="value mono">11.36</span>
+          </div>
+          <div class="row">
+            <span class="label">Hora (UTC)</span>
+            <span class="value mono">2026-04-19 06:13</span>
+          </div>
+          <div class="row">
+            <span class="label">Playbook</span>
+            <span class="value mono">Revisar possibles entrades / acumulació</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bloc dret: estat sistema -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Estat del sistema</div>
+          <div class="pill">SENTINEL·LA</div>
+        </div>
+        <div class="list">
+          <div class="row">
+            <span class="label">Workflow</span>
+            <span class="value mono">sentinella.yml</span>
+          </div>
+          <div class="row">
+            <span class="label">Freqüència</span>
+            <span class="value mono">Cada 5 minuts</span>
+          </div>
+          <div class="row">
+            <span class="label">Backend</span>
+            <span class="value mono">Python · GitHub Actions · Telegram Bot</span>
+          </div>
+          <div class="row">
+            <span class="label">Últim estat</span>
+            <span class="value mono green">OK · 0 errors</span>
+          </div>
+          <div class="row">
+            <span class="label">Actius monitoritzats</span>
+            <span class="value mono">Macro Hard Assets layer</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Peu -->
+    <div class="footer">
+      <div>Mode: <span class="mono">Dark · Minimal</span></div>
+      <div>Arquitectura: <span class="mono">Modular · Antifràgil · Read-only dashboard</span></div>
+    </div>
+  </div>
+</body>
+</html>
 
