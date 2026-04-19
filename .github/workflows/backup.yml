@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Clone public repo (mirror)
         run: |
-          git clone --mirror https://albertcba:${{ secrets.BACKUP_TOKEN }}@github.com/albertcba/sentinella.git mirror
+          git clone --mirror https://albertcba:${{ secrets.BACKUP_TOKEN }}@github.com/albertcba/sentinella-patrimonial.git mirror
 
       - name: Push to private backup repo
         run: |
