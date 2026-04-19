@@ -6,8 +6,6 @@ on:
       - sentinella.yml
     types:
       - completed
-    branches:
-      - main
 
 jobs:
   update-dashboard:
