@@ -44,42 +44,46 @@ jobs:
         run: |
           if [ "$TIPUS" = "alerta" ]; then
             cat <<EOF > data.json
-{
-  "ultima_alerta": {
-    "actiu": "${ACTIU}",
-    "ticker": "${TICKER}",
-    "capa": "${CAPA}",
-    "variacio": ${VARIACIO},
-    "preu": ${PREU},
-    "hora": "${HORA}",
-    "playbook": "${PLAYBOOK}"
-  },
-  "sistema": {
-    "workflow": "sentinella.yml",
-    "freq": "Cada 5 minuts",
-    "estat": "OK",
-    "errors": 0,
-    "actius_monitoritzats": 12
-  }
-}
-EOF
+            {
+            "ultima_alerta": 
+              {
+              "actiu": "${ACTIU}",
+              "ticker": "${TICKER}",
+              "capa": "${CAPA}",
+              "variacio": ${VARIACIO},
+              "preu": ${PREU},
+              "hora": "${HORA}",
+              "playbook": "${PLAYBOOK}"
+              },
+            "sistema": 
+              {
+              "workflow": "sentinella.yml",
+              "freq": "Cada 5 minuts",
+              "estat": "OK",
+              "errors": 0,
+              "actius_monitoritzats": 12
+              }
+            }
+          EOF
           else
             cat <<EOF > data.json
-{
-  "heartbeat": {
-    "estat": "OK",
-    "hora": "${HEARTBEAT_HORA}",
-    "missatge": "${HEARTBEAT_MSG}"
-  },
-  "sistema": {
-    "workflow": "sentinella.yml",
-    "freq": "Cada 5 minuts",
-    "estat": "OK",
-    "errors": 0,
-    "actius_monitoritzats": 12
-  }
-}
-EOF
+            {
+            "heartbeat": 
+              {
+              "estat": "OK",
+              "hora": "${HEARTBEAT_HORA}",
+              "missatge": "${HEARTBEAT_MSG}"
+              },
+            "sistema": 
+              {
+              "workflow": "sentinella.yml",
+              "freq": "Cada 5 minuts",
+              "estat": "OK",
+              "errors": 0,
+              "actius_monitoritzats": 12
+            }
+          }
+          EOF
           fi
 
       - name: Checkout dashboard repo
