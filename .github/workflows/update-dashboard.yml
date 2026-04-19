@@ -1,7 +1,7 @@
 name: Actualitzar Dashboard
 
 on:
-  workflow_run:
+  workflow_dispatch:
     workflows:
       - sentinella
     types:
