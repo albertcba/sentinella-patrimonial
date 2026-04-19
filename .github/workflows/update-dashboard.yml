@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      - name: Esperar 10 segons perquè els artifacts estiguin disponibles
+        run: sleep 10      
+      
       - name: Descarregar artifact alerta.json
         uses: actions/download-artifact@v4
         with:
