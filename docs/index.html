@@ -130,6 +130,37 @@
 
     .mono { font-family: var(--font-mono); }
 
+    /* TAULA D’ACTIUS */
+    .actius-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .actius-table th {
+      text-align: left;
+      padding: 6px 4px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 11px;
+    }
+
+    .actius-table td {
+      padding: 6px 4px;
+      border-bottom: 1px dashed rgba(45,55,72,0.5);
+    }
+
+    .actius-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .variacio-green { color: var(--success); }
+    .variacio-red { color: var(--danger); }
+    .variacio-yellow { color: var(--warning); }
+
     .footer {
       margin-top: 10px;
       display: flex;
@@ -216,6 +247,30 @@
         </div>
       </div>
 
+      <!-- TARGETA TAULA D'ACTIUS -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Actius monitoritzats</div>
+          <div class="pill">MARKET DATA</div>
+        </div>
+
+        <div class="list" style="overflow-x:auto;">
+          <table class="actius-table">
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Ticker</th>
+                <th>Capa</th>
+                <th>Preu</th>
+                <th>Variació</th>
+                <th>Hora</th>
+              </tr>
+            </thead>
+            <tbody id="taula-actius"></tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
 
     <div class="footer">
@@ -263,6 +318,32 @@
           document.getElementById('sys-estat').textContent = dades.sistema.estat;
           document.getElementById('sys-errors').textContent = dades.sistema.errors;
           document.getElementById('sys-actius').textContent = dades.sistema.actius_monitoritzats;
+        }
+
+        // TAULA D'ACTIUS
+        if (dades.actius) {
+          const tbody = document.getElementById('taula-actius');
+          tbody.innerHTML = "";
+
+          dades.actius.forEach(a => {
+            const tr = document.createElement("tr");
+
+            const classeVariacio =
+              a.variacio > 0 ? "variacio-green" :
+              a.variacio < 0 ? "variacio-red" :
+              "variacio-yellow";
+
+            tr.innerHTML = `
+              <td>${a.nom}</td>
+              <td class="mono">${a.ticker}</td>
+              <td>${a.capa}</td>
+              <td class="mono">${a.preu}</td>
+              <td class="mono ${classeVariacio}">${a.variacio}%</td>
+              <td class="mono">${a.hora}</td>
+            `;
+
+            tbody.appendChild(tr);
+          });
         }
 
       } catch (e) {
