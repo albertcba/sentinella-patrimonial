@@ -35,7 +35,6 @@ ACTIUS = [
     {"ticker": "IUUS.L", "nom": "iShares S&P 500 Utilities (IUUS)", "capa": "Macro Hard Assets"},
     {"ticker": "AGAP.L", "nom": "WT Agriculture (AGAP)",            "capa": "Macro Hard Assets"},
     {"ticker": "INFR.L", "nom": "iShares Global Infrastructure",    "capa": "Macro Hard Assets"},
-    {"ticker": "NUUR.L", "nom": "iShares Nuclear Energy (NUUR)",    "capa": "Macro Hard Assets"},
     {"ticker": "URNM.L", "nom": "Sprott Uranium Miners (URNM)",     "capa": "Macro Hard Assets"},
     {"ticker": "SSLV.L", "nom": "Invesco Physical Silver (SSLV)",   "capa": "Macro Hard Assets"},
     {"ticker": "SILJ",   "nom": "Amplify Junior Silver Miners",     "capa": "Macro Hard Assets"},
