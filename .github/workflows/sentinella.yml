@@ -22,14 +22,27 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-      - name: Run Sentinella
-        run: python sentinella.py
+      - name: Executar sentinella i generar alerta.json
+        run: |
+          python sentinella.py > alerta.json
+          echo "JSON generat:"
+          cat alerta.json
+
+      - name: Comprovar que alerta.json existeix
+        run: |
+          echo "Llistant fitxers:"
+          ls -l
+          echo "Contingut d'alerta.json:"
+          cat alerta.json || echo "alerta.json NO existeix"
 
       - name: Upload alerta.json
         uses: actions/upload-artifact@v4
         with:
           name: alerta
           path: alerta.json
+
+      - name: Delay per assegurar indexació d'artifacts
+        run: sleep 10
 
 
   update-dashboard:
