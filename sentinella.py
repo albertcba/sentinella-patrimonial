@@ -134,16 +134,45 @@ def main():
     print("Fi sentinella.")
 
     # --- NOVETAT: imprimir JSON final per al workflow ---
-    if ULTIMA_ALERTA:
-        print(json.dumps({"alerta": ULTIMA_ALERTA}))
-    else:
-        heartbeat = {
-            "estat": "OK",
-            "hora": datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC'),
-            "missatge": "Sense alertes"
-        }
-        print(json.dumps({"heartbeat": heartbeat}))
+    #if ULTIMA_ALERTA:
+    #    print(json.dumps({"alerta": ULTIMA_ALERTA}))
+    #else:
+    #    heartbeat = {
+    #        "estat": "OK",
+    #        "hora": datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC'),
+    #        "missatge": "Sense alertes"
+    #    }
+    #    print(json.dumps({"heartbeat": heartbeat}))
     # ----------------------------------------------------
+
+
+    resultat = {}
+
+    # ALERTA
+    if ULTIMA_ALERTA:
+        resultat["alerta"] = ULTIMA_ALERTA
+
+    # HEARTBEAT
+    else:
+        resultat["heartbeat"] = {
+            "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),
+            "missatge": "Sistema operatiu. Sense alertes."
+        }
+
+    # SISTEMA
+    resultat["sistema"] = {
+        "workflow": "sentinella",
+        "freq": "cada 30 minuts (7h–17h, dill–div)",
+        "estat": "OK",
+        "errors": "0",
+        "actius_monitoritzats": len(ACTIUS)
+    }
+
+    # SORTIDA JSON FINAL
+    print(json.dumps(resultat))
+
+
+
 
 
 if __name__ == "__main__":
