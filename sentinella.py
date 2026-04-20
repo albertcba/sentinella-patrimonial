@@ -183,7 +183,7 @@ def processar_actiu(actiu):
         "capa": actiu["capa"],
         "preu": preu,
         "variacio": round(variacio, 2),
-        "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+        "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),
         "semafor_macro": semafor_macro_actiu(actiu, MACRO)        
     })
 
