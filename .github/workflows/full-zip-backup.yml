@@ -1,0 +1,28 @@
+name: Full ZIP Backup
+
+on:
+  schedule:
+    - cron: "0 3 * * *"   # cada dia a les 03:00 UTC
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout full repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create ZIP of full repository
+        run: |
+          zip -r sentinella-backup.zip . \
+            -x "*.git*"   # exclou només la carpeta .git
+
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sentinella-full-backup
+          path: sentinella-backup.zip
+          retention-days: 90
