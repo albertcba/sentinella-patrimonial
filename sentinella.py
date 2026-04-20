@@ -26,6 +26,7 @@ SENSIBILITAT_MACRO = {
     "REMX":      {"tga": 0, "fed_balance": 1, "tipus_reals": -1},
     "XDWM.L":    {"tga": 0, "fed_balance": 1, "tipus_reals": -1},
     "IUES.L":    {"tga": 1, "fed_balance": 1, "tipus_reals": 0},
+    "IUUS.L":    {"tga": 0, "fed_balance": 1, "tipus_reals": 0},
     "INFR.L":    {"tga": 0, "fed_balance": 1, "tipus_reals": 0},
     "IH2O.L":    {"tga": 0, "fed_balance": 1, "tipus_reals": 0},
     "WCOA.L":    {"tga": 1, "fed_balance": 1, "tipus_reals": 0},
