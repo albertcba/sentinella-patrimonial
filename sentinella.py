@@ -9,6 +9,31 @@ DADES_ACTIUS = []
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
+# --- NOVETAT: indicadors macro (FRED) com a placeholders numèrics ---
+MACRO = {
+    "tga": 0,          # -1 vermell, 0 groc, +1 verd
+    "fed_balance": 0,
+    "tipus_reals": 0,
+}
+
+SENSIBILITAT_MACRO = {
+    "GLDM":      {"tga": 0, "fed": 1, "tipus_reals": -2},
+    "ZGLD.SW":   {"tga": 0, "fed": 1, "tipus_reals": -2},
+    "SSLV.L":    {"tga": 0, "fed": 1, "tipus_reals": -2},
+    "SILJ":      {"tga": 0, "fed": 1, "tipus_reals": -2},
+    "IBIT":      {"tga": 1, "fed": 1, "tipus_reals": -1},
+    "ABTC.SW":   {"tga": 1, "fed": 1, "tipus_reals": -1},
+    "REMX":      {"tga": 0, "fed": 1, "tipus_reals": -1},
+    "XDWM.L":    {"tga": 0, "fed": 1, "tipus_reals": -1},
+    "IUES.L":    {"tga": 1, "fed": 1, "tipus_reals": 0},
+    "INFR.L":    {"tga": 0, "fed": 1, "tipus_reals": 0},
+    "IH2O.L":    {"tga": 0, "fed": 1, "tipus_reals": 0},
+    "WCOA.L":    {"tga": 1, "fed": 1, "tipus_reals": 0},
+    "AGAP.L":    {"tga": 1, "fed": 1, "tipus_reals": 0},
+    "NUUR.L":    {"tga": 0, "fed": 1, "tipus_reals": 0},
+    "URNM.L":    {"tga": 0, "fed": 1, "tipus_reals": 0},
+}
+
 def es_cripto(actiu):
     return actiu["ticker"] in ["BTC-EUR", "ETH-EUR"]
 
@@ -110,6 +135,26 @@ def llindar_variacio(actiu):
     return -4.0
 
 
+def semafor_macro_actiu(actiu, macro):
+    ticker = actiu["ticker"]
+    if ticker not in SENSIBILITAT_MACRO:
+        return None  # no aplicable
+
+    s = SENSIBILITAT_MACRO[ticker]
+    score = (
+        s["tga"] * macro["tga"] +
+        s["fed_balance"] * macro["fed_balance"] +
+        s["tipus_reals"] * macro["tipus_reals"]
+    )
+
+    if score >= 2:
+        return "🟢"
+    if score <= -2:
+        return "🔴"
+    return "🟡"
+
+
+
 def processar_actiu(actiu):
     global ULTIMA_ALERTA
 
@@ -139,6 +184,7 @@ def processar_actiu(actiu):
         "preu": preu,
         "variacio": round(variacio, 2),
         "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+        "semafor_macro": semafor_macro_actiu(actiu, MACRO)        
     })
 
     
@@ -203,6 +249,13 @@ def main():
         "actius_monitoritzats": len(ACTIUS)
     }
 
+    # MACRO
+    resultat["macro"] = {
+        "tga": MACRO["tga"],
+        "fed_balance": MACRO["fed_balance"],
+        "tipus_reals": MACRO["tipus_reals"]
+    }
+    
     # TAULA D'ACTIUS
     resultat["actius"] = DADES_ACTIUS
 
