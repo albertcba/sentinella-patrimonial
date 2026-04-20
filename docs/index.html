@@ -173,6 +173,38 @@
     @media (max-width: 800px) {
       .grid { grid-template-columns: 1fr; }
     }
+
+
+    #macro-card {
+        background: #111;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+        border: 1px solid #222;
+    }
+    
+    #macro-card h2 {
+        margin-top: 0;
+        font-size: 20px;
+        color: #eee;
+    }
+    
+    .macro-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+        font-size: 16px;
+    }
+    
+    .macro-label {
+        color: #aaa;
+    }
+    
+    .macro-value {
+        font-weight: bold;
+        font-size: 18px;
+    }
+  
   </style>
 </head>
 
@@ -254,6 +286,22 @@
           <div class="pill">MARKET DATA</div>
         </div>
 
+      <div id="macro-card" class="card">
+          <h2>Macro Engine</h2>
+          <div class="macro-row">
+              <span class="macro-label">TGA:</span>
+              <span id="macro-tga" class="macro-value">...</span>
+          </div>
+          <div class="macro-row">
+              <span class="macro-label">Fed Balance:</span>
+              <span id="macro-fed" class="macro-value">...</span>
+          </div>
+          <div class="macro-row">
+              <span class="macro-label">Tipus Reals:</span>
+              <span id="macro-tipus" class="macro-value">...</span>
+          </div>
+      </div>
+        
         <div class="list" style="overflow-x:auto;">
           <table class="actius-table">
             <thead>
@@ -355,6 +403,36 @@
 
     carregarDades();
     setInterval(carregarDades, 30000); // refresc automàtic 30s
+
+    function macroEmoji(value) {
+        if (value === 1) return "🟢";
+        if (value === -1) return "🔴";
+        return "🟡";
+    }
+    
+    function macroText(value) {
+        if (value === 1) return " (favorable)";
+        if (value === -1) return " (hostil)";
+        return " (neutre)";
+    }
+    
+    fetch("data.json")
+        .then(r => r.json())
+        .then(data => {
+    
+            // --- TARGETA MACRO ENGINE ---
+            document.getElementById("macro-tga").innerText =
+                macroEmoji(data.macro.tga) + macroText(data.macro.tga);
+    
+            document.getElementById("macro-fed").innerText =
+                macroEmoji(data.macro.fed_balance) + macroText(data.macro.fed_balance);
+    
+            document.getElementById("macro-tipus").innerText =
+                macroEmoji(data.macro.tipus_reals) + macroText(data.macro.tipus_reals);
+    
+            // ... aquí segueix el teu codi existent per omplir la taula d'actius ...
+        });
+
   </script>
 
 </body>
