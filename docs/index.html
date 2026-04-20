@@ -174,37 +174,14 @@
       .grid { grid-template-columns: 1fr; }
     }
 
-
-    #macro-card {
-        background: #111;
-        padding: 20px;
-        border-radius: 10px;
-        margin-bottom: 25px;
-        border: 1px solid #222;
+    #macro-card .value {
+      font-weight: bold;
     }
     
-    #macro-card h2 {
-        margin-top: 0;
-        font-size: 20px;
-        color: #eee;
-    }
+    .macro-green { color: var(--success); }
+    .macro-red { color: var(--danger); }
+    .macro-yellow { color: var(--warning); }
     
-    .macro-row {
-        display: flex;
-        justify-content: space-between;
-        padding: 6px 0;
-        font-size: 16px;
-    }
-    
-    .macro-label {
-        color: #aaa;
-    }
-    
-    .macro-value {
-        font-weight: bold;
-        font-size: 18px;
-    }
-  
   </style>
 </head>
 
@@ -263,6 +240,29 @@
         </div>
       </div>
 
+      <!-- TARGETA MACRO ENGINE -->
+      <div class="card" id="macro-card">
+        <div class="card-header">
+          <div class="card-title">Macro Engine</div>
+          <div class="pill">FRED API</div>
+        </div>
+      
+        <div class="list">
+          <div class="row">
+            <span class="label">TGA</span>
+            <span class="value mono" id="macro-tga"></span>
+          </div>
+          <div class="row">
+            <span class="label">Fed Balance</span>
+            <span class="value mono" id="macro-fed"></span>
+          </div>
+          <div class="row">
+            <span class="label">Tipus Reals</span>
+            <span class="value mono" id="macro-tipus"></span>
+          </div>
+        </div>
+      </div>
+      
       <!-- TARGETA SISTEMA -->
       <div class="card">
         <div class="card-header">
@@ -286,22 +286,6 @@
           <div class="pill">MARKET DATA</div>
         </div>
 
-      <div id="macro-card" class="card">
-          <h2>Macro Engine</h2>
-          <div class="macro-row">
-              <span class="macro-label">TGA:</span>
-              <span id="macro-tga" class="macro-value">...</span>
-          </div>
-          <div class="macro-row">
-              <span class="macro-label">Fed Balance:</span>
-              <span id="macro-fed" class="macro-value">...</span>
-          </div>
-          <div class="macro-row">
-              <span class="macro-label">Tipus Reals:</span>
-              <span id="macro-tipus" class="macro-value">...</span>
-          </div>
-      </div>
-        
         <div class="list" style="overflow-x:auto;">
           <table class="actius-table">
             <thead>
@@ -360,6 +344,31 @@
           document.getElementById('hb-msg').textContent = dades.heartbeat.missatge;
         }
 
+        // --- TARGETA MACRO ENGINE ---
+        if (dades.macro) {
+        
+          function macroEmoji(v) {
+            if (v === 1) return "🟢";
+            if (v === -1) return "🔴";
+            return "🟡";
+          }
+        
+          function macroClass(v) {
+            if (v === 1) return "macro-green";
+            if (v === -1) return "macro-red";
+            return "macro-yellow";
+          }
+        
+          document.getElementById("macro-tga").innerHTML =
+            `<span class="${macroClass(dades.macro.tga)}">${macroEmoji(dades.macro.tga)}</span>`;
+        
+          document.getElementById("macro-fed").innerHTML =
+            `<span class="${macroClass(dades.macro.fed_balance)}">${macroEmoji(dades.macro.fed_balance)}</span>`;
+        
+          document.getElementById("macro-tipus").innerHTML =
+            `<span class="${macroClass(dades.macro.tipus_reals)}">${macroEmoji(dades.macro.tipus_reals)}</span>`;
+        }
+  
         // SISTEMA
         if (dades.sistema) {
           document.getElementById('sys-workflow').textContent = dades.sistema.workflow;
@@ -403,36 +412,6 @@
 
     carregarDades();
     setInterval(carregarDades, 30000); // refresc automàtic 30s
-
-    function macroEmoji(value) {
-        if (value === 1) return "🟢";
-        if (value === -1) return "🔴";
-        return "🟡";
-    }
-    
-    function macroText(value) {
-        if (value === 1) return " (favorable)";
-        if (value === -1) return " (hostil)";
-        return " (neutre)";
-    }
-    
-    fetch("data.json")
-        .then(r => r.json())
-        .then(data => {
-    
-            // --- TARGETA MACRO ENGINE ---
-            document.getElementById("macro-tga").innerText =
-                macroEmoji(data.macro.tga) + macroText(data.macro.tga);
-    
-            document.getElementById("macro-fed").innerText =
-                macroEmoji(data.macro.fed_balance) + macroText(data.macro.fed_balance);
-    
-            document.getElementById("macro-tipus").innerText =
-                macroEmoji(data.macro.tipus_reals) + macroText(data.macro.tipus_reals);
-    
-            // ... aquí segueix el teu codi existent per omplir la taula d'actius ...
-        });
-
   </script>
 
 </body>
