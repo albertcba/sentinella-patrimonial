@@ -264,6 +264,7 @@
                 <th>Preu</th>
                 <th>Variació</th>
                 <th>Hora</th>
+                <th>Macro</th>                
               </tr>
             </thead>
             <tbody id="taula-actius"></tbody>
@@ -340,6 +341,7 @@
               <td class="mono">${a.preu}</td>
               <td class="mono ${classeVariacio}">${a.variacio}%</td>
               <td class="mono">${a.hora}</td>
+              <td class="mono">${a.semafor_macro || ""}</td>              
             `;
 
             tbody.appendChild(tr);
