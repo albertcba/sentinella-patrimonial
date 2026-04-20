@@ -38,25 +38,32 @@ def enviar_missatge(text):
 
 ACTIUS = [
     # Macro Hard Assets
-    {"ticker": "REMX",   "nom": "VanEck Rare Earths (REMX)",        "capa": "Macro Hard Assets"},
-    {"ticker": "IH2O.L", "nom": "iShares Global Water (IH2O)",      "capa": "Macro Hard Assets"},
-    {"ticker": "XDWM.L", "nom": "X MSCI World Materials (XDWM)",    "capa": "Macro Hard Assets"},
-    {"ticker": "IUES.L", "nom": "iShares S&P 500 Energy (IUES)",    "capa": "Macro Hard Assets"},
-    {"ticker": "IUUS.L", "nom": "iShares S&P 500 Utilities (IUUS)", "capa": "Macro Hard Assets"},
-    {"ticker": "AGAP.L", "nom": "WT Agriculture (AGAP)",            "capa": "Macro Hard Assets"},
-    {"ticker": "INFR.L", "nom": "iShares Global Infrastructure",    "capa": "Macro Hard Assets"},
-    {"ticker": "URNM.L", "nom": "Sprott Uranium Miners (URNM)",     "capa": "Macro Hard Assets"},
-    {"ticker": "SSLV.L", "nom": "Invesco Physical Silver (SSLV)",   "capa": "Macro Hard Assets"},
-    {"ticker": "SILJ",   "nom": "Amplify Junior Silver Miners",     "capa": "Macro Hard Assets"},
-    {"ticker": "WCOA.L", "nom": "WisdomTree Enhanced Commodity",    "capa": "Macro Hard Assets"},
-    {"ticker": "GLDM",   "nom": "SPDR Gold MiniShares (GLDM)",      "capa": "Macro Hard Assets"},
-    {"ticker": "ZGLD.SW","nom": "21Shares Physical Gold (ZGLD)",    "capa": "Macro Hard Assets"},
-    {"ticker": "IBIT",   "nom": "iShares Bitcoin Trust (IBIT)",     "capa": "Macro Hard Assets"},
-    {"ticker": "ABTC.SW", "nom": "21Shares Bitcoin ETP (ABTC.SW)",  "capa": "Macro Hard Assets"},
+    {"ticker": "REMX",   "nom": "VanEck Rare Earths (REMX)",                    "capa": "Macro Hard Assets"},
+    {"ticker": "IH2O.L", "nom": "iShares Global Water (IH2O)",                  "capa": "Macro Hard Assets"},
+    {"ticker": "XDWM.L", "nom": "X MSCI World Materials (XDWM)",                "capa": "Macro Hard Assets"},
+    {"ticker": "IUES.L", "nom": "iShares S&P 500 Energy (IUES)",                "capa": "Macro Hard Assets"},
+    {"ticker": "IUUS.L", "nom": "iShares S&P 500 Utilities (IUUS)",             "capa": "Macro Hard Assets"},
+    {"ticker": "AGAP.L", "nom": "WT Agriculture (AGAP)",                        "capa": "Macro Hard Assets"},
+    {"ticker": "INFR.L", "nom": "iShares Global Infrastructure",                "capa": "Macro Hard Assets"},
+    {"ticker": "URNM.L", "nom": "Sprott Uranium Miners (URNM)",                 "capa": "Macro Hard Assets"},
+    {"ticker": "SSLV.L", "nom": "Invesco Physical Silver (SSLV)",               "capa": "Macro Hard Assets"},
+    {"ticker": "SILJ",   "nom": "Amplify Junior Silver Miners",                 "capa": "Macro Hard Assets"},
+    {"ticker": "WCOA.L", "nom": "WisdomTree Enhanced Commodity",                "capa": "Macro Hard Assets"},
+    {"ticker": "GLDM",   "nom": "SPDR Gold MiniShares (GLDM)",                  "capa": "Macro Hard Assets"},
+    {"ticker": "ZGLD.SW","nom": "21Shares Physical Gold (ZGLD)",                "capa": "Macro Hard Assets"},
+    {"ticker": "IBIT",   "nom": "iShares Bitcoin Trust (IBIT)",                 "capa": "Macro Hard Assets"},
+    {"ticker": "ABTC.SW", "nom": "21Shares Bitcoin ETP (ABTC.SW)",              "capa": "Macro Hard Assets"},
 
     # BTC / ETH directes (macro/creixement)
-    {"ticker": "BTC-USD","nom": "Bitcoin Spot",                     "capa": "Macro / Creixement"},
-    {"ticker": "ETH-USD","nom": "Ethereum Spot",                    "capa": "Macro / Creixement"},
+    {"ticker": "BTC-USD","nom": "Bitcoin Spot",                                 "capa": "Macro / Creixement"},
+    {"ticker": "ETH-USD","nom": "Ethereum Spot",                                "capa": "Macro / Creixement"},
+
+    # FACTORS (Prioritat 2)
+    {"ticker": "IWFQ.L", "nom": "iShares Edge MSCI World Quality (IWFQ)",       "capa": "Factors"},
+    {"ticker": "IWVL.L", "nom": "iShares Edge MSCI World Value (IWVL)",         "capa": "Factors"},
+    {"ticker": "IWMO.L", "nom": "iShares Edge MSCI World Momentum (IWMO)",      "capa": "Factors"},
+    {"ticker": "MVOL.L", "nom": "iShares Edge MSCI World Minimum Vol (MVOL)",   "capa": "Factors"},
+    
 ]
 
 # --- NOVETAT: variable global per guardar l’última alerta ---
@@ -96,6 +103,8 @@ def format_missatge(actiu, preu, variacio):
 def llindar_variacio(actiu):
     if actiu["capa"] == "Macro Hard Assets":
         return -3.0
+    if actiu["capa"] == "Factors":
+        return -2.0        
     if "Bitcoin" in actiu["nom"] or "Ethereum" in actiu["nom"]:
         return -4.0
     return -4.0
