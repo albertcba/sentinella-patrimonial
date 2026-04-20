@@ -13,54 +13,71 @@ CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 #   MACRO ENGINE — FRED API
 # ---------------------------------------------------------
 
-def obtenir_fred(series_id):
-    """Retorna (valor_actual, valor_anterior) d'una sèrie FRED."""
+def obtenir_fred_robust(series_id, dies=7):
+    """Retorna una llista de valors numèrics recents d'una sèrie FRED."""
     url = "https://api.stlouisfed.org/fred/series/observations"
     params = {
         "series_id": series_id,
         "api_key": os.getenv("FRED_API_KEY"),
         "file_type": "json",
         "sort_order": "desc",
-        "limit": 2
+        "limit": 10   # agafem més punts per seguretat
     }
 
-    r = requests.get(url, params=params, timeout=10)
+    r = requests.get(url, params=params, timeout=20)
     data = r.json()["observations"]
 
-    actual = float(data[0]["value"])
-    anterior = float(data[1]["value"])
-    return actual, anterior
+    valors = []
+    for obs in data:
+        v = obs["value"]
+        try:
+            valors.append(float(v))
+        except:
+            continue  # ignora valors "." o no numèrics
 
+    if len(valors) < 2:
+        raise ValueError(f"No hi ha prou dades vàlides per {series_id}")
 
-def semafor_tendencia(actual, anterior):
-    """Converteix la tendència en un semàfor numèric."""
-    if actual > anterior * 1.02:
-        return -1   # vermell
-    if actual < anterior * 0.98:
-        return +1   # verd
+    return valors[:dies]  # retornem els més recents
+
+def tendencia_robusta(valors):
+    """Calcula tendència robusta amb mitjanes mòbils."""
+    if len(valors) < 6:
+        return 0  # no hi ha prou dades
+
+    recent = sum(valors[:3]) / 3
+    passat = sum(valors[3:6]) / 3
+
+    canvi = (recent - passat) / passat * 100
+
+    if canvi > 2:
+        return -1   # vermell (tendeix a pujar)
+    if canvi < -2:
+        return +1   # verd (tendeix a baixar)
     return 0        # groc
 
-
 def obtenir_macro():
-    """Construeix el MACRO dict amb semàfors automàtics."""
     try:
-        tga_act, tga_ant = obtenir_fred("WTREGEN")
-        fed_act, fed_ant = obtenir_fred("WALCL")
-        tr_act, tr_ant = obtenir_fred("DFII10")
+        tga_vals = obtenir_fred_robust("WTREGEN")
+        fed_vals = obtenir_fred_robust("WALCL")
+        tr_vals  = obtenir_fred_robust("DFII10")
 
         return {
-            "tga": semafor_tendencia(tga_act, tga_ant),
-            "fed_balance": semafor_tendencia(fed_act, fed_ant),
-            "tipus_reals": semafor_tendencia(tr_act, tr_ant)
+            "tga": tendencia_robusta(tga_vals),
+            "fed_balance": tendencia_robusta(fed_vals),
+            "tipus_reals": tendencia_robusta(tr_vals)
         }
 
     except Exception as e:
-        print("⚠️ Error obtenint dades macro:", e)
+        print("⚠️ Error robust Macro Engine:", e)
         return {"tga": 0, "fed_balance": 0, "tipus_reals": 0}
+
 
 
 # --- MACRO REAL (ja no és placeholder)
 MACRO = obtenir_macro()
+print("DEBUG MACRO:", MACRO)
+
 
 # ---------------------------------------------------------
 #   SENSIBILITAT MACRO PER ACTIU
