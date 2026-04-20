@@ -29,7 +29,7 @@ jobs:
 
       - name: Executar sentinella i generar alerta.json
         run: |
-          python sentinella.py > alerta.json
+          python sentinella.py | tail -n 1 > alerta.json
           echo "JSON generat:"
           cat alerta.json
 
