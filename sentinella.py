@@ -10,7 +10,7 @@ TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 def es_cripto(actiu):
-    return actiu["ticker"] in ["BTC-USD", "ETH-USD"]
+    return actiu["ticker"] in ["BTC-EUR", "ETH-EUR"]
 
 def mercat_obert():
     # Horari ampliat que cobreix Europa i USA
@@ -55,8 +55,8 @@ ACTIUS = [
     {"ticker": "ABTC.SW", "nom": "21Shares Bitcoin ETP (ABTC.SW)",              "capa": "Macro Hard Assets"},
 
     # BTC / ETH directes (macro/creixement)
-    {"ticker": "BTC-USD","nom": "Bitcoin Spot",                                 "capa": "Macro / Creixement"},
-    {"ticker": "ETH-USD","nom": "Ethereum Spot",                                "capa": "Macro / Creixement"},
+    {"ticker": "BTC-EUR","nom": "Bitcoin Spot",                                 "capa": "Macro / Creixement"},
+    {"ticker": "ETH-EUR","nom": "Ethereum Spot",                                "capa": "Macro / Creixement"},
 
     # FACTORS (Prioritat 2)
     {"ticker": "IWFQ.L", "nom": "iShares Edge MSCI World Quality (IWFQ)",       "capa": "Factors"},
