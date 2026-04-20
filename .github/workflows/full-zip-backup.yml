@@ -2,7 +2,7 @@ name: Full ZIP Backup
 
 on:
   schedule:
-    - cron: "0 3 * * *"   # cada dia a les 03:00 UTC
+    - cron: "0 3 * * *"
   workflow_dispatch:
 
 jobs:
@@ -15,10 +15,17 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: List repo contents (debug)
+        run: |
+          echo "=== ROOT CONTENTS ==="
+          ls -la
+          echo "=== WORKFLOWS ==="
+          ls -la .github/workflows || echo "No workflows found"
+
       - name: Create ZIP of full repository
         run: |
           zip -r sentinella-backup.zip . \
-            -x "*.git*"   # exclou només la carpeta .git
+            -x ".git/*"
 
       - name: Upload ZIP artifact
         uses: actions/upload-artifact@v4
