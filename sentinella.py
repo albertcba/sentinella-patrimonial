@@ -76,7 +76,7 @@ def obtenir_macro():
 
 # --- MACRO REAL (ja no és placeholder)
 MACRO = obtenir_macro()
-print("DEBUG MACRO:", MACRO)
+# print("DEBUG MACRO:", MACRO)
 
 
 # ---------------------------------------------------------
@@ -295,7 +295,7 @@ def main():
     resultat["ultima_execucio"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
 
     print(json.dumps(resultat))
-    print("DEBUG MACRO:", MACRO)
+    # print("DEBUG MACRO:", MACRO)
 
 
 if __name__ == "__main__":
