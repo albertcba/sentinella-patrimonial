@@ -17,21 +17,21 @@ MACRO = {
 }
 
 SENSIBILITAT_MACRO = {
-    "GLDM":      {"tga": 0, "fed": 1, "tipus_reals": -2},
-    "ZGLD.SW":   {"tga": 0, "fed": 1, "tipus_reals": -2},
-    "SSLV.L":    {"tga": 0, "fed": 1, "tipus_reals": -2},
-    "SILJ":      {"tga": 0, "fed": 1, "tipus_reals": -2},
-    "IBIT":      {"tga": 1, "fed": 1, "tipus_reals": -1},
-    "ABTC.SW":   {"tga": 1, "fed": 1, "tipus_reals": -1},
-    "REMX":      {"tga": 0, "fed": 1, "tipus_reals": -1},
-    "XDWM.L":    {"tga": 0, "fed": 1, "tipus_reals": -1},
-    "IUES.L":    {"tga": 1, "fed": 1, "tipus_reals": 0},
-    "INFR.L":    {"tga": 0, "fed": 1, "tipus_reals": 0},
-    "IH2O.L":    {"tga": 0, "fed": 1, "tipus_reals": 0},
-    "WCOA.L":    {"tga": 1, "fed": 1, "tipus_reals": 0},
-    "AGAP.L":    {"tga": 1, "fed": 1, "tipus_reals": 0},
-    "NUUR.L":    {"tga": 0, "fed": 1, "tipus_reals": 0},
-    "URNM.L":    {"tga": 0, "fed": 1, "tipus_reals": 0},
+    "GLDM":      {"tga": 0, "fed_balance": 1, "tipus_reals": -2},
+    "ZGLD.SW":   {"tga": 0, "fed_balance": 1, "tipus_reals": -2},
+    "SSLV.L":    {"tga": 0, "fed_balance": 1, "tipus_reals": -2},
+    "SILJ":      {"tga": 0, "fed_balance": 1, "tipus_reals": -2},
+    "IBIT":      {"tga": 1, "fed_balance": 1, "tipus_reals": -1},
+    "ABTC.SW":   {"tga": 1, "fed_balance": 1, "tipus_reals": -1},
+    "REMX":      {"tga": 0, "fed_balance": 1, "tipus_reals": -1},
+    "XDWM.L":    {"tga": 0, "fed_balance": 1, "tipus_reals": -1},
+    "IUES.L":    {"tga": 1, "fed_balance": 1, "tipus_reals": 0},
+    "INFR.L":    {"tga": 0, "fed_balance": 1, "tipus_reals": 0},
+    "IH2O.L":    {"tga": 0, "fed_balance": 1, "tipus_reals": 0},
+    "WCOA.L":    {"tga": 1, "fed_balance": 1, "tipus_reals": 0},
+    "AGAP.L":    {"tga": 1, "fed_balance": 1, "tipus_reals": 0},
+    "NUUR.L":    {"tga": 0, "fed_balance": 1, "tipus_reals": 0},
+    "URNM.L":    {"tga": 0, "fed_balance": 1, "tipus_reals": 0},
 }
 
 def es_cripto(actiu):
