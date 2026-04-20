@@ -278,6 +278,7 @@ def main():
     resultat["ultima_execucio"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
 
     print(json.dumps(resultat))
+    print("DEBUG MACRO:", MACRO)
 
 
 if __name__ == "__main__":
