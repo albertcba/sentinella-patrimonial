@@ -9,12 +9,62 @@ DADES_ACTIUS = []
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
-# --- NOVETAT: indicadors macro (FRED) com a placeholders numèrics ---
-MACRO = {
-    "tga": 0,          # -1 vermell, 0 groc, +1 verd
-    "fed_balance": 0,
-    "tipus_reals": 0,
-}
+# ---------------------------------------------------------
+#   MACRO ENGINE — FRED API
+# ---------------------------------------------------------
+
+def obtenir_fred(series_id):
+    """Retorna (valor_actual, valor_anterior) d'una sèrie FRED."""
+    url = "https://api.stlouisfed.org/fred/series/observations"
+    params = {
+        "series_id": series_id,
+        "api_key": os.getenv("FRED_API_KEY"),
+        "file_type": "json",
+        "sort_order": "desc",
+        "limit": 2
+    }
+
+    r = requests.get(url, params=params, timeout=10)
+    data = r.json()["observations"]
+
+    actual = float(data[0]["value"])
+    anterior = float(data[1]["value"])
+    return actual, anterior
+
+
+def semafor_tendencia(actual, anterior):
+    """Converteix la tendència en un semàfor numèric."""
+    if actual > anterior * 1.02:
+        return -1   # vermell
+    if actual < anterior * 0.98:
+        return +1   # verd
+    return 0        # groc
+
+
+def obtenir_macro():
+    """Construeix el MACRO dict amb semàfors automàtics."""
+    try:
+        tga_act, tga_ant = obtenir_fred("WTREGEN")
+        fed_act, fed_ant = obtenir_fred("WALCL")
+        tr_act, tr_ant = obtenir_fred("DFII10")
+
+        return {
+            "tga": semafor_tendencia(tga_act, tga_ant),
+            "fed_balance": semafor_tendencia(fed_act, fed_ant),
+            "tipus_reals": semafor_tendencia(tr_act, tr_ant)
+        }
+
+    except Exception as e:
+        print("⚠️ Error obtenint dades macro:", e)
+        return {"tga": 0, "fed_balance": 0, "tipus_reals": 0}
+
+
+# --- MACRO REAL (ja no és placeholder)
+MACRO = obtenir_macro()
+
+# ---------------------------------------------------------
+#   SENSIBILITAT MACRO PER ACTIU
+# ---------------------------------------------------------
 
 SENSIBILITAT_MACRO = {
     "GLDM":      {"tga": 0, "fed_balance": 1, "tipus_reals": -2},
@@ -35,25 +85,25 @@ SENSIBILITAT_MACRO = {
     "URNM.L":    {"tga": 0, "fed_balance": 1, "tipus_reals": 0},
 }
 
+# ---------------------------------------------------------
+#   FUNCIONS EXISTENTS
+# ---------------------------------------------------------
+
 def es_cripto(actiu):
     return actiu["ticker"] in ["BTC-EUR", "ETH-EUR"]
 
 def mercat_obert():
-    # Horari ampliat que cobreix Europa i USA
     hora = datetime.utcnow().hour
     return 7 <= hora <= 20
 
 if not TOKEN or not CHAT_ID:
     print("⚠️ Falten variables d'entorn TELEGRAM_TOKEN o TELEGRAM_CHAT_ID")
-    # No fem raise per no fer fallar el workflow
-
 
 def enviar_missatge(text):
     if not TOKEN or not CHAT_ID:
         print("Missatge NO enviat (faltan credencials Telegram):")
         print(text)
         return
-
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
     params = {"chat_id": CHAT_ID, "text": text}
     try:
@@ -63,53 +113,69 @@ def enviar_missatge(text):
 
 
 ACTIUS = [
-    # Macro Hard Assets
-    {"ticker": "REMX",   "nom": "VanEck Rare Earths (REMX)",                    "capa": "Macro Hard Assets"},
-    {"ticker": "IH2O.L", "nom": "iShares Global Water (IH2O)",                  "capa": "Macro Hard Assets"},
-    {"ticker": "XDWM.L", "nom": "X MSCI World Materials (XDWM)",                "capa": "Macro Hard Assets"},
-    {"ticker": "IUES.L", "nom": "iShares S&P 500 Energy (IUES)",                "capa": "Macro Hard Assets"},
-    {"ticker": "IUUS.L", "nom": "iShares S&P 500 Utilities (IUUS)",             "capa": "Macro Hard Assets"},
-    {"ticker": "AGAP.L", "nom": "WT Agriculture (AGAP)",                        "capa": "Macro Hard Assets"},
-    {"ticker": "INFR.L", "nom": "iShares Global Infrastructure",                "capa": "Macro Hard Assets"},
-    {"ticker": "URNM.L", "nom": "Sprott Uranium Miners (URNM)",                 "capa": "Macro Hard Assets"},
-    {"ticker": "SSLV.L", "nom": "Invesco Physical Silver (SSLV)",               "capa": "Macro Hard Assets"},
-    {"ticker": "SILJ",   "nom": "Amplify Junior Silver Miners",                 "capa": "Macro Hard Assets"},
-    {"ticker": "WCOA.L", "nom": "WisdomTree Enhanced Commodity",                "capa": "Macro Hard Assets"},
-    {"ticker": "GLDM",   "nom": "SPDR Gold MiniShares (GLDM)",                  "capa": "Macro Hard Assets"},
-    {"ticker": "ZGLD.SW","nom": "21Shares Physical Gold (ZGLD)",                "capa": "Macro Hard Assets"},
-    {"ticker": "IBIT",   "nom": "iShares Bitcoin Trust (IBIT)",                 "capa": "Macro Hard Assets"},
-    {"ticker": "ABTC.SW", "nom": "21Shares Bitcoin ETP (ABTC.SW)",              "capa": "Macro Hard Assets"},
+    {"ticker": "REMX", "nom": "VanEck Rare Earths (REMX)", "capa": "Macro Hard Assets"},
+    {"ticker": "IH2O.L", "nom": "iShares Global Water (IH2O)", "capa": "Macro Hard Assets"},
+    {"ticker": "XDWM.L", "nom": "X MSCI World Materials (XDWM)", "capa": "Macro Hard Assets"},
+    {"ticker": "IUES.L", "nom": "iShares S&P 500 Energy (IUES)", "capa": "Macro Hard Assets"},
+    {"ticker": "IUUS.L", "nom": "iShares S&P 500 Utilities (IUUS)", "capa": "Macro Hard Assets"},
+    {"ticker": "AGAP.L", "nom": "WT Agriculture (AGAP)", "capa": "Macro Hard Assets"},
+    {"ticker": "INFR.L", "nom": "iShares Global Infrastructure", "capa": "Macro Hard Assets"},
+    {"ticker": "URNM.L", "nom": "Sprott Uranium Miners (URNM)", "capa": "Macro Hard Assets"},
+    {"ticker": "SSLV.L", "nom": "Invesco Physical Silver (SSLV)", "capa": "Macro Hard Assets"},
+    {"ticker": "SILJ", "nom": "Amplify Junior Silver Miners", "capa": "Macro Hard Assets"},
+    {"ticker": "WCOA.L", "nom": "WisdomTree Enhanced Commodity", "capa": "Macro Hard Assets"},
+    {"ticker": "GLDM", "nom": "SPDR Gold MiniShares (GLDM)", "capa": "Macro Hard Assets"},
+    {"ticker": "ZGLD.SW", "nom": "21Shares Physical Gold (ZGLD)", "capa": "Macro Hard Assets"},
+    {"ticker": "IBIT", "nom": "iShares Bitcoin Trust (IBIT)", "capa": "Macro Hard Assets"},
+    {"ticker": "ABTC.SW", "nom": "21Shares Bitcoin ETP (ABTC.SW)", "capa": "Macro Hard Assets"},
 
-    # BTC / ETH directes (macro/creixement)
-    {"ticker": "BTC-EUR","nom": "Bitcoin Spot",                                 "capa": "Macro / Creixement"},
-    {"ticker": "ETH-EUR","nom": "Ethereum Spot",                                "capa": "Macro / Creixement"},
+    {"ticker": "BTC-EUR", "nom": "Bitcoin Spot", "capa": "Macro / Creixement"},
+    {"ticker": "ETH-EUR", "nom": "Ethereum Spot", "capa": "Macro / Creixement"},
 
-    # FACTORS (Prioritat 2)
-    {"ticker": "IWFQ.L", "nom": "iShares Edge MSCI World Quality (IWFQ)",       "capa": "Factors"},
-    {"ticker": "IWVL.L", "nom": "iShares Edge MSCI World Value (IWVL)",         "capa": "Factors"},
-    {"ticker": "IWMO.L", "nom": "iShares Edge MSCI World Momentum (IWMO)",      "capa": "Factors"},
-    {"ticker": "MVOL.L", "nom": "iShares Edge MSCI World Minimum Vol (MVOL)",   "capa": "Factors"},
-    
+    {"ticker": "IWFQ.L", "nom": "iShares Edge MSCI World Quality (IWFQ)", "capa": "Factors"},
+    {"ticker": "IWVL.L", "nom": "iShares Edge MSCI World Value (IWVL)", "capa": "Factors"},
+    {"ticker": "IWMO.L", "nom": "iShares Edge MSCI World Momentum (IWMO)", "capa": "Factors"},
+    {"ticker": "MVOL.L", "nom": "iShares Edge MSCI World Minimum Vol (MVOL)", "capa": "Factors"},
 ]
 
-# --- NOVETAT: variable global per guardar l’última alerta ---
 ULTIMA_ALERTA = None
 
+# ---------------------------------------------------------
+#   SEMÀFOR MACRO PER ACTIU
+# ---------------------------------------------------------
+
+def semafor_macro_actiu(actiu, macro):
+    ticker = actiu["ticker"]
+    if ticker not in SENSIBILITAT_MACRO:
+        return None
+
+    s = SENSIBILITAT_MACRO[ticker]
+    score = (
+        s["tga"] * macro["tga"] +
+        s["fed_balance"] * macro["fed_balance"] +
+        s["tipus_reals"] * macro["tipus_reals"]
+    )
+
+    if score >= 2:
+        return "🟢"
+    if score <= -2:
+        return "🔴"
+    return "🟡"
+
+# ---------------------------------------------------------
+#   PROCESSAMENT D'ACTIUS
+# ---------------------------------------------------------
 
 def obtenir_variacio_yahoo(ticker):
     url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}"
     headers = {"User-Agent": "Mozilla/5.0"}
-
     r = requests.get(url, headers=headers, timeout=15)
     data = r.json()
-
     result = data["chart"]["result"][0]
     meta = result["meta"]
-
     preu_actual = meta["regularMarketPrice"]
     preu_obertura = meta["chartPreviousClose"]
     variacio = ((preu_actual - preu_obertura) / preu_obertura) * 100
-
     return preu_actual, variacio
 
 
@@ -130,40 +196,19 @@ def llindar_variacio(actiu):
     if actiu["capa"] == "Macro Hard Assets":
         return -3.0
     if actiu["capa"] == "Factors":
-        return -2.0        
+        return -2.0
     if "Bitcoin" in actiu["nom"] or "Ethereum" in actiu["nom"]:
         return -4.0
     return -4.0
 
 
-def semafor_macro_actiu(actiu, macro):
-    ticker = actiu["ticker"]
-    if ticker not in SENSIBILITAT_MACRO:
-        return None  # no aplicable
-
-    s = SENSIBILITAT_MACRO[ticker]
-    score = (
-        s["tga"] * macro["tga"] +
-        s["fed_balance"] * macro["fed_balance"] +
-        s["tipus_reals"] * macro["tipus_reals"]
-    )
-
-    if score >= 2:
-        return "🟢"
-    if score <= -2:
-        return "🔴"
-    return "🟡"
-
-
-
 def processar_actiu(actiu):
     global ULTIMA_ALERTA
 
-    # Saltar ETFs fora d’horari de mercat
     if actiu["capa"] == "Macro Hard Assets" and not mercat_obert():
         print(f"Saltant {actiu['ticker']} (mercat tancat)")
         return
-    
+
     ticker = actiu["ticker"]
     print(f"Processant {ticker}...")
 
@@ -177,7 +222,6 @@ def processar_actiu(actiu):
 
     print(f"{ticker}: {variacio:.2f}%  preu={preu}")
 
-    # Guardar dades per al dashboard
     DADES_ACTIUS.append({
         "ticker": actiu["ticker"],
         "nom": actiu["nom"],
@@ -185,17 +229,15 @@ def processar_actiu(actiu):
         "preu": preu,
         "variacio": round(variacio, 2),
         "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),
-        "semafor_macro": semafor_macro_actiu(actiu, MACRO)        
+        "semafor_macro": semafor_macro_actiu(actiu, MACRO)
     })
 
-    
     llindar = llindar_variacio(actiu)
 
     if variacio <= llindar:
         missatge = format_missatge(actiu, preu, variacio)
         enviar_missatge(missatge)
 
-        # --- NOVETAT: guardar alerta per al JSON final ---
         ULTIMA_ALERTA = {
             "actiu": actiu["nom"],
             "ticker": actiu["ticker"],
@@ -205,8 +247,6 @@ def processar_actiu(actiu):
             "hora": datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC'),
             "playbook": "revisar possibles entrades / acumulació"
         }
-    else:
-        print(f"{ticker}: variació {variacio:.2f}% (no arriba al llindar {llindar}%)")
 
 
 def main():
@@ -215,33 +255,16 @@ def main():
         processar_actiu(actiu)
     print("Fi sentinella.")
 
-    # --- NOVETAT: imprimir JSON final per al workflow ---
-    #if ULTIMA_ALERTA:
-    #    print(json.dumps({"alerta": ULTIMA_ALERTA}))
-    #else:
-    #    heartbeat = {
-    #        "estat": "OK",
-    #        "hora": datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC'),
-    #        "missatge": "Sense alertes"
-    #    }
-    #    print(json.dumps({"heartbeat": heartbeat}))
-    # ----------------------------------------------------
-
-
     resultat = {}
 
-    # ALERTA
     if ULTIMA_ALERTA:
         resultat["alerta"] = ULTIMA_ALERTA
-
-    # HEARTBEAT
     else:
         resultat["heartbeat"] = {
             "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),
             "missatge": "Sistema operatiu. Sense alertes."
         }
 
-    # SISTEMA
     resultat["sistema"] = {
         "workflow": "sentinella",
         "freq": "cada 30 minuts (7h–17h, dill–div)",
@@ -250,24 +273,11 @@ def main():
         "actius_monitoritzats": len(ACTIUS)
     }
 
-    # MACRO
-    resultat["macro"] = {
-        "tga": MACRO["tga"],
-        "fed_balance": MACRO["fed_balance"],
-        "tipus_reals": MACRO["tipus_reals"]
-    }
-    
-    # TAULA D'ACTIUS
+    resultat["macro"] = MACRO
     resultat["actius"] = DADES_ACTIUS
-
-    # TIMESTAMP D'ÚLTIMA EXECUCIÓ
     resultat["ultima_execucio"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
 
-    # SORTIDA JSON FINAL
     print(json.dumps(resultat))
-
-
-
 
 
 if __name__ == "__main__":
