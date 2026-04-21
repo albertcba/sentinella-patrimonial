@@ -57,16 +57,28 @@ ACTIUS = [
 def obtenir_variacio(ticker):
     url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}"
     headers = {"User-Agent": "Mozilla/5.0"}
+
     r = requests.get(url, headers=headers, timeout=15)
     data = r.json()
 
-    meta = data["chart"]["result"][0]["meta"]
-    preu = meta["regularMarketPrice"]
-    obertura = meta["chartPreviousClose"]
+    # Validacions robustes
+    if "chart" not in data or data["chart"]["result"] is None:
+        raise ValueError(f"Yahoo no retorna dades per {ticker}")
+
+    result = data["chart"]["result"][0]
+    meta = result.get("meta")
+
+    if not meta:
+        raise ValueError(f"Meta buida per {ticker}")
+
+    preu = meta.get("regularMarketPrice")
+    obertura = meta.get("chartPreviousClose")
+
+    if preu is None or obertura is None:
+        raise ValueError(f"Preu o obertura no disponibles per {ticker}")
 
     variacio = ((preu - obertura) / obertura) * 100
     return preu, variacio
-
 
 # ───────────────────────────────────────────────
 #   MAIN
