@@ -181,6 +181,22 @@
     .macro-green { color: var(--success); }
     .macro-red { color: var(--danger); }
     .macro-yellow { color: var(--warning); }
+
+  .legend-box {
+    margin-top: 8px;
+    padding: 8px 10px;
+    border-left: 2px solid var(--accent-soft);
+    background: rgba(255,255,255,0.02);
+    border-radius: 6px;
+  }
+
+  .legend-line {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    margin: 3px 0;
+  }
+
     
   </style>
 </head>
@@ -246,7 +262,11 @@
           <div class="card-title">Macro Engine</div>
           <div class="pill">FRED API</div>
         </div>
-      
+        <div id="macro-legend" class="legend-box">
+          <div id="legend-tga" class="legend-line"></div>
+          <div id="legend-fed" class="legend-line"></div>
+          <div id="legend-tipus" class="legend-line"></div>
+        </div>      
         <div class="list">
           <div class="row">
             <span class="label">TGA</span>
@@ -367,6 +387,30 @@
         
           document.getElementById("macro-tipus").innerHTML =
             `<span class="${macroClass(dades.macro.tipus_reals)}">${macroEmoji(dades.macro.tipus_reals)}</span>`;
+
+          function llegendaTGA(v) {
+            if (v === -1) return "TGA 🔴 — Descens fort: augment de liquiditat al sistema.";
+            if (v === 1) return "TGA 🟢 — Pujada forta: absorció temporal de liquiditat.";
+            return "TGA 🟡 — Variació moderada: moviment normal de tresoreria.";
+          }
+          
+          function llegendaFed(v) {
+            if (v === -1) return "Fed Balance 🔴 — Expansió del balanç: política més laxa.";
+            if (v === 1) return "Fed Balance 🟢 — Reducció del balanç: drenatge de liquiditat.";
+            return "Fed Balance 🟡 — Moviment neutre o estable.";
+          }
+          
+          function llegendaTipus(v) {
+            if (v === -1) return "Tipus Reals 🔴 — Caiguda: suport per actius reals i risc.";
+            if (v === 1) return "Tipus Reals 🟢 — Puja: pressió sobre actius sensibles a tipus.";
+            return "Tipus Reals 🟡 — Estabilitat en el cost real del capital.";
+          }
+          
+          document.getElementById("legend-tga").textContent = llegendaTGA(dades.macro.tga);
+          document.getElementById("legend-fed").textContent = llegendaFed(dades.macro.fed_balance);
+          document.getElementById("legend-tipus").textContent = llegendaTipus(dades.macro.tipus_reals);
+
+          
         }
   
         // SISTEMA
