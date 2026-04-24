@@ -153,6 +153,9 @@ ACTIUS = [
     {"ticker": "IWVL.L", "nom": "iShares Edge MSCI World Value (IWVL)", "capa": "Factors"},
     {"ticker": "IWMO.L", "nom": "iShares Edge MSCI World Momentum (IWMO)", "capa": "Factors"},
     {"ticker": "MVOL.L", "nom": "iShares Edge MSCI World Minimum Vol (MVOL)", "capa": "Factors"},
+
+    {"ticker": "ULVR.L", "nom": "Unilever PLC (ULVR)", "capa": "Core equity premium"},
+    
 ]
 
 ULTIMA_ALERTA = None
@@ -216,6 +219,8 @@ def llindar_variacio(actiu):
         return -2.0
     if "Bitcoin" in actiu["nom"] or "Ethereum" in actiu["nom"]:
         return -4.0
+    if actiu["capa"] == "Core equity premium":
+        return -2.5        
     return -4.0
 
 
