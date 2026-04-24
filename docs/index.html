@@ -394,7 +394,24 @@
         </div>
       </div>
 
+      <div class="card" id="ulvr-fund-card" style="display:none;">
+        <div class="card-header">
+          <div class="card-title">ULVR · Fonamentals</div>
+          <div class="pill">QUALITY</div>
+        </div>
       
+        <div class="list">
+          <div class="row"><span class="label">ROIC</span><span class="value mono" id="ulvr-roic"></span></div>
+          <div class="row"><span class="label">Marge operatiu</span><span class="value mono" id="ulvr-marge"></span></div>
+          <div class="row"><span class="label">FCF Yield</span><span class="value mono" id="ulvr-fcf"></span></div>
+          <div class="row"><span class="label">PER actual</span><span class="value mono" id="ulvr-per"></span></div>
+          <div class="row"><span class="label">PER històric</span><span class="value mono" id="ulvr-per-hist"></span></div>
+          <div class="row"><span class="label">Deute Net / EBITDA</span><span class="value mono" id="ulvr-deute"></span></div>
+          <div class="row"><span class="label">Dividend Yield</span><span class="value mono" id="ulvr-dividend"></span></div>
+          <div class="row"><span class="label">Actualitzat</span><span class="value mono" id="ulvr-update"></span></div>
+        </div>
+      </div>
+            
       <div class="card">
         <div class="card-header">
           <div class="card-title">Factors</div>
@@ -565,6 +582,26 @@
           }
         });
 
+        // --- TARGETA FONAMENTALS ULVR ---
+        const ulvrCard = document.getElementById("ulvr-fund-card");
+        
+        // Busquem ULVR amb fundamentals
+        const ulvr = dades.actius.find(a => a.ticker === "ULVR.L" && a.fundamentals);
+        
+        if (ulvr) {
+          const f = ulvr.fundamentals;
+          ulvrCard.style.display = "block";
+        
+          document.getElementById("ulvr-roic").textContent = f.roic + " %";
+          document.getElementById("ulvr-marge").textContent = f.marge_operatiu + " %";
+          document.getElementById("ulvr-fcf").textContent = f.fcf_yield + " %";
+          document.getElementById("ulvr-per").textContent = f.per_actual;
+          document.getElementById("ulvr-per-hist").textContent = f.per_hist_mitja;
+          document.getElementById("ulvr-deute").textContent = f.deute_net_ebitda;
+          document.getElementById("ulvr-dividend").textContent = f.dividend_yield + " %";
+          document.getElementById("ulvr-update").textContent = f.actualitzat;
+        }
+        
 
       } catch (e) {
         console.error("Error carregant dades:", e);
