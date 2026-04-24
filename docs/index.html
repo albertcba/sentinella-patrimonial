@@ -370,6 +370,30 @@
           </table>
         </div>
       </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Single Stock Sentinella</div>
+          <div class="pill">STOCKS</div>
+        </div>
+        <div class="list" style="overflow-x:auto;">
+          <table class="actius-table">
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Ticker</th>
+                <th>Capa</th>
+                <th>Preu</th>
+                <th>Variació</th>
+                <th>Hora</th>
+                <th>Macro</th>
+              </tr>
+            </thead>
+            <tbody id="taula-single"></tbody>
+          </table>
+        </div>
+      </div>
+
       
       <div class="card">
         <div class="card-header">
@@ -497,11 +521,13 @@
         // TAULES PER CAPA
         const tbMacro = document.getElementById('taula-macro');
         const tbCore = document.getElementById('taula-core');
+        const tbSingle = document.getElementById('taula-single');        
         const tbFactors = document.getElementById('taula-factors');        
         const tbCripto = document.getElementById('taula-cripto');
         
         tbMacro.innerHTML = "";
         tbCore.innerHTML = "";
+        tbSingle.innerHTML = "";        
         tbFactors.innerHTML = "";        
         tbCripto.innerHTML = "";
         
@@ -522,9 +548,14 @@
             <td class="mono">${a.hora}</td>
             <td class="mono">${a.semafor_macro || ""}</td>
           `;
-        
+
+          // Single Stock Sentinella (ara mateix: ULVR, futurament més)
+          const singleTickers = ["ULVR.L"];          
+          
           if (a.capa === "Macro Hard Assets") {
             tbMacro.appendChild(tr);
+          } else if (singleTickers.includes(a.ticker)) {
+            tbSingle.appendChild(tr);            
           } else if (a.capa === "Core equity premium") {
             tbCore.appendChild(tr);
           } else if (a.capa === "Factors") {
