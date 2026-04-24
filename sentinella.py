@@ -10,6 +10,24 @@ TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 # ---------------------------------------------------------
+#   FONAMENTALS — SINGLE STOCK SENTINELLA
+# ---------------------------------------------------------
+
+FUNDAMENTALS_SINGLE_STOCK = {
+    "ULVR.L": {
+        "nom": "Unilever PLC",
+        "roic": 14.0,               # %
+        "marge_operatiu": 17.0,     # %
+        "fcf_yield": 4.0,           # %
+        "per_actual": 18.0,
+        "per_hist_mitja": 20.0,
+        "deute_net_ebitda": 2.0,
+        "dividend_yield": 3.6,      # %
+        "actualitzat": "2026-04-24"
+    }
+}
+
+# ---------------------------------------------------------
 #   MACRO ENGINE — FRED API
 # ---------------------------------------------------------
 
@@ -244,6 +262,8 @@ def processar_actiu(actiu):
 
     print(f"{ticker}: {variacio:.2f}%  preu={preu}")
 
+    fundamentals = FUNDAMENTALS_SINGLE_STOCK.get(actiu["ticker"])
+        
     DADES_ACTIUS.append({
         "ticker": actiu["ticker"],
         "nom": actiu["nom"],
@@ -251,7 +271,8 @@ def processar_actiu(actiu):
         "preu": preu,
         "variacio": round(variacio, 2),
         "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),
-        "semafor_macro": semafor_macro_actiu(actiu, MACRO)
+        "semafor_macro": semafor_macro_actiu(actiu, MACRO),
+        "fundamentals": fundamentals        
     })
 
     llindar = llindar_variacio(actiu)
