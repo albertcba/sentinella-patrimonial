@@ -245,6 +245,7 @@ def llindar_variacio(actiu):
 def processar_actiu(actiu):
     global ULTIMA_ALERTA
 
+    # 1) Saltar actius de Macro Hard Assets si el mercat està tancat
     if actiu["capa"] == "Macro Hard Assets" and not mercat_obert():
         print(f"Saltant {actiu['ticker']} (mercat tancat)")
         return
@@ -252,6 +253,7 @@ def processar_actiu(actiu):
     ticker = actiu["ticker"]
     print(f"Processant {ticker}...")
 
+    # 2) Obtenir preu i variació
     try:
         preu, variacio = obtenir_variacio_yahoo(ticker)
     except Exception as e:
@@ -262,19 +264,28 @@ def processar_actiu(actiu):
 
     print(f"{ticker}: {variacio:.2f}%  preu={preu}")
 
-    fundamentals = FUNDAMENTALS_SINGLE_STOCK.get(actiu["ticker"])
-        
+    # 3) Fonamentals (si existeixen)
+    fundamentals = FUNDAMENTALS_SINGLE_STOCK.get(ticker)
+
+    # 4) Rolling window de 7 preus (AUTOMÀTIC I ANTIFRÀGIL)
+    preus_7d = actiu.get("preus_7d", [])   # recuperar si existeix
+    preus_7d.append(preu)                 # afegir preu actual
+    preus_7d = preus_7d[-7:]              # mantenir només els últims 7
+
+    # 5) Afegir l'actiu processat al JSON final
     DADES_ACTIUS.append({
-        "ticker": actiu["ticker"],
+        "ticker": ticker,
         "nom": actiu["nom"],
         "capa": actiu["capa"],
         "preu": preu,
         "variacio": round(variacio, 2),
         "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),
         "semafor_macro": semafor_macro_actiu(actiu, MACRO),
-        "fundamentals": fundamentals        
+        "fundamentals": fundamentals,
+        "preus_7d": preus_7d
     })
 
+    # 6) Alertes
     llindar = llindar_variacio(actiu)
 
     if variacio <= llindar:
@@ -283,7 +294,7 @@ def processar_actiu(actiu):
 
         ULTIMA_ALERTA = {
             "actiu": actiu["nom"],
-            "ticker": actiu["ticker"],
+            "ticker": ticker,
             "capa": actiu["capa"],
             "variacio": round(variacio, 2),
             "preu": preu,
