@@ -302,10 +302,9 @@
       <!-- TARGETA TAULA D'ACTIUS -->
       <div class="card">
         <div class="card-header">
-          <div class="card-title">Actius monitoritzats</div>
+          <div class="card-title">Macro Hard Assets</div>
           <div class="pill">MARKET DATA</div>
         </div>
-
         <div class="list" style="overflow-x:auto;">
           <table class="actius-table">
             <thead>
@@ -316,13 +315,60 @@
                 <th>Preu</th>
                 <th>Variació</th>
                 <th>Hora</th>
-                <th>Macro</th>                
+                <th>Macro</th>
               </tr>
             </thead>
-            <tbody id="taula-actius"></tbody>
+            <tbody id="taula-macro"></tbody>
           </table>
         </div>
       </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Core Equity Premium</div>
+          <div class="pill">EQUITY</div>
+        </div>
+        <div class="list" style="overflow-x:auto;">
+          <table class="actius-table">
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Ticker</th>
+                <th>Capa</th>
+                <th>Preu</th>
+                <th>Variació</th>
+                <th>Hora</th>
+                <th>Macro</th>
+              </tr>
+            </thead>
+            <tbody id="taula-core"></tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Cripto</div>
+          <div class="pill">DIGITAL</div>
+        </div>
+        <div class="list" style="overflow-x:auto;">
+          <table class="actius-table">
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Ticker</th>
+                <th>Capa</th>
+                <th>Preu</th>
+                <th>Variació</th>
+                <th>Hora</th>
+                <th>Macro</th>
+              </tr>
+            </thead>
+            <tbody id="taula-cripto"></tbody>
+          </table>
+        </div>
+      </div>
+
 
     </div>
 
@@ -422,32 +468,42 @@
           document.getElementById('sys-actius').textContent = dades.sistema.actius_monitoritzats;
         }
 
-        // TAULA D'ACTIUS
-        if (dades.actius) {
-          const tbody = document.getElementById('taula-actius');
-          tbody.innerHTML = "";
+        // TAULES PER CAPA
+        const tbMacro = document.getElementById('taula-macro');
+        const tbCore = document.getElementById('taula-core');
+        const tbCripto = document.getElementById('taula-cripto');
+        
+        tbMacro.innerHTML = "";
+        tbCore.innerHTML = "";
+        tbCripto.innerHTML = "";
+        
+        dades.actius.forEach(a => {
+          const tr = document.createElement("tr");
+        
+          const classeVariacio =
+            a.variacio > 0 ? "variacio-green" :
+            a.variacio < 0 ? "variacio-red" :
+            "variacio-yellow";
+        
+          tr.innerHTML = `
+            <td>${a.nom}</td>
+            <td class="mono">${a.ticker}</td>
+            <td>${a.capa}</td>
+            <td class="mono">${a.preu}</td>
+            <td class="mono ${classeVariacio}">${a.variacio}%</td>
+            <td class="mono">${a.hora}</td>
+            <td class="mono">${a.semafor_macro || ""}</td>
+          `;
+        
+          if (a.capa === "Macro Hard Assets") {
+            tbMacro.appendChild(tr);
+          } else if (a.capa === "Core equity premium") {
+            tbCore.appendChild(tr);
+          } else if (a.capa.includes("Bitcoin") || a.capa.includes("Ethereum") || a.ticker.includes("BTC") || a.ticker.includes("ETH")) {
+            tbCripto.appendChild(tr);
+          }
+        });
 
-          dades.actius.forEach(a => {
-            const tr = document.createElement("tr");
-
-            const classeVariacio =
-              a.variacio > 0 ? "variacio-green" :
-              a.variacio < 0 ? "variacio-red" :
-              "variacio-yellow";
-
-            tr.innerHTML = `
-              <td>${a.nom}</td>
-              <td class="mono">${a.ticker}</td>
-              <td>${a.capa}</td>
-              <td class="mono">${a.preu}</td>
-              <td class="mono ${classeVariacio}">${a.variacio}%</td>
-              <td class="mono">${a.hora}</td>
-              <td class="mono">${a.semafor_macro || ""}</td>              
-            `;
-
-            tbody.appendChild(tr);
-          });
-        }
 
       } catch (e) {
         console.error("Error carregant dades:", e);
