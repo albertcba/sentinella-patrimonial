@@ -448,6 +448,37 @@
 
   <!-- JS per carregar el JSON -->
   <script>
+
+    function dibuixarSparkline(svgId, dades) {
+      if (!dades || dades.length < 2) return;
+    
+      const svg = document.getElementById(svgId);
+      if (!svg) return;
+    
+      const w = 80;
+      const h = 24;
+      const min = Math.min(...dades);
+      const max = Math.max(...dades);
+      const escala = max - min || 1;
+    
+      const punts = dades.map((v, i) => {
+        const x = (i / (dades.length - 1)) * w;
+        const y = h - ((v - min) / escala) * h;
+        return `${x},${y}`;
+      }).join(" ");
+    
+      svg.innerHTML = `
+        <polyline 
+          points="${punts}" 
+          fill="none" 
+          stroke="#4caf50" 
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      `;
+    }
+   
     async function carregarDades() {
       try {
         const resposta = await fetch('data.json?cache=' + Date.now());
@@ -606,6 +637,9 @@
           if (score <= -2) return "🔴";
           return "🟡";
         }
+
+        // --- NETEJAR TARGETES FONAMENTALS EXISTENTS ---
+        document.querySelectorAll(".card.fundamental").forEach(el => el.remove());
         
         // Crear targeta fonamental per cada actiu amb dades
         dades.actius.forEach(a => {
@@ -632,11 +666,21 @@
               <div class="row"><span class="label">Deute Net / EBITDA</span><span class="value mono">${f.deute_net_ebitda}</span></div>
               <div class="row"><span class="label">Dividend Yield</span><span class="value mono">${f.dividend_yield} %</span></div>
               <div class="row"><span class="label">Semàfor fonamental</span><span class="value mono">${semafor}</span></div>
+              <div class="row">
+                <span class="label">Tendència 7 dies</span>
+                <span class="value mono"><svg id="spark-${a.ticker}" width="80" height="24"></svg></span>
+              </div>              
               <div class="row"><span class="label">Actualitzat</span><span class="value mono">${f.actualitzat}</span></div>
             </div>
           `;
         
           grid.appendChild(card);
+
+          // Dibuixar sparkline si hi ha dades
+          if (a.preus_7d && a.preus_7d.length > 1) {
+            dibuixarSparkline(`spark-${a.ticker}`, a.preus_7d);
+          }
+          
         });
 
         
