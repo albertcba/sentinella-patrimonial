@@ -408,6 +408,7 @@
           <div class="row"><span class="label">PER històric</span><span class="value mono" id="ulvr-per-hist"></span></div>
           <div class="row"><span class="label">Deute Net / EBITDA</span><span class="value mono" id="ulvr-deute"></span></div>
           <div class="row"><span class="label">Dividend Yield</span><span class="value mono" id="ulvr-dividend"></span></div>
+          <div class="row"><span class="label">Semàfor fonamental</span><span class="value mono" id="ulvr-fund-semafor"></span></div>
           <div class="row"><span class="label">Actualitzat</span><span class="value mono" id="ulvr-update"></span></div>
         </div>
       </div>
@@ -582,25 +583,62 @@
           }
         });
 
-        // --- TARGETA FONAMENTALS ULVR ---
-        const ulvrCard = document.getElementById("ulvr-fund-card");
+        // --- TARGETES FONAMENTALS GENERIQUES ---
+        const grid = document.querySelector(".grid");
         
-        // Busquem ULVR amb fundamentals
-        const ulvr = dades.actius.find(a => a.ticker === "ULVR.L" && a.fundamentals);
+        // Funció per calcular semàfor fonamental
+        function calcularSemaforFonamental(f) {
+          let score = 0;
         
-        if (ulvr) {
-          const f = ulvr.fundamentals;
-          ulvrCard.style.display = "block";
+          if (f.roic > 12) score += 1;
+          else if (f.roic < 8) score -= 1;
         
-          document.getElementById("ulvr-roic").textContent = f.roic + " %";
-          document.getElementById("ulvr-marge").textContent = f.marge_operatiu + " %";
-          document.getElementById("ulvr-fcf").textContent = f.fcf_yield + " %";
-          document.getElementById("ulvr-per").textContent = f.per_actual;
-          document.getElementById("ulvr-per-hist").textContent = f.per_hist_mitja;
-          document.getElementById("ulvr-deute").textContent = f.deute_net_ebitda;
-          document.getElementById("ulvr-dividend").textContent = f.dividend_yield + " %";
-          document.getElementById("ulvr-update").textContent = f.actualitzat;
+          if (f.marge_operatiu > 15) score += 1;
+          else if (f.marge_operatiu < 10) score -= 1;
+        
+          if (f.fcf_yield > 4) score += 1;
+          else if (f.fcf_yield < 2) score -= 1;
+        
+          if (f.per_actual < f.per_hist_mitja * 0.9) score += 1;
+          else if (f.per_actual > f.per_hist_mitja * 1.1) score -= 1;
+        
+          if (score >= 2) return "🟢";
+          if (score <= -2) return "🔴";
+          return "🟡";
         }
+        
+        // Crear targeta fonamental per cada actiu amb dades
+        dades.actius.forEach(a => {
+          if (!a.fundamentals) return;
+        
+          const f = a.fundamentals;
+          const semafor = calcularSemaforFonamental(f);
+        
+          const card = document.createElement("div");
+          card.className = "card";
+        
+          card.innerHTML = `
+            <div class="card-header">
+              <div class="card-title">${a.nom} · Fonamentals</div>
+              <div class="pill">QUALITY</div>
+            </div>
+        
+            <div class="list">
+              <div class="row"><span class="label">ROIC</span><span class="value mono">${f.roic} %</span></div>
+              <div class="row"><span class="label">Marge operatiu</span><span class="value mono">${f.marge_operatiu} %</span></div>
+              <div class="row"><span class="label">FCF Yield</span><span class="value mono">${f.fcf_yield} %</span></div>
+              <div class="row"><span class="label">PER actual</span><span class="value mono">${f.per_actual}</span></div>
+              <div class="row"><span class="label">PER històric</span><span class="value mono">${f.per_hist_mitja}</span></div>
+              <div class="row"><span class="label">Deute Net / EBITDA</span><span class="value mono">${f.deute_net_ebitda}</span></div>
+              <div class="row"><span class="label">Dividend Yield</span><span class="value mono">${f.dividend_yield} %</span></div>
+              <div class="row"><span class="label">Semàfor fonamental</span><span class="value mono">${semafor}</span></div>
+              <div class="row"><span class="label">Actualitzat</span><span class="value mono">${f.actualitzat}</span></div>
+            </div>
+          `;
+        
+          grid.appendChild(card);
+        });
+
         
 
       } catch (e) {
