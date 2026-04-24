@@ -322,6 +322,31 @@
           </table>
         </div>
       </div>
+
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Cripto</div>
+          <div class="pill">DIGITAL</div>
+        </div>
+        <div class="list" style="overflow-x:auto;">
+          <table class="actius-table">
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Ticker</th>
+                <th>Capa</th>
+                <th>Preu</th>
+                <th>Variació</th>
+                <th>Hora</th>
+                <th>Macro</th>
+              </tr>
+            </thead>
+            <tbody id="taula-cripto"></tbody>
+          </table>
+        </div>
+      </div>      
+
       
       <div class="card">
         <div class="card-header">
@@ -348,8 +373,8 @@
       
       <div class="card">
         <div class="card-header">
-          <div class="card-title">Cripto</div>
-          <div class="pill">DIGITAL</div>
+          <div class="card-title">Factors</div>
+          <div class="pill">FACTOR MODELS</div>
         </div>
         <div class="list" style="overflow-x:auto;">
           <table class="actius-table">
@@ -364,10 +389,11 @@
                 <th>Macro</th>
               </tr>
             </thead>
-            <tbody id="taula-cripto"></tbody>
+            <tbody id="taula-factors"></tbody>
           </table>
         </div>
       </div>
+
 
 
     </div>
@@ -471,10 +497,12 @@
         // TAULES PER CAPA
         const tbMacro = document.getElementById('taula-macro');
         const tbCore = document.getElementById('taula-core');
+        const tbFactors = document.getElementById('taula-factors');        
         const tbCripto = document.getElementById('taula-cripto');
         
         tbMacro.innerHTML = "";
         tbCore.innerHTML = "";
+        tbFactors.innerHTML = "";        
         tbCripto.innerHTML = "";
         
         dades.actius.forEach(a => {
@@ -499,6 +527,8 @@
             tbMacro.appendChild(tr);
           } else if (a.capa === "Core equity premium") {
             tbCore.appendChild(tr);
+          } else if (a.capa === "Factors") {
+            tbFactors.appendChild(tr);            
           } else if (a.capa.includes("Bitcoin") || a.capa.includes("Ethereum") || a.ticker.includes("BTC") || a.ticker.includes("ETH")) {
             tbCripto.appendChild(tr);
           }
