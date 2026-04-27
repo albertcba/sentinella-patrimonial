@@ -25,6 +25,17 @@ FUNDAMENTALS_SINGLE_STOCK = {
         "dividend_yield": 3.6,      # %
         "actualitzat": "2026-04-24"
     }
+    "NXE": {
+        "nom": "NexGen Energy Ltd",
+        "roic": -3.0,               # % — ROIC negatiu típic en miners pre-producció
+        "marge_operatiu": -150.0,   # % — no hi ha vendes, només despeses d'exploració
+        "fcf_yield": -8.0,          # % — cash burn estructural
+        "per_actual": None,         # no té beneficis → PER no aplicable
+        "per_hist_mitja": None,
+        "deute_net_ebitda": 4.0,    # alt, però normal en projectes miners en desenvolupament
+        "dividend_yield": 0.0,      # %
+        "actualitzat": "2026-04-27"
+    }  
 }
 
 # ---------------------------------------------------------
@@ -118,6 +129,7 @@ SENSIBILITAT_MACRO = {
     "AGAP.L":    {"tga": 1, "fed_balance": 1, "tipus_reals": 0},
     "NUUR.L":    {"tga": 0, "fed_balance": 1, "tipus_reals": 0},
     "URNM.L":    {"tga": 0, "fed_balance": 1, "tipus_reals": 0},
+    "NXE":       {"tga": 0, "fed_balance": 1, "tipus_reals": -2}
 }
 
 # ---------------------------------------------------------
@@ -163,6 +175,7 @@ ACTIUS = [
     {"ticker": "ZGLD.SW", "nom": "21Shares Physical Gold (ZGLD)", "capa": "Macro Hard Assets"},
     {"ticker": "IBIT", "nom": "iShares Bitcoin Trust (IBIT)", "capa": "Macro Hard Assets"},
     {"ticker": "ABTC.SW", "nom": "21Shares Bitcoin ETP (ABTC.SW)", "capa": "Macro Hard Assets"},
+    {"ticker": "NXE", "nom": "NexGen Energy Ltd (NXE)", "capa": "Macro Hard Assets"},
 
     {"ticker": "BTC-EUR", "nom": "Bitcoin Spot", "capa": "Macro / Creixement"},
     {"ticker": "ETH-EUR", "nom": "Ethereum Spot", "capa": "Macro / Creixement"},
@@ -172,7 +185,7 @@ ACTIUS = [
     {"ticker": "IWMO.L", "nom": "iShares Edge MSCI World Momentum (IWMO)", "capa": "Factors"},
     {"ticker": "MVOL.L", "nom": "iShares Edge MSCI World Minimum Vol (MVOL)", "capa": "Factors"},
 
-    {"ticker": "ULVR.L", "nom": "Unilever PLC (ULVR)", "capa": "Core equity premium"},
+    {"ticker": "ULVR.L", "nom": "Unilever PLC (ULVR)", "capa": "Core equity premium"}
     
 ]
 
