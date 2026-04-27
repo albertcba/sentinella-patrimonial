@@ -601,7 +601,7 @@
           // Single Stock Sentinella (ara mateix: ULVR, NXE futurament més)
           const singleTickers = ["ULVR.L", "NXE"];          
           
-          if (a.capa === "Macro Hard Assets") {
+          if (a.capa === "Macro Hard Assets" || a.ticker === "NXE") {
             tbMacro.appendChild(tr);
           } else if (singleTickers.includes(a.ticker)) {
             tbSingle.appendChild(tr);            
