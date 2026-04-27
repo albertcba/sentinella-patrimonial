@@ -24,7 +24,7 @@ FUNDAMENTALS_SINGLE_STOCK = {
         "deute_net_ebitda": 2.0,
         "dividend_yield": 3.6,      # %
         "actualitzat": "2026-04-24"
-    }
+    },
     "NXE": {
         "nom": "NexGen Energy Ltd",
         "roic": -3.0,               # % — ROIC negatiu típic en miners pre-producció
