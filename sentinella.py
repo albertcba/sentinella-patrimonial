@@ -175,7 +175,6 @@ ACTIUS = [
     {"ticker": "ZGLD.SW", "nom": "21Shares Physical Gold (ZGLD)", "capa": "Macro Hard Assets"},
     {"ticker": "IBIT", "nom": "iShares Bitcoin Trust (IBIT)", "capa": "Macro Hard Assets"},
     {"ticker": "ABTC.SW", "nom": "21Shares Bitcoin ETP (ABTC.SW)", "capa": "Macro Hard Assets"},
-    {"ticker": "NXE", "nom": "NexGen Energy Ltd (NXE)", "capa": "Macro Hard Assets"},
 
     {"ticker": "BTC-EUR", "nom": "Bitcoin Spot", "capa": "Macro / Creixement"},
     {"ticker": "ETH-EUR", "nom": "Ethereum Spot", "capa": "Macro / Creixement"},
@@ -185,7 +184,8 @@ ACTIUS = [
     {"ticker": "IWMO.L", "nom": "iShares Edge MSCI World Momentum (IWMO)", "capa": "Factors"},
     {"ticker": "MVOL.L", "nom": "iShares Edge MSCI World Minimum Vol (MVOL)", "capa": "Factors"},
 
-    {"ticker": "ULVR.L", "nom": "Unilever PLC (ULVR)", "capa": "Core equity premium"}
+    {"ticker": "ULVR.L", "nom": "Unilever PLC (ULVR)", "capa": "Core equity premium"},
+    {"ticker": "NXE", "nom": "NexGen Energy Ltd", "capa": "Single Stock Sentinella"}
     
 ]
 
