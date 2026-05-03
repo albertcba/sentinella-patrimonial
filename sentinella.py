@@ -127,8 +127,9 @@ SENSIBILITAT_MACRO = {
     "IH2O.L":    {"tga": 0, "fed_balance": 1, "tipus_reals": 0},
     "WCOA.L":    {"tga": 1, "fed_balance": 1, "tipus_reals": 0},
     "AGAP.L":    {"tga": 1, "fed_balance": 1, "tipus_reals": 0},
-    "NUUR.L":    {"tga": 0, "fed_balance": 1, "tipus_reals": 0},
     "URNM.L":    {"tga": 0, "fed_balance": 1, "tipus_reals": 0},
+    "NUCL.L":    {"tga": 0, "fed_balance": 1, "tipus_reals": 0},   # substitueix NUUR.L
+    "COPX":      {"tga": 1, "fed_balance": 1, "tipus_reals": -1},  # nou    
     "NXE":       {"tga": 0, "fed_balance": 1, "tipus_reals": -2}
 }
 
