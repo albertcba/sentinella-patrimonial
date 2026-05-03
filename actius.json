@@ -27,6 +27,11 @@
   { "ticker": "MVOL.L", "nom": "iShares Edge MSCI World Minimum Vol (MVOL)", "capa": "Factors" },
 
   { "ticker": "ULVR.L", "nom": "Unilever PLC (ULVR)", "capa": "Core equity premium" },
+  { "ticker": "JNJ", "nom": "Johnson & Johnson (JNJ)", "capa": "Core equity premium" },
+  { "ticker": "SJM", "nom": "JM Smucker Co (SJM)", "capa": "Core equity premium" },
+  { "ticker": "WCOS.L", "nom": "SS SP MSCI World Consumer Staples (WCOS)", "capa": "Core equity premium" },
+  { "ticker": "WHEA.L", "nom": "SS SP MSCI World Health Care (WHEA)", "capa": "Core equity premium" },
+  { "ticker": "WTEL.L", "nom": "SS SPDR MSCI World Communication (WTEL)", "capa": "Core equity premium" },  
 
   { "ticker": "NXE", "nom": "NexGen Energy Ltd (NXE)", "capa": "Single Stock Sentinella" },
   { "ticker": "ABBN.SW", "nom": "ABB Ltd (ABBN)", "capa": "Single Stock Sentinella" },
