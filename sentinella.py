@@ -158,36 +158,10 @@ def enviar_missatge(text):
     except Exception as e:
         print("Error enviant missatge:", e)
 
+# 🔥 AQUI VA EL JSON, A NIVELL SUPERIOR
+with open("actius.json") as f:
+    ACTIUS = json.load(f)
 
-ACTIUS = [
-    {"ticker": "REMX", "nom": "VanEck Rare Earths (REMX)", "capa": "Macro Hard Assets"},
-    {"ticker": "IH2O.L", "nom": "iShares Global Water (IH2O)", "capa": "Macro Hard Assets"},
-    {"ticker": "XDWM.L", "nom": "X MSCI World Materials (XDWM)", "capa": "Macro Hard Assets"},
-    {"ticker": "IUES.L", "nom": "iShares S&P 500 Energy (IUES)", "capa": "Macro Hard Assets"},
-    {"ticker": "IUUS.L", "nom": "iShares S&P 500 Utilities (IUUS)", "capa": "Macro Hard Assets"},
-    {"ticker": "AGAP.L", "nom": "WT Agriculture (AGAP)", "capa": "Macro Hard Assets"},
-    {"ticker": "INFR.L", "nom": "iShares Global Infrastructure", "capa": "Macro Hard Assets"},
-    {"ticker": "URNM.L", "nom": "Sprott Uranium Miners (URNM)", "capa": "Macro Hard Assets"},
-    {"ticker": "SSLV.L", "nom": "Invesco Physical Silver (SSLV)", "capa": "Macro Hard Assets"},
-    {"ticker": "SILJ", "nom": "Amplify Junior Silver Miners", "capa": "Macro Hard Assets"},
-    {"ticker": "WCOA.L", "nom": "WisdomTree Enhanced Commodity", "capa": "Macro Hard Assets"},
-    {"ticker": "GLDM", "nom": "SPDR Gold MiniShares (GLDM)", "capa": "Macro Hard Assets"},
-    {"ticker": "ZGLD.SW", "nom": "21Shares Physical Gold (ZGLD)", "capa": "Macro Hard Assets"},
-    {"ticker": "IBIT", "nom": "iShares Bitcoin Trust (IBIT)", "capa": "Macro Hard Assets"},
-    {"ticker": "ABTC.SW", "nom": "21Shares Bitcoin ETP (ABTC.SW)", "capa": "Macro Hard Assets"},
-
-    {"ticker": "BTC-EUR", "nom": "Bitcoin Spot", "capa": "Macro / Creixement"},
-    {"ticker": "ETH-EUR", "nom": "Ethereum Spot", "capa": "Macro / Creixement"},
-
-    {"ticker": "IWFQ.L", "nom": "iShares Edge MSCI World Quality (IWFQ)", "capa": "Factors"},
-    {"ticker": "IWVL.L", "nom": "iShares Edge MSCI World Value (IWVL)", "capa": "Factors"},
-    {"ticker": "IWMO.L", "nom": "iShares Edge MSCI World Momentum (IWMO)", "capa": "Factors"},
-    {"ticker": "MVOL.L", "nom": "iShares Edge MSCI World Minimum Vol (MVOL)", "capa": "Factors"},
-
-    {"ticker": "ULVR.L", "nom": "Unilever PLC (ULVR)", "capa": "Core equity premium"},
-    {"ticker": "NXE", "nom": "NexGen Energy Ltd", "capa": "Single Stock Sentinella"}
-    
-]
 
 ULTIMA_ALERTA = None
 
