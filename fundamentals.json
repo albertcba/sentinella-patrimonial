@@ -93,5 +93,30 @@
     "deute_net_ebitda": 4.8,
     "dividend_yield": 3.2,
     "actualitzat": "2026-05-03"
+  };
+  
+  "JNJ": {
+    "nom": "Johnson & Johnson",
+    "roic": 17.0,
+    "marge_operatiu": 25.0,
+    "fcf_yield": 4.5,
+    "per_actual": 16.0,
+    "per_hist_mitja": 17.0,
+    "deute_net_ebitda": 1.0,
+    "dividend_yield": 3.0,
+    "actualitzat": "2026-05-03"
+  },
+
+  "SJM": {
+    "nom": "JM Smucker Co",
+    "roic": 10.0,
+    "marge_operatiu": 17.0,
+    "fcf_yield": 5.0,
+    "per_actual": 14.0,
+    "per_hist_mitja": 18.0,
+    "deute_net_ebitda": 2.5,
+    "dividend_yield": 3.4,
+    "actualitzat": "2026-05-03"
   }
+  
 }
