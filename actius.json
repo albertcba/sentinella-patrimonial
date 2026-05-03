@@ -16,7 +16,7 @@
   { "ticker": "ABTC.SW", "nom": "21Shares Bitcoin ETP (ABTC.SW)", "capa": "Macro Hard Assets" },
 
   { "ticker": "COPX", "nom": "Global X Copper Miners", "capa": "Macro Hard Assets" },
-  { "ticker": "NUUR.L", "nom": "iShares Nuclear Energy", "capa": "Macro Hard Assets" },
+  { "ticker": "NUCL.L", "nom": "iShares Nuclear Energy", "capa": "Macro Hard Assets" }
 
   { "ticker": "BTC-EUR", "nom": "Bitcoin Spot", "capa": "Macro / Creixement" },
   { "ticker": "ETH-EUR", "nom": "Ethereum Spot", "capa": "Macro / Creixement" },
@@ -29,7 +29,7 @@
   { "ticker": "ULVR.L", "nom": "Unilever PLC (ULVR)", "capa": "Core equity premium" },
 
   { "ticker": "NXE", "nom": "NexGen Energy Ltd", "capa": "Single Stock Sentinella" },
-  { "ticker": "ABBN", "nom": "ABB Ltd", "capa": "Single Stock Sentinella" },
+  { "ticker": "ABBN.SW", "nom": "ABB Ltd", "capa": "Single Stock Sentinella" }
   { "ticker": "BEPC", "nom": "Brookfield Renewable", "capa": "Single Stock Sentinella" },
   { "ticker": "BWXT", "nom": "BWX Technologies", "capa": "Single Stock Sentinella" },
   { "ticker": "LEU", "nom": "Centrus Energy", "capa": "Single Stock Sentinella" },
