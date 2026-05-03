@@ -27,6 +27,20 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
+      - name: Validar actius.json
+        run: |
+          python - << 'EOF'
+          import json, sys
+          try:
+            with open("actius.json") as f:
+              json.load(f)
+            print("✔ actius.json vàlid")
+          except Exception as e:
+            print("❌ ERROR: actius.json no és vàlid")
+            print(e)
+            sys.exit(1)
+          EOF
+
       - name: Executar sentinella i generar alerta.json
         run: |
           python sentinella.py | tail -n 1 > alerta.json
