@@ -28,11 +28,11 @@
 
   { "ticker": "ULVR.L", "nom": "Unilever PLC (ULVR)", "capa": "Core equity premium" },
 
-  { "ticker": "NXE", "nom": "NexGen Energy Ltd", "capa": "Single Stock Sentinella" },
-  { "ticker": "ABBN.SW", "nom": "ABB Ltd", "capa": "Single Stock Sentinella" },
-  { "ticker": "BEPC", "nom": "Brookfield Renewable", "capa": "Single Stock Sentinella" },
-  { "ticker": "BWXT", "nom": "BWX Technologies", "capa": "Single Stock Sentinella" },
-  { "ticker": "LEU", "nom": "Centrus Energy", "capa": "Single Stock Sentinella" },
-  { "ticker": "SU", "nom": "Schneider Electric", "capa": "Single Stock Sentinella" },
-  { "ticker": "WTRG", "nom": "Essential Utilities", "capa": "Single Stock Sentinella" }
+  { "ticker": "NXE", "nom": "NexGen Energy Ltd (NXE)", "capa": "Single Stock Sentinella" },
+  { "ticker": "ABBN.SW", "nom": "ABB Ltd (ABBN)", "capa": "Single Stock Sentinella" },
+  { "ticker": "BEPC", "nom": "Brookfield Renewable (BEPC)", "capa": "Single Stock Sentinella" },
+  { "ticker": "BWXT", "nom": "BWX Technologies (BWXT)", "capa": "Single Stock Sentinella" },
+  { "ticker": "LEU", "nom": "Centrus Energy (LEU)", "capa": "Single Stock Sentinella" },
+  { "ticker": "SU", "nom": "Schneider Electric (SU)", "capa": "Single Stock Sentinella" },
+  { "ticker": "WTRG", "nom": "Essential Utilities (WTRG)", "capa": "Single Stock Sentinella" }
 ]
