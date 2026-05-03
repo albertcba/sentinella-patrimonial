@@ -13,30 +13,8 @@ CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 #   FONAMENTALS — SINGLE STOCK SENTINELLA
 # ---------------------------------------------------------
 
-FUNDAMENTALS_SINGLE_STOCK = {
-    "ULVR.L": {
-        "nom": "Unilever PLC",
-        "roic": 14.0,               # %
-        "marge_operatiu": 17.0,     # %
-        "fcf_yield": 4.0,           # %
-        "per_actual": 18.0,
-        "per_hist_mitja": 20.0,
-        "deute_net_ebitda": 2.0,
-        "dividend_yield": 3.6,      # %
-        "actualitzat": "2026-04-24"
-    },
-    "NXE": {
-        "nom": "NexGen Energy Ltd",
-        "roic": -3.0,               # % — ROIC negatiu típic en miners pre-producció
-        "marge_operatiu": -150.0,   # % — no hi ha vendes, només despeses d'exploració
-        "fcf_yield": -8.0,          # % — cash burn estructural
-        "per_actual": None,         # no té beneficis → PER no aplicable
-        "per_hist_mitja": None,
-        "deute_net_ebitda": 4.0,    # alt, però normal en projectes miners en desenvolupament
-        "dividend_yield": 0.0,      # %
-        "actualitzat": "2026-04-27"
-    }  
-}
+with open("fundamentals.json") as f:
+    FUNDAMENTALS_SINGLE_STOCK = json.load(f)
 
 # ---------------------------------------------------------
 #   MACRO ENGINE — FRED API
