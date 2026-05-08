@@ -40,5 +40,5 @@
   { "ticker": "LEU", "nom": "Centrus Energy (LEU)", "capa": "Single Stock Sentinella" },
   { "ticker": "SU", "nom": "Schneider Electric (SU)", "capa": "Single Stock Sentinella" },
   { "ticker": "WTRG", "nom": "Essential Utilities (WTRG)", "capa": "Single Stock Sentinella" },
-  { "ticker": "WTRG-PUT40", "nom": "WTRG Cash-Secured Put 40", "capa": "Options", "underlying": "WTRG", "strike": 40, "expiry": "2026-04-15" }
+  { "ticker": "WTRG-PUT40", "nom": "WTRG Cash-Secured Put 40", "capa": "Options", "underlying": "WTRG", "strike": 40, "expiry": "2026-05-15" }
 ]
