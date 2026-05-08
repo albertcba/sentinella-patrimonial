@@ -414,7 +414,7 @@ def processar_actiu(actiu):
     if actiu["capa"] == "Options":
         subjacent = actiu["underlying"]   # <-- CORRECCIÓ
         strike = actiu["strike"]
-        expiry_STR = actiu["expiry"]
+        expiry_str = actiu["expiry"]
         
         # Normalitzar guions tipogràfics
         expiry_str = (
