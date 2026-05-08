@@ -1,6 +1,6 @@
 import requests
 import traceback
-import datetime
+from datetime import datetime
 import os
 import json
 import math
@@ -414,23 +414,7 @@ def processar_actiu(actiu):
     if actiu["capa"] == "Options":
         subjacent = actiu["underlying"]   # <-- CORRECCIÓ
         strike = actiu["strike"]
-        expiry_raw = actiu["expiry"]
-        
-        # 1) Convertir a string si ve com datetime.date
-        if isinstance(expiry_raw, datetime.date):
-            expiry_str = expiry_raw.strftime("%Y-%m-%d")
-        else:
-            expiry_str = str(expiry_raw)
-        
-        # 2) Normalitzar guions tipogràfics
-        expiry_str = (
-            expiry_str.replace("‑", "-")
-                      .replace("–", "-")
-                      .replace("—", "-")
-        )
-        
-        # 3) Convertir a datetime.date
-        expiry = datetime.strptime(expiry_str, "%Y-%m-%d").date()
+        expiry = actiu["expiry"]
         
         # 1) Llegir PUT sintètic
         try:
