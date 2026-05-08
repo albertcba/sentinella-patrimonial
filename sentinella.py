@@ -393,7 +393,11 @@ def processar_actiu(actiu):
         print(f"Saltant {actiu['ticker']} (mercat tancat)")
         return
 
-    ticker = actiu["ticker"]
+    # Determinar subjacent real
+    if actiu["capa"] == "Options":
+        ticker = actiu["underlying"]
+    else:
+        ticker = actiu["ticker"]
     print(f"Processant {ticker}...")
 
     # 2) Obtenir preu i variació
@@ -406,23 +410,6 @@ def processar_actiu(actiu):
         return
 
     print(f"{ticker}: {variacio:.2f}%  preu={preu}")
-
-    # Determinar subjacent real
-    if actiu["capa"] == "Options":
-        subjacent = actiu["underlying"]
-    else:
-        subjacent = ticker
-    
-    # 2) Obtenir preu i variació del SUBJACENT
-    try:
-        preu, variacio = obtenir_variacio_yahoo(subjacent)
-    except Exception as e:
-        txt = f"⚠️ Error obtenint dades per {actiu['nom']} ({subjacent}):\n{e}"
-        print(txt)
-        enviar_missatge(txt)
-        return
-    
-    print(f"{subjacent}: {variacio:.2f}%  preu={preu}")
     
     if actiu["capa"] == "Options":
         subjacent = actiu["subjacent"]   # <-- CORRECCIÓ
