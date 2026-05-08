@@ -425,10 +425,11 @@ def processar_actiu(actiu):
     print(f"{subjacent}: {variacio:.2f}%  preu={preu}")
     
     if actiu["capa"] == "Options":
+        subjacent = actiu["subjacent"]   # <-- CORRECCIÓ
         strike = actiu["strike"]
         expiry = actiu["expiry"]
     
-        # 1) Llegir PUT
+        # 1) Llegir PUT sintètic
         try:
             put = obtenir_put_synthetic(subjacent, strike, expiry)
         except Exception as e:
@@ -437,36 +438,40 @@ def processar_actiu(actiu):
             enviar_missatge(txt)
             return
     
-        prima = put["last"]
-        dte = calcular_dte(expiry)
-        dist = distancia_assignacio(preu, strike)
+        # --- CAMPOS SINTÈTICS CORRECTES ---
+        prima = put["lastPrice"]
+        preu_subjacent = put["underlyingPrice"]
+        vol_hist = put["histVol"]
+        dte = put["daysToExpiry"]
+    
+        # --- CÀLCULS ADDICIONALS ---
+        dist = distancia_assignacio(preu_subjacent, strike)
         marge = marge_cash_secured(strike)
+        semafor = semafor_put(preu_subjacent, prima, dte, dist)
     
-        semafor = semafor_put(preu, prima, dte, dist)
-    
-        # Afegir al JSON final
+        # --- JSON FINAL ---
         DADES_ACTIUS.append({
             "ticker": ticker,
             "nom": actiu["nom"],
             "capa": actiu["capa"],
-            "preu_subjacent": preu,
+            "preu_subjacent": preu_subjacent,
             "prima": prima,
             "dte": dte,
             "distancia": dist,
             "marge": marge,
-            "iv": put["iv"],
-            "oi": put["oi"],
-            "vol": put["vol"],
+            "vol_hist": vol_hist,     # <-- substitueix iv
+            "oi": None,               # <-- synthetic no té OI
+            "vol": None,              # <-- synthetic no té volum d’opcions
             "semafor": semafor,
             "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
         })
     
         # ALERTES
-        if prima > 2.50 or preu < strike:
+        if prima > 2.50 or preu_subjacent < strike:
             enviar_missatge(
                 f"⚠️ ALERTA PUT {subjacent} {strike}\n"
-                f"Prima: {prima}\n"
-                f"Preu subjacent: {preu}\n"
+                f"Prima: {prima:.2f}\n"
+                f"Preu subjacent: {preu_subjacent:.2f}\n"
                 f"DTE: {dte}\n"
                 f"Distància assignació: {dist}\n"
                 f"Semàfor: {semafor}"
