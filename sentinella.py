@@ -218,7 +218,11 @@ def obtenir_variacio_yahoo(ticker):
 
 def obtenir_put_yahoo(ticker, strike, expiry):
     url = f"https://query2.finance.yahoo.com/v7/finance/options/{ticker}"
-    headers = {"User-Agent": "Mozilla/5.0"}
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+        "Accept": "application/json, text/plain, */*",
+        "Connection": "keep-alive"
+    }
     r = requests.get(url, headers=headers, timeout=15)
     data = r.json()
 
