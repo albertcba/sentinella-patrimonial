@@ -223,33 +223,6 @@ def obtenir_variacio_yahoo(ticker):
     variacio = ((preu_actual - preu_obertura) / preu_obertura) * 100
     return preu_actual, variacio
 
-def obtenir_put_yahoo(ticker, strike, expiry):
-    url = f"https://query2.finance.yahoo.com/v7/finance/options/{ticker}"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
-        "Accept": "application/json, text/plain, */*",
-        "Connection": "keep-alive"
-    }
-    r = requests.get(url, headers=headers, timeout=15)
-    data = r.json()
-
-    chains = data["optionChain"]["result"][0]["options"][0]["puts"]
-
-    # Buscar el PUT correcte
-    put = next((p for p in chains if p["strike"] == strike), None)
-    if not put:
-        raise ValueError(f"No s'ha trobat PUT {strike} per {ticker}")
-
-    return {
-        "bid": put["bid"],
-        "ask": put["ask"],
-        "last": put["lastPrice"],
-        "iv": put["impliedVolatility"],
-        "oi": put["openInterest"],
-        "vol": put["volume"]
-    }
-
-
 def obtenir_dades_chart_yahoo(ticker, dies_hist=90):
     """
     Retorna llista de preus de tancament per al ticker, usant l'API /v8/finance/chart.
