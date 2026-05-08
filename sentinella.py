@@ -104,6 +104,17 @@ def mercat_obert():
     hora = datetime.utcnow().hour
     return 7 <= hora <= 20
 
+def calcular_dte(expiry):
+    avui = datetime.utcnow().date()
+    venc = datetime.strptime(expiry, "%Y-%m-%d").date()
+    return (venc - avui).days
+
+def distancia_assignacio(preu, strike):
+    return strike - preu
+
+def marge_cash_secured(strike):
+    return strike * 100
+
 if not TOKEN or not CHAT_ID:
     print("⚠️ Falten variables d'entorn TELEGRAM_TOKEN o TELEGRAM_CHAT_ID")
 
@@ -148,6 +159,47 @@ def semafor_macro_actiu(actiu, macro):
         return "🔴"
     return "🟡"
 
+def semafor_put(preu_subjacent, prima, dte, dist):
+    # Preu subjacient
+    if preu_subjacent > 40:
+        s_preu = "🟢"
+    elif 37.8 <= preu_subjacent <= 40:
+        s_preu = "🟡"
+    else:
+        s_preu = "🔴"
+
+    # Prima
+    if prima < 2.20:
+        s_prima = "🟢"
+    elif 2.20 <= prima <= 2.50:
+        s_prima = "🟡"
+    else:
+        s_prima = "🔴"
+
+    # DTE
+    if dte >= 3:
+        s_dte = "🟢"
+    elif 1 <= dte < 3:
+        s_dte = "🟡"
+    else:
+        s_dte = "🔴"
+
+    # Distància assignació
+    if dist > 3:
+        s_dist = "🟢"
+    elif 1 <= dist <= 3:
+        s_dist = "🟡"
+    else:
+        s_dist = "🔴"
+
+    return {
+        "preu": s_preu,
+        "prima": s_prima,
+        "dte": s_dte,
+        "dist": s_dist
+    }
+
+
 # ---------------------------------------------------------
 #   PROCESSAMENT D'ACTIUS
 # ---------------------------------------------------------
@@ -164,6 +216,27 @@ def obtenir_variacio_yahoo(ticker):
     variacio = ((preu_actual - preu_obertura) / preu_obertura) * 100
     return preu_actual, variacio
 
+def obtenir_put_yahoo(ticker, strike, expiry):
+    url = f"https://query2.finance.yahoo.com/v7/finance/options/{ticker}"
+    headers = {"User-Agent": "Mozilla/5.0"}
+    r = requests.get(url, headers=headers, timeout=15)
+    data = r.json()
+
+    chains = data["optionChain"]["result"][0]["options"][0]["puts"]
+
+    # Buscar el PUT correcte
+    put = next((p for p in chains if p["strike"] == strike), None)
+    if not put:
+        raise ValueError(f"No s'ha trobat PUT {strike} per {ticker}")
+
+    return {
+        "bid": put["bid"],
+        "ask": put["ask"],
+        "last": put["lastPrice"],
+        "iv": put["impliedVolatility"],
+        "oi": put["openInterest"],
+        "vol": put["volume"]
+    }
 
 def format_missatge(actiu, preu, variacio):
     direccio = "📉" if variacio < 0 else "📈"
@@ -212,6 +285,73 @@ def processar_actiu(actiu):
 
     print(f"{ticker}: {variacio:.2f}%  preu={preu}")
 
+    # Determinar subjacent real
+    if actiu["capa"] == "Options":
+        subjacent = actiu["underlying"]
+    else:
+        subjacent = ticker
+    
+    # 2) Obtenir preu i variació del SUBJACENT
+    try:
+        preu, variacio = obtenir_variacio_yahoo(subjacent)
+    except Exception as e:
+        txt = f"⚠️ Error obtenint dades per {actiu['nom']} ({subjacent}):\n{e}"
+        print(txt)
+        enviar_missatge(txt)
+        return
+    
+    print(f"{subjacent}: {variacio:.2f}%  preu={preu}")
+    
+    if actiu["capa"] == "Options":
+        strike = actiu["strike"]
+        expiry = actiu["expiry"]
+    
+        # 1) Llegir PUT
+        try:
+            put = obtenir_put_yahoo(subjacent, strike, expiry)
+        except Exception as e:
+            txt = f"⚠️ Error obtenint PUT {strike} per {subjacent}:\n{e}"
+            print(txt)
+            enviar_missatge(txt)
+            return
+    
+        prima = put["last"]
+        dte = calcular_dte(expiry)
+        dist = distancia_assignacio(preu, strike)
+        marge = marge_cash_secured(strike)
+    
+        semafor = semafor_put(preu, prima, dte, dist)
+    
+        # Afegir al JSON final
+        DADES_ACTIUS.append({
+            "ticker": ticker,
+            "nom": actiu["nom"],
+            "capa": actiu["capa"],
+            "preu_subjacent": preu,
+            "prima": prima,
+            "dte": dte,
+            "distancia": dist,
+            "marge": marge,
+            "iv": put["iv"],
+            "oi": put["oi"],
+            "vol": put["vol"],
+            "semafor": semafor,
+            "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+        })
+    
+        # ALERTES
+        if prima > 2.50 or preu < strike:
+            enviar_missatge(
+                f"⚠️ ALERTA PUT {subjacent} {strike}\n"
+                f"Prima: {prima}\n"
+                f"Preu subjacent: {preu}\n"
+                f"DTE: {dte}\n"
+                f"Distància assignació: {dist}\n"
+                f"Semàfor: {semafor}"
+            )
+    
+        return
+ 
     # 3) Fonamentals (si existeixen)
     fundamentals = FUNDAMENTALS_SINGLE_STOCK.get(ticker)
 
