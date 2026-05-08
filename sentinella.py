@@ -414,7 +414,14 @@ def processar_actiu(actiu):
     if actiu["capa"] == "Options":
         subjacent = actiu["underlying"]   # <-- CORRECCIÓ
         strike = actiu["strike"]
-        expiry_str = actiu["expiry"]
+        expiry_STR = actiu["expiry"]
+        
+        # Normalitzar guions tipogràfics
+        expiry_str = (
+            expiry_str.replace("‑", "-")   # non-breaking hyphen
+                       .replace("–", "-")  # en-dash
+                       .replace("—", "-")  # em-dash
+        )
         
         expiry = datetime.strptime(expiry_str, "%Y-%m-%d").date()
         
