@@ -412,7 +412,7 @@ def processar_actiu(actiu):
     print(f"{ticker}: {variacio:.2f}%  preu={preu}")
     
     if actiu["capa"] == "Options":
-        subjacent = actiu["subjacent"]   # <-- CORRECCIÓ
+        subjacent = actiu["underlying"]   # <-- CORRECCIÓ
         strike = actiu["strike"]
         expiry = actiu["expiry"]
     
