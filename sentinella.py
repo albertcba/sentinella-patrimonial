@@ -414,17 +414,9 @@ def processar_actiu(actiu):
     if actiu["capa"] == "Options":
         subjacent = actiu["underlying"]   # <-- CORRECCIÓ
         strike = actiu["strike"]
-        expiry = actiu["expiry"]
-
-        # Normalitzar guions tipogràfics
-        expiry_str = (
-            expiry_str.replace("‑", "-")   # non-breaking hyphen
-                       .replace("–", "-")  # en-dash
-                       .replace("—", "-")  # em-dash
-        )
+        expiry_str = actiu["expiry"]
         
         expiry = datetime.strptime(expiry_str, "%Y-%m-%d").date()
-
         
         # 1) Llegir PUT sintètic
         try:
