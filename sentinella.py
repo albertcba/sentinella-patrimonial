@@ -3,11 +3,18 @@ import traceback
 from datetime import datetime
 import os
 import json
+import math
 
 DADES_ACTIUS = []
 
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+YAHOO_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+    "Accept": "application/json, text/plain, */*",
+    "Connection": "keep-alive"
+}
+
 
 # ---------------------------------------------------------
 #   FONAMENTALS — SINGLE STOCK SENTINELLA
@@ -242,6 +249,128 @@ def obtenir_put_yahoo(ticker, strike, expiry):
         "vol": put["volume"]
     }
 
+
+def obtenir_dades_chart_yahoo(ticker, dies_hist=90):
+    """
+    Retorna llista de preus de tancament per al ticker, usant l'API /v8/finance/chart.
+    """
+    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}"
+    params = {
+        "range": f"{dies_hist}d",
+        "interval": "1d"
+    }
+    r = requests.get(url, headers=YAHOO_HEADERS, params=params, timeout=15)
+    data = r.json()
+
+    result = data.get("chart", {}).get("result")
+    if not result:
+        raise ValueError(f"No s'han pogut obtenir dades de chart per {ticker}")
+
+    chart = result[0]
+    closes = chart["indicators"]["quote"][0]["close"]
+
+    # Filtrar possibles None
+    closes = [c for c in closes if c is not None]
+    if len(closes) < 10:
+        raise ValueError(f"No hi ha prou dades històriques per {ticker}")
+
+    return closes
+
+def calcular_volatilitat_hist(closes):
+    """
+    Volatilitat històrica anualitzada a partir de preus de tancament diaris.
+    """
+    if len(closes) < 2:
+        raise ValueError("No hi ha prou dades per calcular volatilitat")
+
+    returns = []
+    for i in range(1, len(closes)):
+        if closes[i-1] > 0 and closes[i] > 0:
+            r = math.log(closes[i] / closes[i-1])
+            returns.append(r)
+
+    if len(returns) == 0:
+        raise ValueError("No s'han pogut calcular retorns")
+
+    mean_r = sum(returns) / len(returns)
+    var = sum((r - mean_r) ** 2 for r in returns) / (len(returns) - 1)
+    sigma_daily = math.sqrt(var)
+    sigma_annual = sigma_daily * math.sqrt(252)
+
+    return sigma_annual
+
+
+def _norm_cdf(x):
+    return 0.5 * (1.0 + math.erf(x / math.sqrt(2.0)))
+
+def calcular_put_black_scholes(S, K, T, r, sigma):
+    """
+    Preu teòric d'un PUT europeu via Black–Scholes.
+    S: preu subjacient
+    K: strike
+    T: temps en anys
+    r: tipus d'interès (p.ex. 0.04)
+    sigma: volatilitat anualitzada
+    """
+    if T <= 0 or sigma <= 0 or S <= 0 or K <= 0:
+        return None
+
+    d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
+    d2 = d1 - sigma * math.sqrt(T)
+
+    put_price = K * math.exp(-r * T) * _norm_cdf(-d2) - S * _norm_cdf(-d1)
+    return put_price
+
+
+def obtenir_put_synthetic(subjacent, strike, expiry_str, dies_hist=90, tipus_interes=0.04):
+    """
+    Calcula una prima de PUT sintètica a partir de dades de /chart/.
+    subjacent: ticker del subjacient (p.ex. 'WTRG')
+    strike: strike del PUT (p.ex. 40)
+    expiry_str: data de venciment en format 'YYYY-MM-DD'
+    """
+    # 1) Dades històriques
+    closes = obtenir_dades_chart_yahoo(subjacent, dies_hist=dies_hist)
+    preu_actual = closes[-1]
+
+    # 2) Volatilitat històrica
+    sigma = calcular_volatilitat_hist(closes)
+
+    # 3) Temps fins venciment (en anys)
+    avui = datetime.utcnow().date()
+    expiry = datetime.strptime(expiry_str, "%Y-%m-%d").date()
+    dies_fins_venciment = (expiry - avui).days
+    if dies_fins_venciment <= 0:
+        raise ValueError(f"El venciment {expiry_str} ja ha passat o és avui")
+
+    T = dies_fins_venciment / 365.0
+
+    # 4) Preu PUT sintètic
+    put_price = calcular_put_black_scholes(
+        S=preu_actual,
+        K=strike,
+        T=T,
+        r=tipus_interes,
+        sigma=sigma
+    )
+
+    if put_price is None:
+        raise ValueError("No s'ha pogut calcular el preu sintètic del PUT")
+
+    # Retorn estil “put” perquè el Sentinella el pugui consumir
+    return {
+        "synthetic": True,
+        "underlying": subjacent,
+        "strike": strike,
+        "expiry": expiry_str,
+        "lastPrice": put_price,
+        "underlyingPrice": preu_actual,
+        "histVol": sigma,
+        "daysToExpiry": dies_fins_venciment
+    }
+
+
+
 def format_missatge(actiu, preu, variacio):
     direccio = "📉" if variacio < 0 else "📈"
     return (
@@ -312,7 +441,7 @@ def processar_actiu(actiu):
     
         # 1) Llegir PUT
         try:
-            put = obtenir_put_yahoo(subjacent, strike, expiry)
+            put = obtenir_put_synthetic(subjacent, strike, expiry)
         except Exception as e:
             txt = f"⚠️ Error obtenint PUT {strike} per {subjacent}:\n{e}"
             print(txt)
