@@ -226,23 +226,39 @@ def obtenir_variacio_yahoo(ticker):
 def obtenir_dades_chart_yahoo(ticker, dies_hist=90):
     """
     Retorna llista de preus de tancament per al ticker, usant l'API /v8/finance/chart.
+    Controla casos on Yahoo retorna result=None o error.
     """
     url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}"
     params = {
         "range": f"{dies_hist}d",
         "interval": "1d"
     }
+
     r = requests.get(url, headers=YAHOO_HEADERS, params=params, timeout=15)
     data = r.json()
 
+    # 1) Comprovar si hi ha error explícit
+    if data.get("chart", {}).get("error"):
+        err = data["chart"]["error"]
+        raise ValueError(f"Yahoo Chart error per {ticker}: {err.get('description')}")
+
+    # 2) Comprovar si hi ha resultats
     result = data.get("chart", {}).get("result")
     if not result:
         raise ValueError(f"No s'han pogut obtenir dades de chart per {ticker}")
 
     chart = result[0]
-    closes = chart["indicators"]["quote"][0]["close"]
 
-    # Filtrar possibles None
+    # 3) Comprovar que indicators existeix
+    indicators = chart.get("indicators", {})
+    if "quote" not in indicators or not indicators["quote"]:
+        raise ValueError(f"Yahoo no retorna quotes per {ticker}")
+
+    closes = indicators["quote"][0].get("close")
+    if not closes:
+        raise ValueError(f"Yahoo no retorna preus de tancament per {ticker}")
+
+    # 4) Filtrar possibles None
     closes = [c for c in closes if c is not None]
     if len(closes) < 10:
         raise ValueError(f"No hi ha prou dades històriques per {ticker}")
