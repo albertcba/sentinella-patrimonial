@@ -441,14 +441,18 @@ def processar_actiu(actiu):
             "ticker": ticker,
             "nom": actiu["nom"],
             "capa": actiu["capa"],
+            "strike": strike,
+            "expiry": expiry,
+            "preu": prima,                 # perquè el front no vegi undefined
+            "variacio": 0,                 # aquí no té sentit % diari → 0
             "preu_subjacent": preu_subjacent,
             "prima": prima,
             "dte": dte,
             "distancia": dist,
             "marge": marge,
-            "vol_hist": vol_hist,     # <-- substitueix iv
-            "oi": None,               # <-- synthetic no té OI
-            "vol": None,              # <-- synthetic no té volum d’opcions
+            "vol_hist": vol_hist,
+            "oi": None,
+            "vol": None,
             "semafor": semafor,
             "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
         })
