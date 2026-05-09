@@ -389,7 +389,7 @@ def processar_actiu(actiu):
     global ULTIMA_ALERTA
 
     # 1) Saltar actius de Macro Hard Assets si el mercat està tancat
-    if actiu["capa"] == "Macro Hard Assets" and not mercat_obert():
+    if (actiu["capa"] == "Macro Hard Assets" or actiu["capa"] == "Options") and not mercat_obert():
         print(f"Saltant {actiu['ticker']} (mercat tancat)")
         return
 
