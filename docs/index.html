@@ -299,6 +299,30 @@
         </div>
       </div>
 
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Cash‑Secured Puts</div>
+          <div class="pill">OPTIONS</div>
+        </div>
+      
+        <div class="list" style="overflow-x:auto;">
+          <table class="actius-table">
+            <thead>
+              <tr>
+                <th>Subjacent</th>
+                <th>Strike</th>
+                <th>Prima</th>
+                <th>DTE</th>
+                <th>Distància</th>
+                <th>Semàfor</th>
+                <th>Hora</th>
+              </tr>
+            </thead>
+            <tbody id="taula-csp"></tbody>
+          </table>
+        </div>
+      </div>
+
       <!-- TARGETA TAULA D'ACTIUS -->
       <div class="card">
         <div class="card-header">
@@ -614,6 +638,35 @@
           }
         });
 
+        // --- CASH‑SECURED PUTS (CSP) ---
+        const tbCSP = document.getElementById('taula-csp');
+        tbCSP.innerHTML = "";
+        
+        // Semàfor premium institucional
+        function semaforCSP(s) {
+          if (!s) return "";
+          return `${s.preu} Preu | ${s.prima} Prima | ${s.dte} DTE | ${s.dist} Distància`;
+        }
+        
+        // Filtrar només actius d'opcions (synthetic CSP)
+        const opcions = dades.actius.filter(a => a.capa === "Options");
+        
+        opcions.forEach(o => {
+          const tr = document.createElement("tr");
+        
+          tr.innerHTML = `
+            <td class="mono">${o.ticker}</td>
+            <td class="mono">${o.strike}</td>
+            <td class="mono">${o.prima.toFixed(2)}</td>
+            <td class="mono">${o.dte}</td>
+            <td class="mono">${o.distancia.toFixed(2)}</td>
+            <td class="mono">${semaforCSP(o.semafor)}</td>
+            <td class="mono">${o.hora}</td>
+          `;
+        
+          tbCSP.appendChild(tr);
+        });
+        
         // --- TARGETES FONAMENTALS GENERIQUES ---
         const grid = document.querySelector(".grid");
         
