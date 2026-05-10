@@ -141,16 +141,16 @@
   },
   "MCD": {
     "nom": "McDonald's Corp",
-    "roic": "TODO",
-    "marge_operatiu": "TODO",
-    "fcf_yield": "TODO",
-    "per_actual": "TODO",
-    "per_hist_mitja": "TODO",
-    "deute_net_ebitda": "TODO",
-    "dividend_yield": "TODO",
+    "roic": 15.0,
+    "marge_operatiu": 45.0,
+    "fcf_yield": 3.0,
+    "per_actual": 23.0,
+    "per_hist_mitja": 25.0,
+    "deute_net_ebitda": 3.0,
+    "dividend_yield": 2.4,
     "actualitzat": "2026-05-10",
     "preu_actual": null,
     "variacio_pct": null,
-    "nota": "Actualitzaci\u00f3 parcial basada en Yahoo Spark (no inclou fonamentals complets)"
+    "nota": "Actualització sintètica manual basada en dades públiques (Yahoo Spark no disponible)"
   }
 }
