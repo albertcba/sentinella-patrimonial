@@ -32,6 +32,7 @@
   { "ticker": "WCOS.L", "nom": "SS SP MSCI World Consumer Staples (WCOS)", "capa": "Core equity premium" },
   { "ticker": "WHEA.L", "nom": "SS SP MSCI World Health Care (WHEA)", "capa": "Core equity premium" },
   { "ticker": "WTEL.L", "nom": "SS SPDR MSCI World Communication (WTEL)", "capa": "Core equity premium" },  
+  { "ticker": "MCD", "nom": "McDonald's Corp (MCD)", "capa": "Core equity premium" },  
 
   { "ticker": "NXE", "nom": "NexGen Energy Ltd (NXE)", "capa": "Single Stock Sentinella" },
   { "ticker": "ABBN.SW", "nom": "ABB Ltd (ABBN)", "capa": "Single Stock Sentinella" },
