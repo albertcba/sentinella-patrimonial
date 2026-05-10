@@ -623,9 +623,9 @@
           `;
 
           // Single Stock Sentinella (ara mateix: ULVR, NXE futurament més)
-          const singleTickers = ["ULVR.L", "NXE", "JNJ", "SJM", "ABBN.SW", "BEPC", "BWXT", "LEU", "SU", "WTRG"];          
+          const singleTickers = ["ULVR.L", "NXE", "JNJ", "SJM", "ABBN.SW", "BEPC", "BWXT", "LEU", "SU", "WTRG", "MCD"];          
           
-          if (a.capa === "Macro Hard Assets" || a.ticker === "NXE") {
+          if (a.capa === "Macro Hard Assets" || a.ticker === "NXE" || a.ticker === "LEU" || a.ticker === "BWXT" || a.ticker === "SU") {
             tbMacro.appendChild(tr);
           } else if (singleTickers.includes(a.ticker)) {
             tbSingle.appendChild(tr);            
