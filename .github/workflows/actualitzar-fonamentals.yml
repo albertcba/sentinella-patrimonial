@@ -1,5 +1,8 @@
 name: Actualitzar Fonamentals
 
+permissions:
+  contents: write   # 🔥 necessari per fer commit/push
+
 on:
   schedule:
     - cron: "0 5 * * 1"   # Dilluns 07:00 hora catalana (05:00 UTC)
@@ -11,6 +14,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}   # 🔥 necessari per fer push
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -25,3 +30,11 @@ jobs:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python actualitzar_fonamentals.py
+
+      - name: Commit updated fundamentals
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add fundamentals.json
+          git commit -m "Actualització automàtica de fonamentals" || echo "No hi ha canvis per commitejar"
+          git push
