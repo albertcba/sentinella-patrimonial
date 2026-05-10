@@ -1,48 +1,31 @@
 import requests
 import json
 from datetime import datetime
-import re
 
 YF_HEADERS = {
     "User-Agent": "Mozilla/5.0",
     "Accept": "application/json"
 }
 
-# ---------------------------------------------------------
-# 1) OBTENIR FONAMENTALS DES DE YAHOO FINANCE
-# ---------------------------------------------------------
-
-def obtenir_yahoo_key_stats(ticker):
+def obtenir_dades_quote(ticker):
     """
-    Retorna un diccionari amb:
-    - marge_operatiu (%)
-    - per_actual
-    - deute_net_ebitda
-    - dividend_yield (%)
+    Obté dades bàsiques de Yahoo Finance via endpoint 'quote'.
+    Aquest endpoint és estable i no bloqueja GitHub Actions.
     """
-    url = f"https://query2.finance.yahoo.com/v10/finance/quoteSummary/{ticker}?modules=defaultKeyStatistics,financialData"
+    url = f"https://query1.finance.yahoo.com/v7/finance/quote?symbols={ticker}"
     r = requests.get(url, headers=YF_HEADERS, timeout=10)
     data = r.json()
 
     try:
-        ks = data["quoteSummary"]["result"][0]["defaultKeyStatistics"]
-        fd = data["quoteSummary"]["result"][0]["financialData"]
-
-        marge_operatiu = fd.get("operatingMargins", {}).get("raw", None)
-        per_actual = ks.get("forwardPE", {}).get("raw", None)
-        deute_net_ebitda = ks.get("enterpriseToEbitda", {}).get("raw", None)
-        dividend_yield = ks.get("dividendYield", {}).get("raw", None)
-
-        if marge_operatiu is not None:
-            marge_operatiu *= 100
-        if dividend_yield is not None:
-            dividend_yield *= 100
+        q = data["quoteResponse"]["result"][0]
 
         return {
-            "marge_operatiu": marge_operatiu,
-            "per_actual": per_actual,
-            "deute_net_ebitda": deute_net_ebitda,
-            "dividend_yield": dividend_yield
+            "marge_operatiu": q.get("operatingMargins", None),
+            "per_actual": q.get("forwardPE", None),
+            "deute_net_ebitda": q.get("enterpriseToEbitda", None),
+            "dividend_yield": q.get("dividendYield", None),
+            "fcf_yield": q.get("freeCashflow", None),  # pot ser None
+            "roic": None  # ROIC no està disponible en aquest endpoint
         }
 
     except Exception:
@@ -50,39 +33,11 @@ def obtenir_yahoo_key_stats(ticker):
             "marge_operatiu": None,
             "per_actual": None,
             "deute_net_ebitda": None,
-            "dividend_yield": None
+            "dividend_yield": None,
+            "fcf_yield": None,
+            "roic": None
         }
 
-
-# ---------------------------------------------------------
-# 2) OBTENIR ROIC I FCF YIELD DES DE MACROTRENDS
-# ---------------------------------------------------------
-
-def obtenir_macrotrends_metric(url, pattern):
-    r = requests.get(url, headers=YF_HEADERS, timeout=10)
-    html = r.text
-    match = re.search(pattern, html)
-    if match:
-        try:
-            return float(match.group(1))
-        except:
-            return None
-    return None
-
-
-def obtenir_roic_macrotrends(ticker):
-    url = f"https://www.macrotrends.net/stocks/charts/{ticker}/x/roic"
-    return obtenir_macrotrends_metric(url, r"ROIC</td><td.*?>(-?\d+\.\d+)")
-
-
-def obtenir_fcf_yield_macrotrends(ticker):
-    url = f"https://www.macrotrends.net/stocks/charts/{ticker}/x/free-cash-flow-yield"
-    return obtenir_macrotrends_metric(url, r"Free Cash Flow Yield</td><td.*?>(-?\d+\.\d+)")
-
-
-# ---------------------------------------------------------
-# 3) FUNCIÓ PRINCIPAL D’ACTUALITZACIÓ
-# ---------------------------------------------------------
 
 def actualitzar_fonamentals(fundamentals):
     resultat = {}
@@ -90,28 +45,26 @@ def actualitzar_fonamentals(fundamentals):
     for ticker, dades in fundamentals.items():
         print(f"Actualitzant {ticker}...")
 
-        yf = obtenir_yahoo_key_stats(ticker)
-        roic = obtenir_roic_macrotrends(ticker)
-        fcf_yield = obtenir_fcf_yield_macrotrends(ticker)
+        yf = obtenir_dades_quote(ticker)
+
+        # Convertir marges i dividend yield a percentatge si cal
+        marge = yf["marge_operatiu"] * 100 if yf["marge_operatiu"] else None
+        dividend = yf["dividend_yield"] * 100 if yf["dividend_yield"] else None
 
         resultat[ticker] = {
             "nom": dades["nom"],
-            "roic": roic,
-            "marge_operatiu": yf["marge_operatiu"],
-            "fcf_yield": fcf_yield,
+            "roic": yf["roic"],  # no disponible en aquest endpoint
+            "marge_operatiu": marge,
+            "fcf_yield": yf["fcf_yield"],
             "per_actual": yf["per_actual"],
             "per_hist_mitja": dades.get("per_hist_mitja"),
             "deute_net_ebitda": yf["deute_net_ebitda"],
-            "dividend_yield": yf["dividend_yield"],
+            "dividend_yield": dividend,
             "actualitzat": datetime.utcnow().strftime("%Y-%m-%d")
         }
 
     return resultat
 
-
-# ---------------------------------------------------------
-# 4) EXECUCIÓ DIRECTA (opcional)
-# ---------------------------------------------------------
 
 if __name__ == "__main__":
     with open("fundamentals.json") as f:
