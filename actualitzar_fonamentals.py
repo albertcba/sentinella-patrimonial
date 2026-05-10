@@ -4,16 +4,31 @@ from datetime import datetime
 
 def obtenir_dades_spark(ticker):
     url = f"https://query1.finance.yahoo.com/v7/finance/spark?symbols={ticker}&range=1d&interval=1d"
-    r = requests.get(url, timeout=10)
-    data = r.json()
 
     try:
+        r = requests.get(url, timeout=10)
+
+        # Si la resposta no és JSON, retornem dades buides
+        try:
+            data = r.json()
+        except:
+            print(f"⚠ Yahoo no ha retornat JSON per {ticker}")
+            return {
+                "preu": None,
+                "variacio_pct": None
+            }
+
+        # Parse normal
         q = data["spark"]["result"][0]
+        close = q["response"][0]["close"]
+
         return {
-            "preu": q["response"][0]["close"][-1],
-            "variacio_pct": q["response"][0]["close"][-1] / q["response"][0]["close"][0] - 1
+            "preu": close[-1],
+            "variacio_pct": (close[-1] / close[0] - 1) if close[0] else None
         }
-    except:
+
+    except Exception as e:
+        print(f"⚠ Error obtenint dades per {ticker}: {e}")
         return {
             "preu": None,
             "variacio_pct": None
