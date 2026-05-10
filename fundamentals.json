@@ -8,9 +8,11 @@
     "per_hist_mitja": 20.0,
     "deute_net_ebitda": 2.0,
     "dividend_yield": 3.6,
-    "actualitzat": "2026-04-24"
+    "actualitzat": "2026-05-10",
+    "preu_actual": null,
+    "variacio_pct": null,
+    "nota": "Actualitzaci\u00f3 parcial basada en Yahoo Spark (no inclou fonamentals complets)"
   },
-
   "NXE": {
     "nom": "NexGen Energy Ltd",
     "roic": -3.0,
@@ -20,9 +22,11 @@
     "per_hist_mitja": null,
     "deute_net_ebitda": 4.0,
     "dividend_yield": 0.0,
-    "actualitzat": "2026-04-27"
+    "actualitzat": "2026-05-10",
+    "preu_actual": null,
+    "variacio_pct": null,
+    "nota": "Actualitzaci\u00f3 parcial basada en Yahoo Spark (no inclou fonamentals complets)"
   },
-
   "ABBN.SW": {
     "nom": "ABB Ltd",
     "roic": 16.0,
@@ -32,9 +36,11 @@
     "per_hist_mitja": 20.0,
     "deute_net_ebitda": 1.2,
     "dividend_yield": 2.4,
-    "actualitzat": "2026-05-03"
+    "actualitzat": "2026-05-10",
+    "preu_actual": null,
+    "variacio_pct": null,
+    "nota": "Actualitzaci\u00f3 parcial basada en Yahoo Spark (no inclou fonamentals complets)"
   },
-
   "BEPC": {
     "nom": "Brookfield Renewable",
     "roic": 3.0,
@@ -44,9 +50,11 @@
     "per_hist_mitja": null,
     "deute_net_ebitda": 5.5,
     "dividend_yield": 4.7,
-    "actualitzat": "2026-05-03"
+    "actualitzat": "2026-05-10",
+    "preu_actual": null,
+    "variacio_pct": null,
+    "nota": "Actualitzaci\u00f3 parcial basada en Yahoo Spark (no inclou fonamentals complets)"
   },
-
   "BWXT": {
     "nom": "BWX Technologies",
     "roic": 18.0,
@@ -56,9 +64,11 @@
     "per_hist_mitja": 24.0,
     "deute_net_ebitda": 1.8,
     "dividend_yield": 1.3,
-    "actualitzat": "2026-05-03"
+    "actualitzat": "2026-05-10",
+    "preu_actual": null,
+    "variacio_pct": null,
+    "nota": "Actualitzaci\u00f3 parcial basada en Yahoo Spark (no inclou fonamentals complets)"
   },
-
   "LEU": {
     "nom": "Centrus Energy",
     "roic": 12.0,
@@ -68,9 +78,11 @@
     "per_hist_mitja": 18.0,
     "deute_net_ebitda": 0.9,
     "dividend_yield": 0.0,
-    "actualitzat": "2026-05-03"
+    "actualitzat": "2026-05-10",
+    "preu_actual": null,
+    "variacio_pct": null,
+    "nota": "Actualitzaci\u00f3 parcial basada en Yahoo Spark (no inclou fonamentals complets)"
   },
-
   "SU": {
     "nom": "Schneider Electric",
     "roic": 13.0,
@@ -80,9 +92,11 @@
     "per_hist_mitja": 22.0,
     "deute_net_ebitda": 1.5,
     "dividend_yield": 2.0,
-    "actualitzat": "2026-05-03"
+    "actualitzat": "2026-05-10",
+    "preu_actual": null,
+    "variacio_pct": null,
+    "nota": "Actualitzaci\u00f3 parcial basada en Yahoo Spark (no inclou fonamentals complets)"
   },
-
   "WTRG": {
     "nom": "Essential Utilities",
     "roic": 5.0,
@@ -92,9 +106,11 @@
     "per_hist_mitja": 25.0,
     "deute_net_ebitda": 4.8,
     "dividend_yield": 3.2,
-    "actualitzat": "2026-05-03"
+    "actualitzat": "2026-05-10",
+    "preu_actual": null,
+    "variacio_pct": null,
+    "nota": "Actualitzaci\u00f3 parcial basada en Yahoo Spark (no inclou fonamentals complets)"
   },
-  
   "JNJ": {
     "nom": "Johnson & Johnson",
     "roic": 17.0,
@@ -104,9 +120,11 @@
     "per_hist_mitja": 17.0,
     "deute_net_ebitda": 1.0,
     "dividend_yield": 3.0,
-    "actualitzat": "2026-05-03"
+    "actualitzat": "2026-05-10",
+    "preu_actual": null,
+    "variacio_pct": null,
+    "nota": "Actualitzaci\u00f3 parcial basada en Yahoo Spark (no inclou fonamentals complets)"
   },
-
   "SJM": {
     "nom": "JM Smucker Co",
     "roic": 10.0,
@@ -116,9 +134,11 @@
     "per_hist_mitja": 18.0,
     "deute_net_ebitda": 2.5,
     "dividend_yield": 3.4,
-    "actualitzat": "2026-05-03"
+    "actualitzat": "2026-05-10",
+    "preu_actual": null,
+    "variacio_pct": null,
+    "nota": "Actualitzaci\u00f3 parcial basada en Yahoo Spark (no inclou fonamentals complets)"
   },
-
   "MCD": {
     "nom": "McDonald's Corp",
     "roic": "TODO",
@@ -128,7 +148,9 @@
     "per_hist_mitja": "TODO",
     "deute_net_ebitda": "TODO",
     "dividend_yield": "TODO",
-    "actualitzat": "TODO"
-  }  
-  
+    "actualitzat": "2026-05-10",
+    "preu_actual": null,
+    "variacio_pct": null,
+    "nota": "Actualitzaci\u00f3 parcial basada en Yahoo Spark (no inclou fonamentals complets)"
+  }
 }
