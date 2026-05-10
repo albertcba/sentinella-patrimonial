@@ -117,6 +117,18 @@
     "deute_net_ebitda": 2.5,
     "dividend_yield": 3.4,
     "actualitzat": "2026-05-03"
-  }
+  },
+
+  "MCD": {
+    "nom": "McDonald's Corp",
+    "roic": "TODO",
+    "marge_operatiu": "TODO",
+    "fcf_yield": "TODO",
+    "per_actual": "TODO",
+    "per_hist_mitja": "TODO",
+    "deute_net_ebitda": "TODO",
+    "dividend_yield": "TODO",
+    "actualitzat": "TODO"
+  }  
   
 }
