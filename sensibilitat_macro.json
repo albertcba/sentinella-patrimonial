@@ -22,4 +22,9 @@
   "COPX":      { "tga": 1, "fed_balance": 1, "tipus_reals": -1 },
 
   "NXE":       { "tga": 0, "fed_balance": 1, "tipus_reals": -2 }
+
+  "BWXT":    { "tga": 0, "fed_balance": 1, "tipus_reals": -1 },
+  "LEU":     { "tga": 1, "fed_balance": 1, "tipus_reals": -2 },
+  "SU":      { "tga": 0, "fed_balance": 1, "tipus_reals": 0 }
+
 }
