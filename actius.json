@@ -40,5 +40,5 @@
   { "ticker": "BWXT", "nom": "BWX Technologies (BWXT)", "capa": "Single Stock Sentinella" },
   { "ticker": "LEU", "nom": "Centrus Energy (LEU)", "capa": "Single Stock Sentinella" },
   { "ticker": "SU", "nom": "Schneider Electric (SU)", "capa": "Single Stock Sentinella" },
-  { "ticker": "WTRG", "nom": "Essential Utilities (WTRG)", "capa": "Single Stock Sentinella" },
+  { "ticker": "WTRG", "nom": "Essential Utilities (WTRG)", "capa": "Single Stock Sentinella" }
 ]
