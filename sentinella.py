@@ -108,8 +108,16 @@ def es_cripto(actiu):
     return actiu["ticker"] in ["BTC-EUR", "ETH-EUR"]
 
 def mercat_obert():
-    hora = datetime.utcnow().hour
-    return 7 <= hora <= 20
+    ara = datetime.utcnow()
+    dia = ara.weekday()        # 0 = dilluns, 6 = diumenge
+    hora = ara.hour
+
+    # Caps de setmana tancat
+    if dia >= 5:
+        return False
+
+    # Horari de 07:00 a 24:00 UTC
+    return 7 <= hora < 24
 
 def calcular_dte(expiry):
     avui = datetime.utcnow().date()
@@ -388,8 +396,8 @@ def llindar_variacio(actiu):
 def processar_actiu(actiu):
     global ULTIMA_ALERTA
 
-    # 1) Saltar actius de Macro Hard Assets si el mercat està tancat
-    if (actiu["capa"] == "Macro Hard Assets" or actiu["capa"] == "Options") and not mercat_obert():
+    # 1) Saltar actius si el mercat està tancat
+    if not es_cripto(actiu['ticker']) and not mercat_obert():
         print(f"Saltant {actiu['ticker']} (mercat tancat)")
         return
 
@@ -410,7 +418,8 @@ def processar_actiu(actiu):
         return
 
     print(f"{ticker}: {variacio:.2f}%  preu={preu}")
-    
+
+    #  { "ticker": "WTRG-PUT40", "nom": "WTRG Cash-Secured Put 40", "capa": "Options", "underlying": "WTRG", "strike": 40, "expiry": "2026-05-15" }      
     if actiu["capa"] == "Options":
         subjacent = actiu["underlying"]   # <-- CORRECCIÓ
         strike = actiu["strike"]
