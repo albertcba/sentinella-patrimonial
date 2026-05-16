@@ -104,8 +104,8 @@ with open("sensibilitat_macro.json") as f:
 #   FUNCIONS EXISTENTS
 # ---------------------------------------------------------
 
-def es_cripto(actiu):
-    return actiu["ticker"] in ["BTC-EUR", "ETH-EUR"]
+def es_cripto(ticker):
+    return ticker in ["BTC-EUR", "ETH-EUR"]
 
 def mercat_obert():
     ara = datetime.utcnow()
