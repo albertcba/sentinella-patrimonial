@@ -108,16 +108,20 @@ def es_cripto(ticker):
     return ticker in ["BTC-EUR", "ETH-EUR"]
 
 def mercat_obert():
-    ara = datetime.utcnow()
-    dia = ara.weekday()        # 0 = dilluns, 6 = diumenge
-    hora = ara.hour
+    ara_utc = datetime.utcnow()
+    ara_local = datetime.now()  # detecta CET/CEST automàticament
+    offset = (ara_local - ara_utc).seconds // 3600  # +1 o +2
+
+    # Convertim hora catalana a UTC
+    hora_local = ara_local.hour
+    dia = ara_local.weekday()  # 0=dilluns, 6=diumenge
 
     # Caps de setmana tancat
     if dia >= 5:
         return False
 
-    # Horari de 07:00 a 24:00 UTC
-    return 7 <= hora < 24
+    # Horari català: 06:00–24:00
+    return 6 <= hora_local < 24
 
 def calcular_dte(expiry):
     avui = datetime.utcnow().date()
