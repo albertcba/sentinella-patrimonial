@@ -40,5 +40,9 @@
   { "ticker": "BWXT", "nom": "BWX Technologies (BWXT)", "capa": "Single Stock Sentinella" },
   { "ticker": "LEU", "nom": "Centrus Energy (LEU)", "capa": "Single Stock Sentinella" },
   { "ticker": "SU", "nom": "Schneider Electric (SU)", "capa": "Single Stock Sentinella" },
-  { "ticker": "WTRG", "nom": "Essential Utilities (WTRG)", "capa": "Single Stock Sentinella" }
+  { "ticker": "WTRG", "nom": "Essential Utilities (WTRG)", "capa": "Single Stock Sentinella" },
+  { "ticker": "F-PUT12.5", "nom": "F Cash-Secured Put 12.5", "capa": "Options", "underlying": "F", "strike": 12.5, "expiry": "2026-05-22" },
+  { "ticker": "VZ-PUT45", "nom": "VZ Cash-Secured Put 45", "capa": "Options", "underlying": "VZ", "strike": 45, "expiry": "2026-05-22" },
+  { "ticker": "T-PUT23.5", "nom": "T Cash-Secured Put 23.5", "capa": "Options", "underlying": "T", "strike": 23.5, "expiry": "2026-05-22" }
+  { "ticker": "WTRG-CALL40", "nom": "WTRG Covered Call 40", "capa": "Options", "underlying": "WTRG", "strike": 40, "expiry": "2026-06-18" }
 ]
