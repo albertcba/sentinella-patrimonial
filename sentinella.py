@@ -473,7 +473,7 @@ def processar_actiu(actiu):
         # ALERTES
         if prima > 2.50 or preu_subjacent < strike:
             enviar_missatge(
-                f"⚠️ ALERTA actiu["nom"] {subjacent} {strike}\n"
+                f"⚠️ ALERTA {actiu["nom"]} {subjacent} {strike}\n"
                 f"Prima: {prima:.2f}\n"
                 f"Preu subjacent: {preu_subjacent:.2f}\n"
                 f"DTE: {dte}\n"
