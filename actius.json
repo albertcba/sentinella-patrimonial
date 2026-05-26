@@ -44,5 +44,6 @@
   { "ticker": "WTRG-CALL40", "nom": "WTRG Covered Call 40", "capa": "Options", "underlying": "WTRG", "strike": 40, "expiry": "2026-06-18" },
   { "ticker": "SPSM-PUT49", "nom": "SPSM Cash-Secured Put 49", "capa": "Options", "underlying": "SPSM", "strike": 49, "expiry": "2026-06-18" },
   { "ticker": "XLE-PUT55", "nom": "XLE Cash-Secured Put 55", "capa": "Options", "underlying": "XLE", "strike": 55, "expiry": "2026-06-18" },
-  { "ticker": "KMI-PUT33", "nom": "KMI Cash-Secured Put 33", "capa": "Options", "underlying": "KMI", "strike": 33, "expiry": "2026-05-29" }  
+  { "ticker": "KMI-PUT33", "nom": "KMI Cash-Secured Put 33", "capa": "Options", "underlying": "KMI", "strike": 33, "expiry": "2026-05-29" },
+  { "ticker": "XLF-BULLPUT51/50", "nom": "XLF Bull Put 51/50", "capa": "Options", "underlying": "XLF", "strike": 51, "expiry": "2026-06-18" }
 ]
