@@ -94,30 +94,98 @@ MACRO = obtenir_macro()
 
 
 # ---------------------------------------------------------
-#   OPTIONS ENGINE — PLACEHOLDER MINIMALISTA
-# ---------------------------------------------------------
-
-def obtenir_options_engine(macro):
-    """
-    Panell minimalista per al mercat d'opcions.
-    De moment, valors simbòlics (0 = 🟡) i macro reutilitzat.
-    """
-    return {
-        "vix": 0,              # -1 = 🔴, 0 = 🟡, +1 = 🟢
-        "estocastic_spx": 0,   # -1 = 🔴, 0 = 🟡, +1 = 🟢
-        "regim_macro": macro   # reutilitzem el mateix bloc MACRO
-    }
-
-OPTIONS_ENGINE = obtenir_options_engine(MACRO)
-
-
-
-# ---------------------------------------------------------
 #   SENSIBILITAT MACRO PER ACTIU
 # ---------------------------------------------------------
 
 with open("sensibilitat_macro.json") as f:
     SENSIBILITAT_MACRO = json.load(f)
+
+
+# ---------------------------------------------------------
+#   OPTIONS ENGINE — PLACEHOLDER MINIMALISTA
+# ---------------------------------------------------------
+
+
+def obtenir_vix():
+    """
+    Retorna l'estat del VIX com a semàfor (-1, 0, +1).
+    Llindars institucionals:
+      - VIX < 13 → 🔴 (volatilitat baixa)
+      - 13–18 → 🟡 (moderada)
+      - > 18 → 🟢 (alta)
+    """
+    closes = obtenir_dades_chart_yahoo("^VIX", dies_hist=5)
+    vix = closes[-1]
+
+    if vix < 13:
+        return -1
+    if vix > 18:
+        return 1
+    return 0
+
+
+def obtenir_estocastic_spx():
+    """
+    Calcula l'estocàstic lent (%D) de l'SPX (ticker ^GSPC).
+    Retorna semàfor (-1, 0, +1).
+    """
+    closes = obtenir_dades_chart_yahoo("^GSPC", dies_hist=30)
+
+    # finestra de 14 dies
+    window = 14
+    if len(closes) < window + 3:
+        return 0
+
+    # %K dels últims 3 dies
+    ks = []
+    for i in range(3):
+        segment = closes[-(window + i): -i or None]
+        low14 = min(segment)
+        high14 = max(segment)
+        close = closes[-1 - i]
+
+        if high14 == low14:
+            k = 50
+        else:
+            k = (close - low14) / (high14 - low14) * 100
+        ks.append(k)
+
+    # %D = mitjana de 3 dies
+    d = sum(ks) / 3
+
+    if d < 20:
+        return 1   # 🟢 sobreventa
+    if d > 80:
+        return -1  # 🔴 sobrecompra
+    return 0       # 🟡 neutral
+
+
+
+def obtenir_options_engine(macro):
+    """
+    Panell operatiu d'opcions amb dades reals:
+      - VIX real
+      - Estocàstic SPX real
+      - Règim macro reutilitzat
+    """
+    try:
+        vix = obtenir_vix()
+    except:
+        vix = 0
+
+    try:
+        stoch = obtenir_estocastic_spx()
+    except:
+        stoch = 0
+
+    return {
+        "vix": vix,
+        "estocastic_spx": stoch,
+        "regim_macro": macro
+    }
+
+OPTIONS_ENGINE = obtenir_options_engine(MACRO)
+
 
 # ---------------------------------------------------------
 #   FUNCIONS EXISTENTS
