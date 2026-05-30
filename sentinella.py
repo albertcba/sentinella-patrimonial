@@ -94,6 +94,25 @@ MACRO = obtenir_macro()
 
 
 # ---------------------------------------------------------
+#   OPTIONS ENGINE — PLACEHOLDER MINIMALISTA
+# ---------------------------------------------------------
+
+def obtenir_options_engine(macro):
+    """
+    Panell minimalista per al mercat d'opcions.
+    De moment, valors simbòlics (0 = 🟡) i macro reutilitzat.
+    """
+    return {
+        "vix": 0,              # -1 = 🔴, 0 = 🟡, +1 = 🟢
+        "estocastic_spx": 0,   # -1 = 🔴, 0 = 🟡, +1 = 🟢
+        "regim_macro": macro   # reutilitzem el mateix bloc MACRO
+    }
+
+OPTIONS_ENGINE = obtenir_options_engine(MACRO)
+
+
+
+# ---------------------------------------------------------
 #   SENSIBILITAT MACRO PER ACTIU
 # ---------------------------------------------------------
 
@@ -547,6 +566,7 @@ def main():
     }
 
     resultat["macro"] = MACRO
+    resultat["options_engine"] = OPTIONS_ENGINE    
     resultat["actius"] = DADES_ACTIUS
     resultat["ultima_execucio"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
 
