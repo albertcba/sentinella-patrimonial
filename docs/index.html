@@ -282,6 +282,35 @@
           </div>
         </div>
       </div>
+
+      <!-- TARGETA OPTIONS ENGINE -->
+      <div class="card" id="options-card">
+        <div class="card-header">
+          <div class="card-title">Options Engine</div>
+          <div class="pill">VOLATILITY</div>
+        </div>
+      
+        <div id="options-legend" class="legend-box">
+          <div id="legend-vix" class="legend-line"></div>
+          <div id="legend-stoch" class="legend-line"></div>
+          <div id="legend-regim" class="legend-line"></div>
+        </div>
+      
+        <div class="list">
+          <div class="row">
+            <span class="label">VIX</span>
+            <span class="value mono" id="opt-vix"></span>
+          </div>
+          <div class="row">
+            <span class="label">Estocàstic SPX</span>
+            <span class="value mono" id="opt-stoch"></span>
+          </div>
+          <div class="row">
+            <span class="label">Règim Macro</span>
+            <span class="value mono" id="opt-regim"></span>
+          </div>
+        </div>
+      </div>
       
       <!-- TARGETA SISTEMA -->
       <div class="card">
@@ -581,7 +610,63 @@
 
           
         }
-  
+
+        // --- TARGETA OPTIONS ENGINE ---
+        if (dades.options_engine) {
+        
+          function optEmoji(v) {
+            if (v === 1) return "🟢";
+            if (v === -1) return "🔴";
+            return "🟡";
+          }
+        
+          function optClass(v) {
+            if (v === 1) return "macro-green";
+            if (v === -1) return "macro-red";
+            return "macro-yellow";
+          }
+        
+          // Pintar valors
+          document.getElementById("opt-vix").innerHTML =
+            `<span class="${optClass(dades.options_engine.vix)}">${optEmoji(dades.options_engine.vix)}</span>`;
+        
+          document.getElementById("opt-stoch").innerHTML =
+            `<span class="${optClass(dades.options_engine.estocastic_spx)}">${optEmoji(dades.options_engine.estocastic_spx)}</span>`;
+        
+          // El règim macro reutilitza el mateix bloc MACRO
+          const reg = dades.options_engine.regim_macro;
+          const regScore = reg.tga + reg.fed_balance + reg.tipus_reals;
+        
+          const regVal = regScore >= 1 ? 1 : regScore <= -1 ? -1 : 0;
+        
+          document.getElementById("opt-regim").innerHTML =
+            `<span class="${optClass(regVal)}">${optEmoji(regVal)}</span>`;
+        
+          // Llegendes minimalistes
+          function llegendaVIX(v) {
+            if (v === -1) return "VIX 🔴 — Volatilitat baixa: primes febles.";
+            if (v === 1) return "VIX 🟢 — Volatilitat alta: primes elevades.";
+            return "VIX 🟡 — Volatilitat moderada: primes normals.";
+          }
+        
+          function llegendaStoch(v) {
+            if (v === -1) return "Estocàstic 🔴 — Sobrecompra: millor per calls cobertes.";
+            if (v === 1) return "Estocàstic 🟢 — Sobreventa: millor per puts assegurats.";
+            return "Estocàstic 🟡 — Zona neutral.";
+          }
+        
+          function llegendaRegim(v) {
+            if (v === -1) return "Règim Macro 🔴 — Liquiditat expansiva: suport per risc.";
+            if (v === 1) return "Règim Macro 🟢 — Liquiditat restrictiva: pressió sobre risc.";
+            return "Règim Macro 🟡 — Entorn estable.";
+          }
+        
+          document.getElementById("legend-vix").textContent = llegendaVIX(dades.options_engine.vix);
+          document.getElementById("legend-stoch").textContent = llegendaStoch(dades.options_engine.estocastic_spx);
+          document.getElementById("legend-regim").textContent = llegendaRegim(regVal);
+        }
+
+        
         // SISTEMA
         if (dades.sistema) {
           document.getElementById('sys-workflow').textContent = dades.sistema.workflow;
