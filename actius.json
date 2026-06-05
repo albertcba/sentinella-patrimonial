@@ -44,5 +44,9 @@
   { "ticker": "WTRG-CALL40", "nom": "WTRG Covered Call 40", "capa": "Options", "underlying": "WTRG", "strike": 40, "expiry": "2026-06-18" },
   { "ticker": "KMI-CALL33", "nom": "KMI Covered Call 33", "capa": "Options", "underlying": "KMI", "strike": 33, "expiry": "2026-06-18" },
   { "ticker": "XLE-BULLPUT55/52.5", "nom": "XLE Bull Put 55/52.5", "capa": "Options", "underlying": "XLE", "strike": 55, "expiry": "2026-06-18" },
-  { "ticker": "XLF-BULLPUT51/50", "nom": "XLF Bull Put 51/50", "capa": "Options", "underlying": "XLF", "strike": 51, "expiry": "2026-06-18" }
+  { "ticker": "XLF-BULLPUT51/50", "nom": "XLF Bull Put 51/50", "capa": "Options", "underlying": "XLF", "strike": 51, "expiry": "2026-06-18" },
+  { "ticker": "BG-BULLPUT120/115", "nom": "XLE Bull Put 120/115", "capa": "Options", "underlying": "BG", "strike": 120, "expiry": "2026-07-17" },
+  { "ticker": "GM-BULLPUT81/80", "nom": "GM Bull Put 81/80", "capa": "Options", "underlying": "GM", "strike": 81, "expiry": "2026-06-12" },
+  { "ticker": "JPM-BULLPUT295/290", "nom": "JPM Bull Put 295/290", "capa": "Options", "underlying": "JPM", "strike": 295, "expiry": "2026-06-26" },
+  { "ticker": "KO-BULLPUT77/76", "nom": "KO Bull Put 77/76", "capa": "Options", "underlying": "KO", "strike": 77, "expiry": "2026-06-18" }  
 ]
