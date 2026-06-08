@@ -48,5 +48,6 @@
   { "ticker": "BG-BULLPUT120/115", "nom": "XLE Bull Put 120/115", "capa": "Options", "underlying": "BG", "strike": 120, "expiry": "2026-07-17" },
   { "ticker": "GM-BULLPUT81/80", "nom": "GM Bull Put 81/80", "capa": "Options", "underlying": "GM", "strike": 81, "expiry": "2026-06-12" },
   { "ticker": "JPM-BULLPUT295/290", "nom": "JPM Bull Put 295/290", "capa": "Options", "underlying": "JPM", "strike": 295, "expiry": "2026-06-26" },
-  { "ticker": "KO-BULLPUT77/76", "nom": "KO Bull Put 77/76", "capa": "Options", "underlying": "KO", "strike": 77, "expiry": "2026-06-18" }  
+  { "ticker": "KO-BULLPUT77/76", "nom": "KO Bull Put 77/76", "capa": "Options", "underlying": "KO", "strike": 77, "expiry": "2026-06-18" },
+  { "ticker": "IBIT-BULLPUT34/33", "nom": "IBIT Bull Put 34/33", "capa": "Options", "underlying": "IBIT", "strike": 34, "expiry": "2026-06-12" }
 ]
