@@ -3,35 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <title>Avaluador de Vertical Puts</title>
+
     <style>
         body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
+            background-color: #0d0d0d;
+            color: #e0e0e0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            max-width: 650px;
             margin: 40px auto;
+            padding: 20px;
             line-height: 1.6;
         }
-        label { font-weight: bold; }
+
+        h2, h3 {
+            color: #f0f0f0;
+            font-weight: 500;
+        }
+
+        label {
+            font-weight: 500;
+            color: #cccccc;
+        }
+
         input {
             width: 100%;
-            padding: 6px;
-            margin-bottom: 12px;
+            padding: 8px;
+            margin-bottom: 14px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            background-color: #1a1a1a;
+            color: #e0e0e0;
         }
+
         button {
             padding: 10px 20px;
-            font-size: 16px;
+            font-size: 15px;
             cursor: pointer;
+            background-color: #333;
+            color: #e0e0e0;
+            border: 1px solid #555;
+            border-radius: 4px;
         }
+
+        button:hover {
+            background-color: #444;
+        }
+
         pre {
-            background: #f4f4f4;
+            background: #111;
             padding: 15px;
             border-radius: 6px;
+            border: 1px solid #333;
+            color: #d0d0d0;
+        }
+
+        .semafor {
+            font-size: 22px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
+
 <body>
 
     <h2>Avaluador de Vertical Puts</h2>
-    <p>Introdueix les dades del vertical i obtindràs el semàfor, l’anomalia i el crèdit just.</p>
+    <p>Calcula l’anomalia, el crèdit just i el semàfor de risc.</p>
 
     <form id="verticalForm">
         <label>Subjacent:</label>
@@ -68,31 +104,75 @@
     </form>
 
     <h3>Resultat:</h3>
+    <div id="semafor" class="semafor"></div>
     <pre id="resultat"></pre>
 
     <script>
-        async function avaluar() {
-            const params = new URLSearchParams({
-                subjacent: document.getElementById("subjacent").value,
-                preu_subjacent: document.getElementById("preu_subjacent").value,
-                expiry: document.getElementById("expiry").value,
-                strike_curt: document.getElementById("strike_curt").value,
-                delta_curt: document.getElementById("delta_curt").value,
-                strike_llarg: document.getElementById("strike_llarg").value,
-                delta_llarg: document.getElementById("delta_llarg").value,
-                bid: document.getElementById("bid").value,
-                mid: document.getElementById("mid").value,
-                ask: document.getElementById("ask").value
-            });
+        function avaluar() {
+            const subjacent = document.getElementById("subjacent").value;
+            const preu_subjacent = parseFloat(document.getElementById("preu_subjacent").value);
+            const expiry = document.getElementById("expiry").value;
 
-            // IMPORTANT: substitueix aquesta URL pel teu servidor FastAPI
-            const API_URL = "http://localhost:8000/avaluar_vertical";
+            const strike_curt = parseFloat(document.getElementById("strike_curt").value);
+            const delta_curt = parseFloat(document.getElementById("delta_curt").value);
 
-            const res = await fetch(API_URL + "?" + params);
-            const data = await res.json();
+            const strike_llarg = parseFloat(document.getElementById("strike_llarg").value);
+            const delta_llarg = parseFloat(document.getElementById("delta_llarg").value);
 
+            const bid = parseFloat(document.getElementById("bid").value);
+            const mid = parseFloat(document.getElementById("mid").value);
+            const ask = parseFloat(document.getElementById("ask").value);
+
+            // --- CÀLCULS (versió JS del teu mòdul Python) ---
+            const amplada = Math.abs(strike_curt - strike_llarg);
+
+            const abs_dc = Math.abs(delta_curt);
+            const abs_dl = Math.abs(delta_llarg);
+
+            const p_c = abs_dl;
+            const p_b = abs_dc - abs_dl;
+            const p_a = 1 - abs_dc;
+
+            const credit_just = p_c * amplada + p_b * (amplada / 2);
+            const anomalia = mid - credit_just;
+
+            let semafor = "";
+            let emoji = "";
+            let missatge = "";
+
+            if (anomalia > 0.05) {
+                semafor = "VERMELL";
+                emoji = "🔴";
+                missatge = "Crèdit desproporcionat: risc ocult.";
+            } else if (anomalia < -0.05) {
+                semafor = "TARONJA";
+                emoji = "🟠";
+                missatge = "Crèdit minso: no compensa el risc.";
+            } else {
+                semafor = "VERD";
+                emoji = "🟢";
+                missatge = "Preu normal: coherent amb el risc.";
+            }
+
+            const resultat = {
+                subjacent,
+                preu_subjacent,
+                expiry,
+                strike_curt,
+                strike_llarg,
+                delta_curt,
+                delta_llarg,
+                mid_real: mid,
+                amplada,
+                credit_just: credit_just.toFixed(4),
+                anomalia: anomalia.toFixed(4),
+                semafor,
+                missatge
+            };
+
+            document.getElementById("semafor").textContent = emoji + " " + semafor;
             document.getElementById("resultat").textContent =
-                JSON.stringify(data, null, 2);
+                JSON.stringify(resultat, null, 2);
         }
     </script>
 
