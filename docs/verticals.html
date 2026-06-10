@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <title>Avaluador de Vertical Puts</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            line-height: 1.6;
+        }
+        label { font-weight: bold; }
+        input {
+            width: 100%;
+            padding: 6px;
+            margin-bottom: 12px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Avaluador de Vertical Puts</h2>
+    <p>Introdueix les dades del vertical i obtindràs el semàfor, l’anomalia i el crèdit just.</p>
+
+    <form id="verticalForm">
+        <label>Subjacent:</label>
+        <input type="text" id="subjacent">
+
+        <label>Preu subjacent:</label>
+        <input type="number" id="preu_subjacent" step="0.01">
+
+        <label>Expiry (YYYY-MM-DD):</label>
+        <input type="text" id="expiry">
+
+        <label>Strike curt:</label>
+        <input type="number" id="strike_curt" step="0.01">
+
+        <label>Delta curt:</label>
+        <input type="number" id="delta_curt" step="0.001">
+
+        <label>Strike llarg:</label>
+        <input type="number" id="strike_llarg" step="0.01">
+
+        <label>Delta llarg:</label>
+        <input type="number" id="delta_llarg" step="0.001">
+
+        <label>Bid:</label>
+        <input type="number" id="bid" step="0.01">
+
+        <label>Mid:</label>
+        <input type="number" id="mid" step="0.01">
+
+        <label>Ask:</label>
+        <input type="number" id="ask" step="0.01">
+
+        <button type="button" onclick="avaluar()">Avaluar</button>
+    </form>
+
+    <h3>Resultat:</h3>
+    <pre id="resultat"></pre>
+
+    <script>
+        async function avaluar() {
+            const params = new URLSearchParams({
+                subjacent: document.getElementById("subjacent").value,
+                preu_subjacent: document.getElementById("preu_subjacent").value,
+                expiry: document.getElementById("expiry").value,
+                strike_curt: document.getElementById("strike_curt").value,
+                delta_curt: document.getElementById("delta_curt").value,
+                strike_llarg: document.getElementById("strike_llarg").value,
+                delta_llarg: document.getElementById("delta_llarg").value,
+                bid: document.getElementById("bid").value,
+                mid: document.getElementById("mid").value,
+                ask: document.getElementById("ask").value
+            });
+
+            // IMPORTANT: substitueix aquesta URL pel teu servidor FastAPI
+            const API_URL = "http://localhost:8000/avaluar_vertical";
+
+            const res = await fetch(API_URL + "?" + params);
+            const data = await res.json();
+
+            document.getElementById("resultat").textContent =
+                JSON.stringify(data, null, 2);
+        }
+    </script>
+
+</body>
+</html>
