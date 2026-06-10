@@ -50,5 +50,7 @@
   { "ticker": "JPM-BULLPUT295/290", "nom": "JPM Bull Put 295/290", "capa": "Options", "underlying": "JPM", "strike": 295, "expiry": "2026-06-26" },
   { "ticker": "KO-BULLPUT77/76", "nom": "KO Bull Put 77/76", "capa": "Options", "underlying": "KO", "strike": 77, "expiry": "2026-06-18" },
   { "ticker": "IBIT-BULLPUT34/33", "nom": "IBIT Bull Put 34/33", "capa": "Options", "underlying": "IBIT", "strike": 34, "expiry": "2026-06-12" },
-  { "ticker": "PEP-BULLPUT130/125", "nom": "PEP Bull Put 130/125", "capa": "Options", "underlying": "PEP", "strike": 130, "expiry": "2026-07-17" }
+  { "ticker": "PEP-BULLPUT130/125", "nom": "PEP Bull Put 130/125", "capa": "Options", "underlying": "PEP", "strike": 130, "expiry": "2026-07-17" },
+  { "ticker": "BAC-BULLPUT51/50", "nom": "BAC Bull Put 51/50", "capa": "Options", "underlying": "BAC", "strike": 51, "expiry": "2026-07-02" },
+  { "ticker": "F-BULLPUT13/12", "nom": "F Bull Put 13/12", "capa": "Options", "underlying": "F", "strike": 13, "expiry": "2026-07-17" }
 ]
