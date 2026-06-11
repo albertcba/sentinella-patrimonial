@@ -65,6 +65,26 @@
         #advanced {
             margin-top: 15px;
         }
+
+        .subjacent-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .subjacent-row input {
+            flex: 1;
+        }
+        
+        .subjacent-row button {
+            padding: 8px 12px;
+            font-size: 14px;
+            background-color: #333;
+            color: #e0e0e0;
+            border: 1px solid #555;
+            border-radius: 4px;
+        }
+
     </style>
 </head>
 
@@ -74,8 +94,12 @@
     <p>Calcula l’anomalia, el crèdit just i el semàfor de risc.</p>
 
     <form id="verticalForm">
+        
         <label>Subjacent:</label>
-        <input type="text" id="subjacent">
+        <div class="subjacent-row">
+            <input type="text" id="subjacent">
+            <button type="button" onclick="obrirGrafic()">📈</button>
+        </div>
 
         <label>Preu subjacent:</label>
         <input type="number" id="preu_subjacent" step="0.01">
@@ -222,7 +246,15 @@
             a.click();
             URL.revokeObjectURL(url);
         }
-       
+
+        function obrirGrafic() {
+            const subjacent = document.getElementById("subjacent").value.trim();
+            if (!subjacent) return;
+        
+            const url = `https://finance.yahoo.com/quote/${encodeURIComponent(subjacent)}`;
+            window.open(url, "_blank");
+        }
+        
     </script>
 
 </body>
