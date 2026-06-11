@@ -52,5 +52,9 @@
   { "ticker": "IBIT-BULLPUT34/33", "nom": "IBIT Bull Put 34/33", "capa": "Options", "underlying": "IBIT", "strike": 34, "expiry": "2026-06-12" },
   { "ticker": "PEP-BULLPUT130/125", "nom": "PEP Bull Put 130/125", "capa": "Options", "underlying": "PEP", "strike": 130, "expiry": "2026-07-17" },
   { "ticker": "BAC-BULLPUT51/50", "nom": "BAC Bull Put 51/50", "capa": "Options", "underlying": "BAC", "strike": 51, "expiry": "2026-07-02" },
-  { "ticker": "F-BULLPUT13/12", "nom": "F Bull Put 13/12", "capa": "Options", "underlying": "F", "strike": 13, "expiry": "2026-07-17" }
+  { "ticker": "F-BULLPUT13/12", "nom": "F Bull Put 13/12", "capa": "Options", "underlying": "F", "strike": 13, "expiry": "2026-07-17" },
+  { "ticker": "ADM-BULLPUT75/70", "nom": "ADM Bull Put 75/70", "capa": "Options", "underlying": "ADM", "strike": 75, "expiry": "2026-07-17" },
+  { "ticker": "PFE-BULLPUT25/24.5", "nom": "PFE Bull Put 25/24.5", "capa": "Options", "underlying": "PFE", "strike": 25, "expiry": "2026-06-26" },
+  { "ticker": "VZ-BULLPUT45/44", "nom": "VZ Bull Put 45/44", "capa": "Options", "underlying": "VZ", "strike": 45, "expiry": "2026-07-02" },
+  { "ticker": "XLE-BULLPUT55/54.5", "nom": "XLE Bull Put 55/54.5", "capa": "Options", "underlying": "XLE", "strike": 55, "expiry": "2026-06-26" }
 ]
