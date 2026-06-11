@@ -117,6 +117,8 @@
         <pre id="metrics"></pre>
     </div>
 
+    <button type="button" onclick="exportarJSON()">Exportar JSON</button>
+    
     <script>
         function toggleAdvanced() {
             const box = document.getElementById("advanced");
@@ -201,6 +203,26 @@
                 EM: EM.toFixed(4)
             }, null, 2);
         }
+
+        function exportarJSON() {
+            const text = document.getElementById("resultat").textContent;
+            if (!text.trim()) return;
+        
+            const blob = new Blob([text], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+        
+            const a = document.createElement("a");
+            a.href = url;
+        
+            // Nom del fitxer: vertical_<subjacent>_<expiry>.json
+            const subjacent = document.getElementById("subjacent").value || "vertical";
+            const expiry = document.getElementById("expiry").value || "expiry";
+            a.download = `vertical_${subjacent}_${expiry}.json`;
+        
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+       
     </script>
 
 </body>
