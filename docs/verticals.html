@@ -61,6 +61,10 @@
             font-size: 22px;
             margin-bottom: 10px;
         }
+
+        #advanced {
+            margin-top: 15px;
+        }
     </style>
 </head>
 
@@ -107,7 +111,18 @@
     <div id="semafor" class="semafor"></div>
     <pre id="resultat"></pre>
 
+    <button type="button" onclick="toggleAdvanced()">Mètriques avançades ▼</button>
+
+    <div id="advanced" style="display:none;">
+        <pre id="metrics"></pre>
+    </div>
+
     <script>
+        function toggleAdvanced() {
+            const box = document.getElementById("advanced");
+            box.style.display = (box.style.display === "none") ? "block" : "none";
+        }
+
         function avaluar() {
             const subjacent = document.getElementById("subjacent").value;
             const preu_subjacent = parseFloat(document.getElementById("preu_subjacent").value);
@@ -123,7 +138,7 @@
             const mid = parseFloat(document.getElementById("mid").value);
             const ask = parseFloat(document.getElementById("ask").value);
 
-            // --- CÀLCULS (versió JS del teu mòdul Python) ---
+            // --- CÀLCULS BASE ---
             const amplada = Math.abs(strike_curt - strike_llarg);
 
             const abs_dc = Math.abs(delta_curt);
@@ -173,6 +188,18 @@
             document.getElementById("semafor").textContent = emoji + " " + semafor;
             document.getElementById("resultat").textContent =
                 JSON.stringify(resultat, null, 2);
+
+            // --- MÈTRIQUES AVANÇADES ---
+            const POP = 1 - abs_dc;
+            const risk_max = amplada - mid;
+            const RR = mid / risk_max;
+            const EM = POP * mid - (1 - POP) * risk_max;
+
+            document.getElementById("metrics").textContent = JSON.stringify({
+                POP: POP.toFixed(4),
+                RR: RR.toFixed(4),
+                EM: EM.toFixed(4)
+            }, null, 2);
         }
     </script>
 
