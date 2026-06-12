@@ -133,6 +133,7 @@
 
     <h3>Resultat:</h3>
     <div id="semafor" class="semafor"></div>
+    <div id="semafor2" class="semafor"></div>
     <pre id="resultat"></pre>
 
     <button type="button" onclick="toggleAdvanced()">Mètriques avançades ▼</button>
@@ -221,13 +222,58 @@
             const RR = mid / risk_max;
             const EM = POP * mid - (1 - POP) * risk_max;
 
+            const ef = classificarEficiència(POP, RR, EM, mid, amplada);
+
+            let emoji2 = "";
+            if (ef.etiqueta === "OK") emoji2 = "🟢";
+            else if (ef.etiqueta === "ACCEPTABLE") emoji2 = "🟡";
+            else emoji2 = "🔴";
+            
+            document.getElementById("semafor2").textContent =
+                emoji2 + " Eficiència: " + ef.nivell;
+
+            
             document.getElementById("metrics").textContent = JSON.stringify({
                 POP: POP.toFixed(4),
                 RR: RR.toFixed(4),
-                EM: EM.toFixed(4)
+                EM: EM.toFixed(4),
+                eficiència: ef.nivell
             }, null, 2);
+            
         }
 
+        function classificarEficiència(POP, RR, EM, mid, amplada) {
+            // Suposem amplada = 0.5 per ara
+            let creditMinOK = 0.10;
+            let creditMinAcceptable = 0.06;
+        
+            let creditClass = (mid >= creditMinOK) ? "OK" :
+                              (mid >= creditMinAcceptable) ? "ACCEPTABLE" : "NO";
+        
+            let rrClass = (RR >= 0.25) ? "OK" :
+                          (RR >= 0.18) ? "ACCEPTABLE" : "NO";
+        
+            let emClass = (EM >= 0.02) ? "OK" :
+                          (EM >= 0) ? "ACCEPTABLE" : "NO";
+        
+            let popClass = (POP >= 0.85) ? "OK" :
+                           (POP >= 0.75) ? "ACCEPTABLE" : "NO";
+        
+            // Si algun és NO → No eficient
+            if ([creditClass, rrClass, emClass, popClass].includes("NO")) {
+                return { nivell: "No eficient", etiqueta: "NO_EFICIENT" };
+            }
+        
+            // Si tots són OK → OK
+            if ([creditClass, rrClass, emClass, popClass].every(c => c === "OK")) {
+                return { nivell: "OK", etiqueta: "OK" };
+            }
+        
+            // Resta → Acceptable
+            return { nivell: "Acceptable", etiqueta: "ACCEPTABLE" };
+        }
+
+        
         function exportarJSON() {
             const text = document.getElementById("resultat").textContent;
             if (!text.trim()) return;
