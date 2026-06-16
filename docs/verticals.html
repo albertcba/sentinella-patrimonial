@@ -155,6 +155,25 @@
         <pre id="metrics"></pre>
     </div>
 
+    <button type="button" onclick="toggleEficiencia()">Crèdit mínim eficient ▼</button>
+    
+    <div id="eficienciaPanel" style="display:none; margin-top:15px;">
+    
+        <h3>Pre-filtre + Eficiència</h3>
+    
+        <label>Amplada del spread:</label>
+        <input type="number" id="amplada_eficient" step="0.1" placeholder="1">
+    
+        <label>Delta curt (per POP):</label>
+        <input type="number" id="delta_eficient" step="0.001" placeholder="-0.20">
+    
+        <button type="button" onclick="calcularCreditMinimEficient()">Calcular</button>
+    
+        <div id="semafor_eficient" class="semafor"></div>
+        <pre id="resultat_eficient"></pre>
+    
+    </div>
+    
     <button type="button" onclick="exportarJSON()">Exportar JSON</button>
     
     <script>
@@ -352,7 +371,72 @@
             document.getElementById("resultat_prefiltre").textContent =
                 JSON.stringify(resultat, null, 2);
         }
+
+        function toggleEficiencia() {
+            const box = document.getElementById("eficienciaPanel");
+            box.style.display = (box.style.display === "none") ? "block" : "none";
+        }
         
+        function calcularCreditMinimEficient() {
+            const amplada = parseFloat(document.getElementById("amplada_eficient").value);
+            const delta_curt = Math.abs(parseFloat(document.getElementById("delta_eficient").value));
+        
+            if (isNaN(amplada) || isNaN(delta_curt)) {
+                document.getElementById("resultat_eficient").textContent =
+                    "Introdueix amplada i delta curt.";
+                return;
+            }
+        
+            // POP aproximat segons delta curt
+            const POP = 1 - delta_curt;
+        
+            // Condició EM ≥ 0.02
+            const credit_min_EM = (1 - POP) + 0.02;
+        
+            // Condició RR ≥ 0.25
+            const credit_min_RR = 0.25 * amplada / (1 + 0.25);
+        
+            // Crèdit mínim eficient
+            const credit_min_eficient = Math.max(credit_min_EM, credit_min_RR);
+        
+            // Crèdit raonable segons delta i amplada
+            const k_min = 0.55;
+            const k_max = 0.75;
+            const credit_raonable_min = amplada * delta_curt * k_min;
+            const credit_raonable_max = amplada * delta_curt * k_max;
+        
+            // Rang acceptable
+            const acceptable_min = credit_raonable_min * 0.85;
+            const acceptable_max = credit_raonable_max * 1.15;
+        
+            // Semàfor d'eficiència
+            let emoji = "";
+            if (credit_min_eficient <= credit_raonable_min) emoji = "🟢";
+            else if (credit_min_eficient <= acceptable_max) emoji = "🟡";
+            else emoji = "🔴";
+        
+            document.getElementById("semafor_eficient").textContent =
+                emoji + " Crèdit mínim eficient: " + credit_min_eficient.toFixed(3);
+        
+            const resultat = {
+                amplada,
+                delta_curt,
+                POP: POP.toFixed(3),
+                credit_min_eficient: credit_min_eficient.toFixed(3),
+                credit_raonable: {
+                    min: credit_raonable_min.toFixed(3),
+                    max: credit_raonable_max.toFixed(3)
+                },
+                rang_acceptable: {
+                    min: acceptable_min.toFixed(3),
+                    max: acceptable_max.toFixed(3)
+                }
+            };
+        
+            document.getElementById("resultat_eficient").textContent =
+                JSON.stringify(resultat, null, 2);
+        }
+                
         
     </script>
 
