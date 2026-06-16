@@ -93,6 +93,19 @@
     <h2>Avaluador de Vertical Puts</h2>
     <p>Calcula l’anomalia, el crèdit just i el semàfor de risc.</p>
 
+    <h3>Crèdit raonable (pre-filtre)</h3>
+    
+    <label>Amplada del spread:</label>
+    <input type="number" id="amplada_prefiltre" step="0.1" placeholder="0.5 / 1 / 2.5 / 5">
+    
+    <label>Delta curt objectiu:</label>
+    <input type="number" id="delta_objectiu" step="0.01" placeholder="0.20">
+    
+    <button type="button" onclick="calcularCreditRaonable()">Calcular crèdit raonable</button>
+    
+    <pre id="resultat_prefiltre"></pre>
+
+    
     <form id="verticalForm">
         
         <label>Subjacent:</label>
@@ -300,6 +313,46 @@
             const url = `https://finance.yahoo.com/quote/${encodeURIComponent(subjacent)}`;
             window.open(url, "_blank");
         }
+
+        function calcularCreditRaonable() {
+            const amplada = parseFloat(document.getElementById("amplada_prefiltre").value);
+            const delta_obj = Math.abs(parseFloat(document.getElementById("delta_objectiu").value));
+        
+            if (isNaN(amplada) || isNaN(delta_obj)) {
+                document.getElementById("resultat_prefiltre").textContent =
+                    "Introdueix amplada i delta objectiu.";
+                return;
+            }
+        
+            // Rang institucional del factor k
+            const k_min = 0.55;
+            const k_max = 0.75;
+        
+            const credit_min = amplada * delta_obj * k_min;
+            const credit_max = amplada * delta_obj * k_max;
+        
+            // Rang acceptable
+            const acceptable_min = credit_min * 0.85;
+            const acceptable_max = credit_max * 1.15;
+        
+            const resultat = {
+                amplada,
+                delta_objectiu: delta_obj,
+                credit_raonable: {
+                    min: credit_min.toFixed(3),
+                    max: credit_max.toFixed(3)
+                },
+                rang_acceptable: {
+                    min: acceptable_min.toFixed(3),
+                    max: acceptable_max.toFixed(3)
+                },
+                credit_minim_eficient: (credit_min * 0.92).toFixed(3)
+            };
+        
+            document.getElementById("resultat_prefiltre").textContent =
+                JSON.stringify(resultat, null, 2);
+        }
+        
         
     </script>
 
