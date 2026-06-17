@@ -340,7 +340,10 @@
             const POP = 1 - delta_curt;
         
             // Condició EM ≥ 0.02
-            const credit_min_EM = (1 - POP) + 0.02;
+            // EM = POP*C - (1-POP)*(amplada - C) >= 0.02
+            // => (POP + (1-POP)) * C - (1-POP)*amplada >= 0.02
+            // => C >= (0.02 + (1-POP)*amplada)
+            const credit_min_EM = (0.02 + (1 - POP) * amplada);
         
             // Condició RR ≥ 0.25
             const credit_min_RR = 0.25 * amplada / (1 + 0.25);
