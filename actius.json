@@ -55,5 +55,7 @@
   { "ticker": "PFE-BULLPUT25/24.5", "nom": "PFE Bull Put 25/24.5", "capa": "Options", "underlying": "PFE", "strike": 25, "expiry": "2026-06-26" },
   { "ticker": "VZ-BULLPUT45/44", "nom": "VZ Bull Put 45/44", "capa": "Options", "underlying": "VZ", "strike": 45, "expiry": "2026-07-02" },
   { "ticker": "XLE-BULLPUT55/54.5", "nom": "XLE Bull Put 55/54.5", "capa": "Options", "underlying": "XLE", "strike": 55, "expiry": "2026-06-26" },
-  { "ticker": "KO-CALENDARSPREAD80/80", "nom": "KO Calendar Spread 80/80", "capa": "Options", "underlying": "KO", "strike": 80, "expiry": "2026-06-26" }  
+  { "ticker": "KO-CALENDARSPREAD80/80", "nom": "KO Calendar Spread 80/80", "capa": "Options", "underlying": "KO", "strike": 80, "expiry": "2026-06-26" },
+  { "ticker": "SO-CSP90", "nom": "SO Cash Secured Put 90", "capa": "Options", "underlying": "SO", "strike": 90, "expiry": "2026-07-31" },
+  { "ticker": "URNM-CSP55", "nom": "URNM Cash Secured Put 55", "capa": "Options", "underlying": "URNM", "strike": 55, "expiry": "2026-07-17" }  
 ]
