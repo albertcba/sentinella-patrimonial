@@ -43,11 +43,8 @@
   { "ticker": "WTRG", "nom": "Essential Utilities (WTRG)", "capa": "Single Stock Sentinella" },
   { "ticker": "WTRG-CALL40", "nom": "WTRG Covered Call 40", "capa": "Options", "underlying": "WTRG", "strike": 40, "expiry": "2026-06-18" },
   { "ticker": "KMI-CALL33", "nom": "KMI Covered Call 33", "capa": "Options", "underlying": "KMI", "strike": 33, "expiry": "2026-06-18" },
-  { "ticker": "XLE-BULLPUT55/52.5", "nom": "XLE Bull Put 55/52.5", "capa": "Options", "underlying": "XLE", "strike": 55, "expiry": "2026-06-18" },
-  { "ticker": "XLF-BULLPUT51/50", "nom": "XLF Bull Put 51/50", "capa": "Options", "underlying": "XLF", "strike": 51, "expiry": "2026-06-18" },
   { "ticker": "BG-BULLPUT120/115", "nom": "XLE Bull Put 120/115", "capa": "Options", "underlying": "BG", "strike": 120, "expiry": "2026-07-17" },
   { "ticker": "JPM-BULLPUT295/290", "nom": "JPM Bull Put 295/290", "capa": "Options", "underlying": "JPM", "strike": 295, "expiry": "2026-06-26" },
-  { "ticker": "KO-BULLPUT77/76", "nom": "KO Bull Put 77/76", "capa": "Options", "underlying": "KO", "strike": 77, "expiry": "2026-06-18" },
   { "ticker": "PEP-BULLPUT130/125", "nom": "PEP Bull Put 130/125", "capa": "Options", "underlying": "PEP", "strike": 130, "expiry": "2026-07-17" },
   { "ticker": "BAC-BULLPUT51/50", "nom": "BAC Bull Put 51/50", "capa": "Options", "underlying": "BAC", "strike": 51, "expiry": "2026-07-02" },
   { "ticker": "F-BULLPUT13/12", "nom": "F Bull Put 13/12", "capa": "Options", "underlying": "F", "strike": 13, "expiry": "2026-07-17" },
@@ -57,5 +54,6 @@
   { "ticker": "XLE-BULLPUT55/54.5", "nom": "XLE Bull Put 55/54.5", "capa": "Options", "underlying": "XLE", "strike": 55, "expiry": "2026-06-26" },
   { "ticker": "KO-CALENDARSPREAD80/80", "nom": "KO Calendar Spread 80/80", "capa": "Options", "underlying": "KO", "strike": 80, "expiry": "2026-06-26" },
   { "ticker": "SO-CSP90", "nom": "SO Cash Secured Put 90", "capa": "Options", "underlying": "SO", "strike": 90, "expiry": "2026-07-31" },
-  { "ticker": "URNM-CSP55", "nom": "URNM Cash Secured Put 55", "capa": "Options", "underlying": "URNM", "strike": 55, "expiry": "2026-07-17" }  
+  { "ticker": "URNM-CSP55", "nom": "URNM Cash Secured Put 55", "capa": "Options", "underlying": "URNM", "strike": 55, "expiry": "2026-07-17" },
+  { "ticker": "UL-CALENDARSPREAD57/57", "nom": "KO Calendar Spread 57/57", "capa": "Options", "underlying": "UL", "strike": 57, "expiry": "2026-07-10" },
 ]
