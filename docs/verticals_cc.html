@@ -285,14 +285,14 @@ function avaluarCC() {
         preu,
         strike,
         dte,
-        prima,
+        prima: prima.toFixed(2),
         distancia: distancia.toFixed(2),
         rend_anual: rend_anual.toFixed(2),
         nou_cost: nou_cost.toFixed(2),
         risc_assign,
         perill,
         credit_min,
-        decisio: go
+        decisio
     };
 
     document.getElementById("resultat").textContent =
