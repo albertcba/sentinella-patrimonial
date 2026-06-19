@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <title>Avaluador de Covered Calls</title>
+
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: #e0e0e0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        h2, h3 {
+            color: #f0f0f0;
+            font-weight: 500;
+        }
+
+        label {
+            font-weight: 500;
+            color: #cccccc;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 14px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 15px;
+            cursor: pointer;
+            background-color: #333;
+            color: #e0e0e0;
+            border: 1px solid #555;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #444;
+        }
+
+        pre {
+            background: #111;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #333;
+            color: #d0d0d0;
+        }
+
+        .semafor {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .section {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 6px;
+            background-color: #141414;
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .row input {
+            flex: 1;
+        }
+
+        .subjacent-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .subjacent-row input {
+            flex: 1;
+        }
+
+        .subjacent-row button {
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>Avaluador de Covered Calls</h2>
+<p>Validació institucional de risc, eficiència i consistència.</p>
+
+<form id="ccForm">
+
+    <!-- SUBJACENT -->
+    <div class="section">
+        <h3>Subjacent</h3>
+
+        <label>Actiu:</label>
+        <div class="subjacent-row">
+            <input type="text" id="subjacent">
+            <button type="button" onclick="obrirGrafic()">📈</button>
+        </div>
+
+        <label>Preu actual:</label>
+        <input type="number" id="preu" step="0.01">
+
+        <label>Cost base:</label>
+        <input type="number" id="cost" step="0.01">
+
+        <label>Dividend proper (sí/no):</label>
+        <input type="text" id="dividend">
+    </div>
+
+    <!-- CONTRACTE -->
+    <div class="section">
+        <h3>Contracte</h3>
+
+        <label>Strike:</label>
+        <input type="number" id="strike" step="0.01">
+
+        <label>Expiry (DTE):</label>
+        <input type="number" id="dte">
+
+        <div class="row">
+            <div>
+                <label>Bid:</label>
+                <input type="number" id="bid" step="0.01">
+            </div>
+            <div>
+                <label>Ask:</label>
+                <input type="number" id="ask" step="0.01">
+            </div>
+        </div>
+
+        <label>Open Interest:</label>
+        <input type="number" id="oi">
+
+        <label>Volum:</label>
+        <input type="number" id="vol">
+    </div>
+
+    <!-- GREGUES -->
+    <div class="section">
+        <h3>Gregues</h3>
+
+        <label>Delta:</label>
+        <input type="number" id="delta" step="0.001">
+
+        <label>Theta:</label>
+        <input type="number" id="theta" step="0.001">
+
+        <label>Vega:</label>
+        <input type="number" id="vega" step="0.001">
+
+        <label>Gamma:</label>
+        <input type="number" id="gamma" step="0.001">
+
+        <label>IV (%):</label>
+        <input type="number" id="iv" step="0.1">
+    </div>
+
+    <!-- POSICIÓ -->
+    <div class="section">
+        <h3>Posició</h3>
+
+        <label>Accions (normalment 100):</label>
+        <input type="number" id="accions" value="100">
+    </div>
+
+    <button type="button" onclick="avaluarCC()">Avaluar CC</button>
+
+</form>
+
+<h3>Resultat:</h3>
+<div id="semafor" class="semafor"></div>
+<pre id="resultat"></pre>
+
+<button type="button" onclick="toggleAdvanced()">Mètriques avançades ▼</button>
+<div id="advanced" style="display:none;">
+    <pre id="metrics"></pre>
+</div>
+
+<button type="button" onclick="exportarJSON()">Exportar JSON</button>
+
+<script>
+function toggleAdvanced() {
+    const box = document.getElementById("advanced");
+    box.style.display = (box.style.display === "none") ? "block" : "none";
+}
+
+function obrirGrafic() {
+    const subjacent = document.getElementById("subjacent").value.trim();
+    if (!subjacent) return;
+    const url = `https://finance.yahoo.com/quote/${encodeURIComponent(subjacent)}`;
+    window.open(url, "_blank");
+}
+
+function avaluarCC() {
+    const subjacent = document.getElementById("subjacent").value;
+    const preu = parseFloat(document.getElementById("preu").value);
+    const cost = parseFloat(document.getElementById("cost").value);
+    const dividend = document.getElementById("dividend").value.toLowerCase();
+
+    const strike = parseFloat(document.getElementById("strike").value);
+    const dte = parseFloat(document.getElementById("dte").value);
+    const bid = parseFloat(document.getElementById("bid").value);
+    const ask = parseFloat(document.getElementById("ask").value);
+    const oi = parseFloat(document.getElementById("oi").value);
+    const vol = parseFloat(document.getElementById("vol").value);
+
+    const delta = parseFloat(document.getElementById("delta").value);
+    const theta = parseFloat(document.getElementById("theta").value);
+    const iv = parseFloat(document.getElementById("iv").value);
+
+    const prima = (bid + ask) / 2;
+
+    // --- CÀLCULS ---
+    const distancia = ((strike - preu) / preu) * 100;
+    const rend_anual = (prima / cost) * (365 / dte) * 100;
+    const nou_cost = cost - prima;
+
+    const risc_assign = (delta > 0.30 || dividend === "sí") ? "Alt" : "Baix";
+    const perill = (oi < 200 || vol < 50 || iv < 15) ? "Detectat" : "Cap";
+    const credit_min = (prima / preu) > 0.01 ? "OK" : "Insuficient";
+
+    const go = (credit_min === "OK" && risc_assign === "Baix" && perill === "Cap")
+        ? "GO"
+        : "NO-GO";
+
+    document.getElementById("semafor").textContent =
+        (go === "GO" ? "🟢" : "🔴") + " " + go;
+
+    const resultat = {
+        subjacent,
+        preu,
+        strike,
+        dte,
+        prima,
+        distancia: distancia.toFixed(2),
+        rend_anual: rend_anual.toFixed(2),
+        nou_cost: nou_cost.toFixed(2),
+        risc_assign,
+        perill,
+        credit_min,
+        decisio: go
+    };
+
+    document.getElementById("resultat").textContent =
+        JSON.stringify(resultat, null, 2);
+
+    // --- MÈTRIQUES AVANÇADES ---
+    const assign_prob = delta;
+    const theta_day = theta;
+    const iv_level = iv;
+
+    document.getElementById("metrics").textContent = JSON.stringify({
+        Prob_assignacio: assign_prob,
+        Theta_dia: theta_day,
+        IV: iv_level,
+        Distancia_strike: distancia.toFixed(2),
+        Rendibilitat_anualitzada: rend_anual.toFixed(2)
+    }, null, 2);
+}
+
+function exportarJSON() {
+    const text = document.getElementById("resultat").textContent;
+    if (!text.trim()) return;
+
+    const blob = new Blob([text], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+
+    const subjacent = document.getElementById("subjacent").value || "cc";
+    const dte = document.getElementById("dte").value || "dte";
+
+    a.download = `cc_${subjacent}_${dte}.json`;
+
+    a.click();
+    URL.revokeObjectURL(url);
+}
+</script>
+
+</body>
+</html>
