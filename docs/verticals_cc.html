@@ -235,12 +235,45 @@ function avaluarCC() {
     const perill = (oi < 200 || vol < 50 || iv < 15) ? "Detectat" : "Cap";
     const credit_min = (prima / preu) > 0.01 ? "OK" : "Insuficient";
 
-    const go = (credit_min === "OK" && risc_assign === "Baix" && perill === "Cap")
-        ? "GO"
-        : "NO-GO";
+    let decisio = "";
+    let emoji = "";
+    
+    if (rend_anual > 12) {
+        decisio = "GO";
+        emoji = "🟢";
+    } else if (rend_anual > 4) {
+        decisio = "ACCEPTABLE";
+        emoji = "🟡";
+    } else {
+        decisio = "NO EFICIENT";
+        emoji = "🔴";
+    }
+    
+    let sem_rend = "";
+    if (rend_anual > 12) sem_rend = "🟢 GO";
+    else if (rend_anual > 4) sem_rend = "🟡 Acceptable";
+    else sem_rend = "🔴 Baixa";
 
-    document.getElementById("semafor").textContent =
-        (go === "GO" ? "🟢" : "🔴") + " " + go;
+    let sem_credit = "";
+    if (prima >= preu * 0.01) sem_credit = "🟢 Suficient";
+    else if (prima >= preu * 0.005) sem_credit = "🟡 Justet";
+    else sem_credit = "🔴 Insuficient";
+    
+    let sem_assign = "";
+    if (delta < 0.20) sem_assign = "🟢 Baix";
+    else if (delta < 0.35) sem_assign = "🟡 Mitjà";
+    else sem_assign = "🔴 Alt";
+
+    let sem_perill = "";
+    if (oi > 300 && vol > 50 && iv > 20) sem_perill = "🟢 Cap";
+    else if (oi > 100 && vol > 10) sem_perill = "🟡 Moderat";
+    else sem_perill = "🔴 Perill";
+
+    document.getElementById("semafor").textContent = emoji + " " + decisio;
+    document.getElementById("sem_rend").textContent = "Rendibilitat anualitzada: " + sem_rend;
+    document.getElementById("sem_credit").textContent = "Crèdit mínim: " + sem_credit;
+    document.getElementById("sem_assign").textContent = "Risc d'assignació: " + sem_assign;
+    document.getElementById("sem_perill").textContent = "Perill: " + sem_perill;
 
     const resultat = {
         subjacent,
