@@ -212,6 +212,12 @@ function obrirGrafic() {
     window.open(url, "_blank");
 }
 
+function netejar(text) {
+    return text.replace("🟢 ", "")
+               .replace("🟡 ", "")
+               .replace("🔴 ", "");
+}    
+
 function avaluarCC() {
     const subjacent = document.getElementById("subjacent").value;
     const preu = parseFloat(document.getElementById("preu").value);
@@ -289,9 +295,9 @@ function avaluarCC() {
         distancia: distancia.toFixed(2),
         rend_anual: rend_anual.toFixed(2),
         nou_cost: nou_cost.toFixed(2),
-        risc_assign,
-        perill,
-        credit_min,
+        risc_assign: netejar(sem_assign),
+        perill: netejar(sem_perill),
+        credit_min: netejar(sem_credit),
         decisio
     };
 
