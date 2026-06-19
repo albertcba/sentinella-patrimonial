@@ -55,5 +55,5 @@
   { "ticker": "KO-CALENDARSPREAD80/80", "nom": "KO Calendar Spread 80/80", "capa": "Options", "underlying": "KO", "strike": 80, "expiry": "2026-06-26" },
   { "ticker": "SO-CSP90", "nom": "SO Cash Secured Put 90", "capa": "Options", "underlying": "SO", "strike": 90, "expiry": "2026-07-31" },
   { "ticker": "URNM-CSP55", "nom": "URNM Cash Secured Put 55", "capa": "Options", "underlying": "URNM", "strike": 55, "expiry": "2026-07-17" },
-  { "ticker": "UL-CALENDARSPREAD57/57", "nom": "KO Calendar Spread 57/57", "capa": "Options", "underlying": "UL", "strike": 57, "expiry": "2026-07-10" },
+  { "ticker": "UL-CALENDARSPREAD57/57", "nom": "KO Calendar Spread 57/57", "capa": "Options", "underlying": "UL", "strike": 57, "expiry": "2026-07-10" }
 ]
