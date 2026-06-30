@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <title>Sentinella Patrimonial — Calendars</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #0f172a;
+            color: #e5e7eb;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            padding: 16px 24px;
+            background: #020617;
+            border-bottom: 1px solid #1f2937;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+        header p {
+            margin: 4px 0 0;
+            font-size: 13px;
+            color: #9ca3af;
+        }
+        main {
+            padding: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 20px;
+        }
+        .panel {
+            background: #020617;
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+            padding: 16px 18px;
+            margin-bottom: 18px;
+        }
+        .panel h2 {
+            margin: 0 0 8px;
+            font-size: 16px;
+        }
+        .panel h3 {
+            margin: 12px 0 6px;
+            font-size: 14px;
+            color: #9ca3af;
+        }
+        .panel small {
+            color: #6b7280;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        label {
+            font-size: 12px;
+            color: #9ca3af;
+            display: block;
+            margin-bottom: 2px;
+        }
+        input, select {
+            width: 100%;
+            padding: 6px 8px;
+            border-radius: 4px;
+            border: 1px solid #374151;
+            background: #020617;
+            color: #e5e7eb;
+            font-size: 13px;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        .inline-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .inline-row > div {
+            flex: 1;
+        }
+        button {
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: none;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        .btn-secondary {
+            background: #111827;
+            color: #e5e7eb;
+            border: 1px solid #374151;
+        }
+        .outputs {
+            font-size: 13px;
+        }
+        .outputs p {
+            margin: 4px 0;
+        }
+        .tag {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 999px;
+            font-size: 11px;
+            margin-right: 4px;
+        }
+        .tag-green { background: #064e3b; color: #a7f3d0; }
+        .tag-yellow { background: #78350f; color: #fde68a; }
+        .tag-red { background: #7f1d1d; color: #fecaca; }
+
+        .semaphore {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .light {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #1f2937;
+            border: 1px solid #374151;
+        }
+        .light.green { background: #22c55e; }
+        .light.yellow { background: #eab308; }
+        .light.red { background: #ef4444; }
+
+        .go-no-go {
+            margin-top: 10px;
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .go { background: #022c22; color: #6ee7b7; border: 1px solid #16a34a; }
+        .no-go { background: #450a0a; color: #fecaca; border: 1px solid #b91c1c; }
+        .neutral { background: #111827; color: #e5e7eb; border: 1px solid #4b5563; }
+
+        .section-note {
+            font-size: 11px;
+            color: #6b7280;
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Sentinella Patrimonial — Avaluació de Calendars</h1>
+    <p>Formulari manual institucional per validar eficiència, consistència, risc i perills ocults d’un Calendar.</p>
+</header>
+
+<main>
+    <div class="grid">
+        <!-- ESQUERRA: FORMULARI D’ENTRADA -->
+        <section>
+            <div class="panel">
+                <h2>1. Dades de l’actiu i estructura del Calendar</h2>
+                <p class="section-note">Introdueix el que veus a la cadena d’opcions per aquest Calendar concret.</p>
+
+                <div class="inline-row">
+                    <div>
+                        <label for="ticker">Ticker / Actiu</label>
+                        <input id="ticker" type="text" placeholder="KO, PEP, XLF...">
+                    </div>
+                    <div>
+                        <label for="underlyingPrice">Preu subjacient actual</label>
+                        <input id="underlyingPrice" type="number" step="0.01" placeholder="p.ex. 62.35">
+                    </div>
+                    <div>
+                        <label for="accountSize">Mida compte (aprox.)</label>
+                        <input id="accountSize" type="number" step="100" placeholder="p.ex. 25000">
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div>
+                        <label for="calendarType">Tipus de Calendar</label>
+                        <select id="calendarType">
+                            <option value="call">Calendar de Calls</option>
+                            <option value="put">Calendar de Puts</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="directionBias">Biaix direccional</label>
+                        <select id="directionBias">
+                            <option value="neutral">Neutral</option>
+                            <option value="bullish">Lleugerament alcista</option>
+                            <option value="bearish">Lleugerament baixista</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h3>Short leg (front month)</h3>
+                <div class="form-row">
+                    <div>
+                        <label for="shortExpiry">Venciment curt (DTE)</label>
+                        <input id="shortExpiry" type="number" placeholder="p.ex. 25">
+                    </div>
+                    <div>
+                        <label for="shortStrike">Strike curt</label>
+                        <input id="shortStrike" type="number" step="0.5" placeholder="p.ex. 60">
+                    </div>
+                    <div>
+                        <label for="shortPrice">Prima short (crèdit)</label>
+                        <input id="shortPrice" type="number" step="0.01" placeholder="p.ex. 1.25">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <label for="shortDelta">Delta short</label>
+                        <input id="shortDelta" type="number" step="0.01" placeholder="p.ex. 0.30">
+                    </div>
+                    <div>
+                        <label for="shortTheta">Theta short (per contracte)</label>
+                        <input id="shortTheta" type="number" step="0.01" placeholder="p.ex. 0.04">
+                    </div>
+                    <div>
+                        <label for="shortIV">IV short (%)</label>
+                        <input id="shortIV" type="number" step="0.1" placeholder="p.ex. 22.5">
+                    </div>
+                </div>
+
+                <h3>Long leg (back month)</h3>
+                <div class="form-row">
+                    <div>
+                        <label for="longExpiry">Venciment llarg (DTE)</label>
+                        <input id="longExpiry" type="number" placeholder="p.ex. 60">
+                    </div>
+                    <div>
+                        <label for="longStrike">Strike llarg</label>
+                        <input id="longStrike" type="number" step="0.5" placeholder="p.ex. 60">
+                    </div>
+                    <div>
+                        <label for="longPrice">Prima long (dèbit)</label>
+                        <input id="longPrice" type="number" step="0.01" placeholder="p.ex. 2.10">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <label for="longDelta">Delta long</label>
+                        <input id="longDelta" type="number" step="0.01" placeholder="p.ex. 0.40">
+                    </div>
+                    <div>
+                        <label for="longTheta">Theta long (per contracte)</label>
+                        <input id="longTheta" type="number" step="0.01" placeholder="p.ex. -0.03">
+                    </div>
+                    <div>
+                        <label for="longIV">IV llarg (%)</label>
+                        <input id="longIV" type="number" step="0.1" placeholder="p.ex. 24.0">
+                    </div>
+                </div>
+
+                <h3>Context i perills potencials</h3>
+                <div class="form-row-2">
+                    <div>
+                        <label for="earningsWithin">Hi ha earnings dins del venciment curt?</label>
+                        <select id="earningsWithin">
+                            <option value="no">No</option>
+                            <option value="yes">Sí</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="dividendRisk">Dividend / ex‑div dins del venciment curt?</label>
+                        <select id="dividendRisk">
+                            <option value="no">No</option>
+                            <option value="yes">Sí</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div>
+                        <label for="ivRegime">Règim d’IV (subjectiu)</label>
+                        <select id="ivRegime">
+                            <option value="normal">Normal</option>
+                            <option value="elevated">Elevada</option>
+                            <option value="low">Molt baixa</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="macroRisk">Risc macro / sectorial</label>
+                        <select id="macroRisk">
+                            <option value="low">Baix</option>
+                            <option value="medium">Mitjà</option>
+                            <option value="high">Alt</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="inline-row" style="margin-top: 12px;">
+                    <button class="btn-primary" type="button" onclick="avaluarCalendar()">Avaluar Calendar</button>
+                    <button class="btn-secondary" type="button" onclick="netejarFormulari()">Netejar</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- DRETA: LECTURA INSTITUCIONAL -->
+        <section>
+            <div class="panel">
+                <h2>2. Lectura institucional del Calendar</h2>
+                <p class="section-note">Resultats basats en les dades introduïdes. No és recomanació, és lectura de consistència.</p>
+
+                <div class="outputs" id="outputs">
+                    <p><strong>Cost net del Calendar:</strong> <span id="netCost">—</span></p>
+                    <p><strong>Exposició per contracte:</strong> <span id="exposure">—</span></p>
+                    <p><strong>Pes sobre el compte:</strong> <span id="accountRisk">—</span></p>
+
+                    <h3>Eficiència de la prima</h3>
+                    <p id="efficiencyText">—</p>
+                    <div id="efficiencyTags"></div>
+
+                    <h3>Consistència de l’estructura</h3>
+                    <p id="consistencyText">—</p>
+                    <div id="consistencyTags"></div>
+
+                    <h3>Risc controlat</h3>
+                    <p id="riskText">—</p>
+                    <div id="riskTags"></div>
+
+                    <h3>Perills ocults / distorsions</h3>
+                    <p id="hiddenText">—</p>
+                    <div id="hiddenTags"></div>
+
+                    <div class="semaphore">
+                        <span>Semàfor global:</span>
+                        <div class="light" id="semGreen"></div>
+                        <div class="light" id="semYellow"></div>
+                        <div class="light" id="semRed"></div>
+                    </div>
+
+                    <div id="goNoGo" class="go-no-go neutral" style="margin-top: 12px;">
+                        GO / NO‑GO: pendent d’avaluació
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script>
+function parseNumber(id) {
+    const v = document.getElementById(id).value;
+    const n = parseFloat(v);
+    return isNaN(n) ? null : n;
+}
+
+function setTags(containerId, tags) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = "";
+    tags.forEach(t => {
+        const span = document.createElement("span");
+        span.className = "tag " + t.color;
+        span.textContent = t.label;
+        container.appendChild(span);
+    });
+}
+
+function avaluarCalendar() {
+    const underlyingPrice = parseNumber("underlyingPrice");
+    const accountSize = parseNumber("accountSize");
+
+    const shortExpiry = parseNumber("shortExpiry");
+    const shortStrike = parseNumber("shortStrike");
+    const shortPrice = parseNumber("shortPrice");
+    const shortDelta = parseNumber("shortDelta");
+    const shortTheta = parseNumber("shortTheta");
+    const shortIV = parseNumber("shortIV");
+
+    const longExpiry = parseNumber("longExpiry");
+    const longStrike = parseNumber("longStrike");
+    const longPrice = parseNumber("longPrice");
+    const longDelta = parseNumber("longDelta");
+    const longTheta = parseNumber("longTheta");
+    const longIV = parseNumber("longIV");
+
+    const earningsWithin = document.getElementById("earningsWithin").value;
+    const dividendRisk = document.getElementById("dividendRisk").value;
+    const ivRegime = document.getElementById("ivRegime").value;
+    const macroRisk = document.getElementById("macroRisk").value;
+
+    // BÀSICS
+    const netCost = (longPrice && shortPrice) ? (longPrice - shortPrice) : null;
+    const exposure = netCost ? netCost * 100 : null;
+    const accountRisk = (exposure && accountSize) ? (exposure / accountSize * 100) : null;
+
+    document.getElementById("netCost").textContent =
+        netCost !== null ? netCost.toFixed(2) + " $ (dèbit)" : "—";
+    document.getElementById("exposure").textContent =
+        exposure !== null ? exposure.toFixed(0) + " $" : "—";
+    document.getElementById("accountRisk").textContent =
+        accountRisk !== null ? accountRisk.toFixed(2) + " % del compte" : "—";
+
+    // EFICIÈNCIA DE LA PRIMA (simple, institucional)
+    let efficiencyText = "";
+    let efficiencyTags = [];
+
+    if (netCost === null || shortTheta === null || longTheta === null) {
+        efficiencyText = "Falten dades de prima o theta per valorar eficiència.";
+        efficiencyTags.push({ label: "Dades incompletes", color: "tag-yellow" });
+    } else {
+        const thetaNet = (shortTheta + longTheta); // per contracte
+        // Heurística: Calendar eficient si theta net és positiu o lleugerament negatiu però amb dèbit moderat
+        if (netCost <= 1.5 && thetaNet >= -0.01) {
+            efficiencyText = "Prima eficient: dèbit moderat i perfil de theta raonable per Calendar.";
+            efficiencyTags.push({ label: "Eficient", color: "tag-green" });
+        } else if (netCost > 3.0) {
+            efficiencyText = "Dèbit elevat: la prima pot ser ineficient respecte al potencial de retorn.";
+            efficiencyTags.push({ label: "Dèbit alt", color: "tag-red" });
+        } else {
+            efficiencyText = "Prima acceptable però no òptima; revisa si el dèbit encaixa amb el teu playbook.";
+            efficiencyTags.push({ label: "Borderline", color: "tag-yellow" });
+        }
+    }
+    document.getElementById("efficiencyText").textContent = efficiencyText;
+    setTags("efficiencyTags", efficiencyTags);
+
+    // CONSISTÈNCIA DE L’ESTRUCTURA
+    let consistencyText = "";
+    let consistencyTags = [];
+
+    if (shortExpiry === null || longExpiry === null || shortStrike === null || longStrike === null) {
+        consistencyText = "Falten DTE o strikes per valorar consistència.";
+        consistencyTags.push({ label: "Dades incompletes", color: "tag-yellow" });
+    } else {
+        const ratioDTE = longExpiry / shortExpiry;
+        const sameStrike = (Math.abs(longStrike - shortStrike) < 0.01);
+
+        if (ratioDTE >= 2 && ratioDTE <= 3 && sameStrike) {
+            consistencyText = "Estructura consistent: back month ~2‑3x front month i mateix strike.";
+            consistencyTags.push({ label: "DTE 2‑3x", color: "tag-green" });
+            consistencyTags.push({ label: "Mism strike", color: "tag-green" });
+        } else {
+            consistencyText = "Estructura poc ortodoxa: revisa relació de DTE i strikes (Calendar pot ser massa curt o massa llarg).";
+            if (ratioDTE < 1.5) {
+                consistencyTags.push({ label: "Back massa curt", color: "tag-yellow" });
+            } else if (ratioDTE > 3.5) {
+                consistencyTags.push({ label: "Back massa llarg", color: "tag-yellow" });
+            }
+            if (!sameStrike) {
+                consistencyTags.push({ label: "Diagonal", color: "tag-yellow" });
+            }
+        }
+    }
+    document.getElementById("consistencyText").textContent = consistencyText;
+    setTags("consistencyTags", consistencyTags);
+
+    // RISC CONTROLAT
+    let riskText = "";
+    let riskTags = [];
+
+    if (accountRisk === null) {
+        riskText = "Falta mida de compte o dèbit per valorar el pes del trade.";
+        riskTags.push({ label: "Dades incompletes", color: "tag-yellow" });
+    } else {
+        if (accountRisk <= 1.5) {
+            riskText = "Risc controlat: exposició per sota del 1.5% del compte.";
+            riskTags.push({ label: "Risc baix", color: "tag-green" });
+        } else if (accountRisk <= 3) {
+            riskText = "Risc moderat: exposició entre 1.5% i 3% del compte.";
+            riskTags.push({ label: "Risc moderat", color: "tag-yellow" });
+        } else {
+            riskText = "Risc elevat: exposició superior al 3% del compte per un Calendar.";
+            riskTags.push({ label: "Risc alt", color: "tag-red" });
+        }
+    }
+
+    // Ajust per règim d’IV i risc macro
+    if (ivRegime === "elevated") {
+        riskTags.push({ label: "IV elevada", color: "tag-yellow" });
+    } else if (ivRegime === "low") {
+        riskTags.push({ label: "IV molt baixa", color: "tag-yellow" });
+    }
+    if (macroRisk === "high") {
+        riskTags.push({ label: "Risc macro alt", color: "tag-red" });
+    } else if (macroRisk === "medium") {
+        riskTags.push({ label: "Risc macro mitjà", color: "tag-yellow" });
+    }
+
+    document.getElementById("riskText").textContent = riskText;
+    setTags("riskTags", riskTags);
+
+    // PERILLS OCULTS
+    let hiddenText = "";
+    let hiddenTags = [];
+
+    if (earningsWithin === "yes") {
+        hiddenTags.push({ label: "Earnings al front", color: "tag-red" });
+    }
+    if (dividendRisk === "yes") {
+        hiddenTags.push({ label: "Dividend / ex‑div", color: "tag-yellow" });
+    }
+
+    if (hiddenTags.length === 0) {
+        hiddenText = "No es detecten perills evidents des de les variables introduïdes. Igualment, revisa notícia i agenda.";
+        hiddenTags.push({ label: "Sense perills evidents", color: "tag-green" });
+    } else {
+        hiddenText = "Hi ha elements que poden distorsionar el Calendar (earnings, dividend o risc macro).";
+    }
+    document.getElementById("hiddenText").textContent = hiddenText;
+    setTags("hiddenTags", hiddenTags);
+
+    // SEMÀFOR GLOBAL + GO / NO‑GO
+    const semGreen = document.getElementById("semGreen");
+    const semYellow = document.getElementById("semYellow");
+    const semRed = document.getElementById("semRed");
+    semGreen.className = "light";
+    semYellow.className = "light";
+    semRed.className = "light";
+
+    const goNoGo = document.getElementById("goNoGo");
+    goNoGo.className = "go-no-go neutral";
+
+    // Heurística global: comptem “flags” verds / grocs / vermells
+    let scoreGreen = 0, scoreYellow = 0, scoreRed = 0;
+
+    efficiencyTags.forEach(t => {
+        if (t.color === "tag-green") scoreGreen++;
+        if (t.color === "tag-yellow") scoreYellow++;
+        if (t.color === "tag-red") scoreRed++;
+    });
+    consistencyTags.forEach(t => {
+        if (t.color === "tag-green") scoreGreen++;
+        if (t.color === "tag-yellow") scoreYellow++;
+        if (t.color === "tag-red") scoreRed++;
+    });
+    riskTags.forEach(t => {
+        if (t.color === "tag-green") scoreGreen++;
+        if (t.color === "tag-yellow") scoreYellow++;
+        if (t.color === "tag-red") scoreRed++;
+    });
+    hiddenTags.forEach(t => {
+        if (t.color === "tag-green") scoreGreen++;
+        if (t.color === "tag-yellow") scoreYellow++;
+        if (t.color === "tag-red") scoreRed++;
+    });
+
+    if (scoreRed === 0 && scoreYellow <= 3 && scoreGreen >= 3) {
+        semGreen.className = "light green";
+        goNoGo.className = "go-no-go go";
+        goNoGo.textContent = "GO: Calendar eficient, consistent i amb risc raonablement controlat segons el teu playbook.";
+    } else if (scoreRed >= 2 || (scoreRed >= 1 && scoreYellow >= 3)) {
+        semRed.className = "light red";
+        goNoGo.className = "go-no-go no-go";
+        goNoGo.textContent = "NO‑GO: massa flags vermells/grocs per considerar aquest Calendar com a trade institucional.";
+    } else {
+        semYellow.className = "light yellow";
+        goNoGo.className = "go-no-go neutral";
+        goNoGo.textContent = "Zona grisa: Calendar acceptable però amb matisos. Requereix criteri discrecional abans de fer GO.";
+    }
+}
+
+function netejarFormulari() {
+    const ids = [
+        "ticker","underlyingPrice","accountSize",
+        "shortExpiry","shortStrike","shortPrice","shortDelta","shortTheta","shortIV",
+        "longExpiry","longStrike","longPrice","longDelta","longTheta","longIV"
+    ];
+    ids.forEach(id => document.getElementById(id).value = "");
+
+    document.getElementById("earningsWithin").value = "no";
+    document.getElementById("dividendRisk").value = "no";
+    document.getElementById("ivRegime").value = "normal";
+    document.getElementById("macroRisk").value = "low";
+
+    document.getElementById("netCost").textContent = "—";
+    document.getElementById("exposure").textContent = "—";
+    document.getElementById("accountRisk").textContent = "—";
+
+    document.getElementById("efficiencyText").textContent = "—";
+    document.getElementById("consistencyText").textContent = "—";
+    document.getElementById("riskText").textContent = "—";
+    document.getElementById("hiddenText").textContent = "—";
+
+    setTags("efficiencyTags", []);
+    setTags("consistencyTags", []);
+    setTags("riskTags", []);
+    setTags("hiddenTags", []);
+
+    const semGreen = document.getElementById("semGreen");
+    const semYellow = document.getElementById("semYellow");
+    const semRed = document.getElementById("semRed");
+    semGreen.className = "light";
+    semYellow.className = "light";
+    semRed.className = "light";
+
+    const goNoGo = document.getElementById("goNoGo");
+    goNoGo.className = "go-no-go neutral";
+    goNoGo.textContent = "GO / NO‑GO: pendent d’avaluació";
+}
+</script>
+</body>
+</html>
