@@ -330,7 +330,7 @@
 
       <div class="card">
         <div class="card-header">
-          <div class="card-title">Cash‑Secured Puts</div>
+          <div class="card-title">Options</div>
           <div class="pill">OPTIONS</div>
         </div>
       
@@ -339,6 +339,7 @@
             <thead>
               <tr>
                 <th>Subjacent</th>
+                <th>Preu</th>
                 <th>Strike</th>
                 <th>Prima</th>
                 <th>DTE</th>
@@ -741,6 +742,7 @@
         
           tr.innerHTML = `
             <td class="mono">${o.ticker}</td>
+            <td class="mono">${o.preu_subjacent}</td>
             <td class="mono">${o.strike}</td>
             <td class="mono">${o.prima.toFixed(2)}</td>
             <td class="mono">${o.dte}</td>
