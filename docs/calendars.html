@@ -310,6 +310,7 @@
                 <div class="inline-row" style="margin-top: 12px;">
                     <button class="btn-primary" type="button" onclick="avaluarCalendar()">Avaluar Calendar</button>
                     <button class="btn-secondary" type="button" onclick="netejarFormulari()">Netejar</button>
+                    <button class="btn-secondary" type="button" onclick="exportarJSON()">Exportar JSON</button>
                 </div>
             </div>
         </section>
@@ -607,6 +608,65 @@ function netejarFormulari() {
     goNoGo.className = "go-no-go neutral";
     goNoGo.textContent = "GO / NO‑GO: pendent d’avaluació";
 }
+
+function exportarJSON() {
+    const data = {
+        actiu: document.getElementById("ticker").value,
+        underlying: parseNumber("underlyingPrice"),
+        accountSize: parseNumber("accountSize"),
+        tipus: document.getElementById("calendarType").value,
+        biaix: document.getElementById("directionBias").value,
+
+        short: {
+            dte: parseNumber("shortExpiry"),
+            strike: parseNumber("shortStrike"),
+            price: parseNumber("shortPrice"),
+            delta: parseNumber("shortDelta"),
+            theta: parseNumber("shortTheta"),
+            iv: parseNumber("shortIV")
+        },
+
+        long: {
+            dte: parseNumber("longExpiry"),
+            strike: parseNumber("longStrike"),
+            price: parseNumber("longPrice"),
+            delta: parseNumber("longDelta"),
+            theta: parseNumber("longTheta"),
+            iv: parseNumber("longIV")
+        },
+
+        context: {
+            earnings: document.getElementById("earningsWithin").value,
+            dividend: document.getElementById("dividendRisk").value,
+            ivRegime: document.getElementById("ivRegime").value,
+            macroRisk: document.getElementById("macroRisk").value
+        },
+
+        lectura: {
+            costNet: document.getElementById("netCost").textContent,
+            exposicio: document.getElementById("exposure").textContent,
+            pesCompte: document.getElementById("accountRisk").textContent,
+            eficiencia: document.getElementById("efficiencyText").textContent,
+            consistencia: document.getElementById("consistencyText").textContent,
+            risc: document.getElementById("riskText").textContent,
+            perills: document.getElementById("hiddenText").textContent,
+            goNoGo: document.getElementById("goNoGo").textContent
+        },
+
+        timestamp: new Date().toISOString()
+    };
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `calendar_${data.actiu}_${data.timestamp}.json`;
+    a.click();
+
+    URL.revokeObjectURL(url);
+}
+
 </script>
 </body>
 </html>
