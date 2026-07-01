@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <title>Sentinella Patrimonial — Fonamentals GO/NO‑GO</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #0f172a;
+            color: #e5e7eb;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            padding: 16px 24px;
+            background: #020617;
+            border-bottom: 1px solid #1f2937;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+        header p {
+            margin: 4px 0 0;
+            font-size: 13px;
+            color: #9ca3af;
+        }
+        main {
+            padding: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 20px;
+        }
+        .panel {
+            background: #020617;
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+            padding: 16px 18px;
+            margin-bottom: 18px;
+        }
+        .panel h2 {
+            margin: 0 0 8px;
+            font-size: 16px;
+        }
+        .panel h3 {
+            margin: 12px 0 6px;
+            font-size: 14px;
+            color: #9ca3af;
+        }
+        .panel small {
+            color: #6b7280;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        label {
+            font-size: 12px;
+            color: #9ca3af;
+            display: block;
+            margin-bottom: 2px;
+        }
+        input, select {
+            width: 100%;
+            padding: 6px 8px;
+            border-radius: 4px;
+            border: 1px solid #374151;
+            background: #020617;
+            color: #e5e7eb;
+            font-size: 13px;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        .inline-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .inline-row > div {
+            flex: 1;
+        }
+        button {
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: none;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        .btn-secondary {
+            background: #111827;
+            color: #e5e7eb;
+            border: 1px solid #374151;
+        }
+        .outputs {
+            font-size: 13px;
+        }
+        .outputs p {
+            margin: 4px 0;
+        }
+        .tag {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 999px;
+            font-size: 11px;
+            margin-right: 4px;
+        }
+        .tag-green { background: #064e3b; color: #a7f3d0; }
+        .tag-yellow { background: #78350f; color: #fde68a; }
+        .tag-red { background: #7f1d1d; color: #fecaca; }
+
+        .semaphore {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .light {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #1f2937;
+            border: 1px solid #374151;
+        }
+        .light.green { background: #22c55e; }
+        .light.yellow { background: #eab308; }
+        .light.red { background: #ef4444; }
+
+        .go-no-go {
+            margin-top: 10px;
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .go { background: #022c22; color: #6ee7b7; border: 1px solid #16a34a; }
+        .no-go { background: #450a0a; color: #fecaca; border: 1px solid #b91c1c; }
+        .neutral { background: #111827; color: #e5e7eb; border: 1px solid #4b5563; }
+
+        .section-note {
+            font-size: 11px;
+            color: #6b7280;
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Sentinella Patrimonial — Fonamentals GO/NO‑GO</h1>
+    <p>Formulari manual institucional per validar la qualitat fonamental d’un subjacent abans de BSP, CC o Calendars.</p>
+</header>
+
+<main>
+    <div class="grid">
+        <!-- ESQUERRA: FORMULARI D’ENTRADA -->
+        <section>
+            <div class="panel">
+                <h2>1. Dades de l’actiu i fonamentals (Yahoo Finance)</h2>
+                <p class="section-note">Introdueix els valors que veus a la fitxa de Yahoo Finance per aquest actiu.</p>
+
+                <div class="inline-row">
+                    <div>
+                        <label for="ticker">Ticker / Actiu</label>
+                        <input id="ticker" type="text" placeholder="BG, KO, PEP...">
+                    </div>
+                    <div>
+                        <label for="sector">Sector / Indústria</label>
+                        <input id="sector" type="text" placeholder="Farm Products / Consumer Defensive">
+                    </div>
+                    <div>
+                        <label for="marketCap">Market Cap (B)</label>
+                        <input id="marketCap" type="number" step="0.01" placeholder="p.ex. 20.6">
+                    </div>
+                </div>
+
+                <h3>Valuation i rendibilitat</h3>
+                <div class="form-row">
+                    <div>
+                        <label for="pe">PE Ratio (TTM)</label>
+                        <input id="pe" type="number" step="0.01" placeholder="p.ex. 27.93">
+                    </div>
+                    <div>
+                        <label for="profitMargin">Profit Margin (%)</label>
+                        <input id="profitMargin" type="number" step="0.01" placeholder="p.ex. 0.85">
+                    </div>
+                    <div>
+                        <label for="roe">ROE (ttm, %)</label>
+                        <input id="roe" type="number" step="0.01" placeholder="p.ex. 4.93">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <label for="roa">ROA (ttm, %)</label>
+                        <input id="roa" type="number" step="0.01" placeholder="p.ex. 2.38">
+                    </div>
+                    <div>
+                        <label for="beta">Beta (5Y Monthly)</label>
+                        <input id="beta" type="number" step="0.01" placeholder="p.ex. 0.62">
+                    </div>
+                    <div>
+                        <label for="divYield">Dividend Yield (%)</label>
+                        <input id="divYield" type="number" step="0.01" placeholder="p.ex. 2.70">
+                    </div>
+                </div>
+
+                <h3>Balanc i flux de caixa</h3>
+                <div class="form-row">
+                    <div>
+                        <label for="cash">Total Cash (B)</label>
+                        <input id="cash" type="number" step="0.01" placeholder="p.ex. 1.70">
+                    </div>
+                    <div>
+                        <label for="debtEquity">Total Debt/Equity (%)</label>
+                        <input id="debtEquity" type="number" step="0.01" placeholder="p.ex. 93.21">
+                    </div>
+                    <div>
+                        <label for="fcf">Levered Free Cash Flow (B)</label>
+                        <input id="fcf" type="number" step="0.01" placeholder="p.ex. -6.83">
+                    </div>
+                </div>
+
+                <h3>Context temporal i risc</h3>
+                <div class="form-row-2">
+                    <div>
+                        <label for="earningsDays">Dies fins a earnings (aprox.)</label>
+                        <input id="earningsDays" type="number" step="1" placeholder="p.ex. 28">
+                    </div>
+                    <div>
+                        <label for="sectorStability">Estabilitat sectorial</label>
+                        <select id="sectorStability">
+                            <option value="stable">Estable</option>
+                            <option value="mixed">Mixta</option>
+                            <option value="unstable">Inestable</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div>
+                        <label for="macroRisk">Risc macro / cicle</label>
+                        <select id="macroRisk">
+                            <option value="low">Baix</option>
+                            <option value="medium">Mitjà</option>
+                            <option value="high">Alt</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="useFor">Ús previst</label>
+                        <select id="useFor">
+                            <option value="any">Qualsevol (BSP / CC / Calendar)</option>
+                            <option value="income">Només income (CC / dividends)</option>
+                            <option value="calendars">Només Calendars</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="inline-row" style="margin-top: 12px;">
+                    <button class="btn-primary" type="button" onclick="avaluarFonamentals()">Avaluar Fonamentals</button>
+                    <button class="btn-secondary" type="button" onclick="netejarFormulari()">Netejar</button>
+                    <button class="btn-secondary" type="button" onclick="exportarJSON()">Exportar JSON</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- DRETA: LECTURA INSTITUCIONAL -->
+        <section>
+            <div class="panel">
+                <h2>2. Lectura institucional del subjacent</h2>
+                <p class="section-note">Resultats basats en les dades introduïdes. No és recomanació, és filtre GO/NO‑GO fonamental.</p>
+
+                <div class="outputs" id="outputs">
+                    <p><strong>Resum ràpid:</strong> <span id="summary">—</span></p>
+
+                    <h3>Qualitat del negoci</h3>
+                    <p id="businessText">—</p>
+                    <div id="businessTags"></div>
+
+                    <h3>Valuation</h3>
+                    <p id="valuationText">—</p>
+                    <div id="valuationTags"></div>
+
+                    <h3>Risc de balanç i caixa</h3>
+                    <p id="balanceText">—</p>
+                    <div id="balanceTags"></div>
+
+                    <h3>Perills ocults / distorsions</h3>
+                    <p id="warningText">—</p>
+                    <div id="warningTags"></div>
+
+                    <div class="semaphore">
+                        <span>Semàfor global:</span>
+                        <div class="light" id="semGreen"></div>
+                        <div class="light" id="semYellow"></div>
+                        <div class="light" id="semRed"></div>
+                    </div>
+
+                    <div id="goNoGo" class="go-no-go neutral" style="margin-top: 12px;">
+                        GO / NO‑GO: pendent d’avaluació
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script>
+function parseNumber(id) {
+    const v = document.getElementById(id).value;
+    const n = parseFloat(v);
+    return isNaN(n) ? null : n;
+}
+
+function setTags(containerId, tags) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = "";
+    tags.forEach(t => {
+        const span = document.createElement("span");
+        span.className = "tag " + t.color;
+        span.textContent = t.label;
+        container.appendChild(span);
+    });
+}
+
+function avaluarFonamentals() {
+    const ticker = document.getElementById("ticker").value.trim();
+    const sector = document.getElementById("sector").value.trim();
+    const marketCap = parseNumber("marketCap");
+
+    const pe = parseNumber("pe");
+    const profitMargin = parseNumber("profitMargin");
+    const roe = parseNumber("roe");
+    const roa = parseNumber("roa");
+    const beta = parseNumber("beta");
+    const divYield = parseNumber("divYield");
+
+    const cash = parseNumber("cash");
+    const debtEquity = parseNumber("debtEquity");
+    const fcf = parseNumber("fcf");
+
+    const earningsDays = parseNumber("earningsDays");
+    const sectorStability = document.getElementById("sectorStability").value;
+    const macroRisk = document.getElementById("macroRisk").value;
+    const useFor = document.getElementById("useFor").value;
+
+    // Resum
+    let summary = "";
+    if (!ticker) {
+        summary = "Falta el ticker per contextualitzar la lectura.";
+    } else {
+        summary = `Actiu ${ticker} (${sector || "sector desconegut"}) amb market cap ~${marketCap ? marketCap.toFixed(1) + "B" : "N/D"}.`;
+    }
+    document.getElementById("summary").textContent = summary;
+
+    // Qualitat del negoci
+    let businessText = "";
+    let businessTags = [];
+
+    if (profitMargin === null || roe === null || roa === null) {
+        businessText = "Falten marges, ROE o ROA per valorar la qualitat del negoci.";
+        businessTags.push({ label: "Dades incompletes", color: "tag-yellow" });
+    } else {
+        if (profitMargin >= 10 && roe >= 10 && roa >= 5) {
+            businessText = "Negoci sòlid: marges i rendibilitat sobre capital i actius robustos.";
+            businessTags.push({ label: "Marges sòlids", color: "tag-green" });
+            businessTags.push({ label: "ROE > 10%", color: "tag-green" });
+            businessTags.push({ label: "ROA > 5%", color: "tag-green" });
+        } else {
+            businessText = "Qualitat de negoci discreta o pressionada: marges baixos o rendibilitat limitada.";
+            if (profitMargin < 3) {
+                businessTags.push({ label: "Marge molt baix", color: "tag-red" });
+            } else if (profitMargin < 10) {
+                businessTags.push({ label: "Marge modest", color: "tag-yellow" });
+            }
+            if (roe < 5) {
+                businessTags.push({ label: "ROE < 5%", color: "tag-red" });
+            } else if (roe < 10) {
+                businessTags.push({ label: "ROE moderat", color: "tag-yellow" });
+            }
+            if (roa < 2) {
+                businessTags.push({ label: "ROA < 2%", color: "tag-red" });
+            } else if (roa < 5) {
+                businessTags.push({ label: "ROA moderat", color: "tag-yellow" });
+            }
+        }
+    }
+    setTags("businessTags", businessTags);
+    document.getElementById("businessText").textContent = businessText;
+
+    // Valuation
+    let valuationText = "";
+    let valuationTags = [];
+
+    if (pe === null) {
+        valuationText = "Falta el PE per valorar la cara/barata de l’actiu.";
+        valuationTags.push({ label: "Dades incompletes", color: "tag-yellow" });
+    } else {
+        if (pe <= 20) {
+            valuationText = "Valuation raonable o moderadament atractiva per opcions institucionals.";
+            valuationTags.push({ label: "PE ≤ 20", color: "tag-green" });
+        } else if (pe <= 25) {
+            valuationText = "Valuation exigent però acceptable; requereix més cura en estratègies agressives.";
+            valuationTags.push({ label: "PE 20‑25", color: "tag-yellow" });
+        } else {
+            valuationText = "Valuation cara: PE > 25, risc de compressió de múltiple.";
+            valuationTags.push({ label: "PE > 25", color: "tag-red" });
+        }
+    }
+
+    if (beta !== null) {
+        if (beta < 0.8) {
+            valuationTags.push({ label: "Beta baixa", color: "tag-green" });
+        } else if (beta <= 1.2) {
+            valuationTags.push({ label: "Beta moderada", color: "tag-yellow" });
+        } else {
+            valuationTags.push({ label: "Beta alta", color: "tag-red" });
+        }
+    }
+
+    if (divYield !== null) {
+        if (divYield >= 1 && divYield <= 5) {
+            valuationTags.push({ label: "Dividend raonable", color: "tag-green" });
+        } else if (divYield > 6) {
+            valuationTags.push({ label: "Dividend potencialment tens", color: "tag-yellow" });
+        }
+    }
+
+    setTags("valuationTags", valuationTags);
+    document.getElementById("valuationText").textContent = valuationText;
+
+    // Balanc i caixa
+    let balanceText = "";
+    let balanceTags = [];
+
+    if (cash === null || debtEquity === null || fcf === null) {
+        balanceText = "Falten dades de caixa, deute o FCF per valorar el balanç.";
+        balanceTags.push({ label: "Dades incompletes", color: "tag-yellow" });
+    } else {
+        if (fcf < 0) {
+            balanceTags.push({ label: "FCF negatiu", color: "tag-red" });
+        } else if (fcf < 1) {
+            balanceTags.push({ label: "FCF feble", color: "tag-yellow" });
+        } else {
+            balanceTags.push({ label: "FCF positiu", color: "tag-green" });
+        }
+
+        if (debtEquity > 80) {
+            balanceTags.push({ label: "Deute elevat (>80%)", color: "tag-red" });
+        } else if (debtEquity > 60) {
+            balanceTags.push({ label: "Deute moderat", color: "tag-yellow" });
+        } else {
+            balanceTags.push({ label: "Deute controlat", color: "tag-green" });
+        }
+
+        if (cash < 1) {
+            balanceTags.push({ label: "Caixa baixa (<1B)", color: "tag-red" });
+        } else if (cash < 2) {
+            balanceTags.push({ label: "Caixa justa", color: "tag-yellow" });
+        } else {
+            balanceTags.push({ label: "Caixa confortable", color: "tag-green" });
+        }
+
+        balanceText = "Lectura de balanç basada en FCF, deute i caixa. Flags vermells indiquen fragilitat per opcions.";
+    }
+    setTags("balanceTags", balanceTags);
+    document.getElementById("balanceText").textContent = balanceText;
+
+    // Perills ocults
+    let warningText = "";
+    let warningTags = [];
+
+    if (earningsDays !== null) {
+        if (earningsDays > 25) {
+            warningTags.push({ label: "Earnings lluny (>25 dies)", color: "tag-yellow" });
+        } else if (earningsDays < 10) {
+            warningTags.push({ label: "Earnings molt a prop", color: "tag-yellow" });
+        }
+    }
+
+    if (sectorStability === "unstable") {
+        warningTags.push({ label: "Sector inestable", color: "tag-red" });
+    } else if (sectorStability === "mixed") {
+        warningTags.push({ label: "Sector mixt", color: "tag-yellow" });
+    } else {
+        warningTags.push({ label: "Sector estable", color: "tag-green" });
+    }
+
+    if (macroRisk === "high") {
+        warningTags.push({ label: "Risc macro alt", color: "tag-red" });
+    } else if (macroRisk === "medium") {
+        warningTags.push({ label: "Risc macro mitjà", color: "tag-yellow" });
+    } else {
+        warningTags.push({ label: "Risc macro baix", color: "tag-green" });
+    }
+
+    if (warningTags.length === 0) {
+        warningText = "No es detecten perills evidents des de les variables introduïdes. Igualment, revisa notícia i agenda.";
+        warningTags.push({ label: "Sense perills evidents", color: "tag-green" });
+    } else {
+        warningText = "Hi ha elements de context (sector, macro, earnings) que poden distorsionar el comportament del subjacent.";
+    }
+    setTags("warningTags", warningTags);
+    document.getElementById("warningText").textContent = warningText;
+
+    // SEMÀFOR GLOBAL + GO / NO‑GO
+    const semGreen = document.getElementById("semGreen");
+    const semYellow = document.getElementById("semYellow");
+    const semRed = document.getElementById("semRed");
+    semGreen.className = "light";
+    semYellow.className = "light";
+    semRed.className = "light";
+
+    const goNoGo = document.getElementById("goNoGo");
+    goNoGo.className = "go-no-go neutral";
+
+    let scoreGreen = 0, scoreYellow = 0, scoreRed = 0;
+
+    [businessTags, valuationTags, balanceTags, warningTags].forEach(group => {
+        group.forEach(t => {
+            if (t.color === "tag-green") scoreGreen++;
+            if (t.color === "tag-yellow") scoreYellow++;
+            if (t.color === "tag-red") scoreRed++;
+        });
+    });
+
+    // Heurística GO/NO‑GO fonamental
+    if (scoreRed === 0 && scoreYellow <= 3 && scoreGreen >= 4) {
+        semGreen.className = "light green";
+        goNoGo.className = "go-no-go go";
+        goNoGo.textContent = "GO: fonamentals sòlids o raonables per operar BSP, CC o Calendars segons el teu playbook.";
+    } else if (scoreRed >= 3 || (scoreRed >= 2 && scoreYellow >= 3)) {
+        semRed.className = "light red";
+        goNoGo.className = "go-no-go no-go";
+        goNoGo.textContent = "NO‑GO: massa flags vermells/grocs; subjacent fonamentalment fràgil per opcions institucionals.";
+    } else {
+        semYellow.className = "light yellow";
+        goNoGo.className = "go-no-go neutral";
+        goNoGo.textContent = "Zona grisa: fonamentals mixtos. Només Calendar o posicions petites amb criteri discrecional.";
+    }
+}
+
+function netejarFormulari() {
+    const ids = [
+        "ticker","sector","marketCap",
+        "pe","profitMargin","roe","roa","beta","divYield",
+        "cash","debtEquity","fcf","earningsDays"
+    ];
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+    });
+
+    document.getElementById("sectorStability").value = "stable";
+    document.getElementById("macroRisk").value = "low";
+    document.getElementById("useFor").value = "any";
+
+    document.getElementById("summary").textContent = "—";
+    document.getElementById("businessText").textContent = "—";
+    document.getElementById("valuationText").textContent = "—";
+    document.getElementById("balanceText").textContent = "—";
+    document.getElementById("warningText").textContent = "—";
+
+    setTags("businessTags", []);
+    setTags("valuationTags", []);
+    setTags("balanceTags", []);
+    setTags("warningTags", []);
+
+    const semGreen = document.getElementById("semGreen");
+    const semYellow = document.getElementById("semYellow");
+    const semRed = document.getElementById("semRed");
+    semGreen.className = "light";
+    semYellow.className = "light";
+    semRed.className = "light";
+
+    const goNoGo = document.getElementById("goNoGo");
+    goNoGo.className = "go-no-go neutral";
+    goNoGo.textContent = "GO / NO‑GO: pendent d’avaluació";
+}
+
+function exportarJSON() {
+    const data = {
+        actiu: document.getElementById("ticker").value,
+        sector: document.getElementById("sector").value,
+        marketCapB: parseNumber("marketCap"),
+
+        fonamentals: {
+            pe: parseNumber("pe"),
+            profitMargin: parseNumber("profitMargin"),
+            roe: parseNumber("roe"),
+            roa: parseNumber("roa"),
+            beta: parseNumber("beta"),
+            divYield: parseNumber("divYield"),
+            cashB: parseNumber("cash"),
+            debtEquity: parseNumber("debtEquity"),
+            fcfB: parseNumber("fcf"),
+            earningsDays: parseNumber("earningsDays")
+        },
+
+        context: {
+            sectorStability: document.getElementById("sectorStability").value,
+            macroRisk: document.getElementById("macroRisk").value,
+            useFor: document.getElementById("useFor").value
+        },
+
+        lectura: {
+            summary: document.getElementById("summary").textContent,
+            business: document.getElementById("businessText").textContent,
+            valuation: document.getElementById("valuationText").textContent,
+            balance: document.getElementById("balanceText").textContent,
+            warnings: document.getElementById("warningText").textContent,
+            goNoGo: document.getElementById("goNoGo").textContent
+        },
+
+        timestamp: new Date().toISOString()
+    };
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `fonamentals_${data.actiu || "actiu"}_${data.timestamp}.json`;
+    a.click();
+
+    URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
