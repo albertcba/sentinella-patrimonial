@@ -44,13 +44,12 @@
   { "ticker": "WTRG-CALL40", "nom": "WTRG Covered Call 40", "capa": "Options", "underlying": "WTRG", "strike": 40, "expiry": "2026-07-17" },
   { "ticker": "KMI-CALL33", "nom": "KMI Covered Call 33", "capa": "Options", "underlying": "KMI", "strike": 33, "expiry": "2026-07-02" },
   { "ticker": "XLE-CALL55", "nom": "XLE Covered Call 55", "capa": "Options", "underlying": "XLE", "strike": 55, "expiry": "2026-07-02" },  
-  { "ticker": "BG-BULLPUT120/115", "nom": "XLE Bull Put 120/115", "capa": "Options", "underlying": "BG", "strike": 120, "expiry": "2026-07-17" },
   { "ticker": "PEP-BULLPUT130/125", "nom": "PEP Bull Put 130/125", "capa": "Options", "underlying": "PEP", "strike": 130, "expiry": "2026-07-17" },
   { "ticker": "BAC-BULLPUT51/50", "nom": "BAC Bull Put 51/50", "capa": "Options", "underlying": "BAC", "strike": 51, "expiry": "2026-07-02" },
   { "ticker": "F-BULLPUT13/12", "nom": "F Bull Put 13/12", "capa": "Options", "underlying": "F", "strike": 13, "expiry": "2026-07-17" },
   { "ticker": "ADM-BULLPUT75/70", "nom": "ADM Bull Put 75/70", "capa": "Options", "underlying": "ADM", "strike": 75, "expiry": "2026-07-17" },
-  { "ticker": "KO-CALENDARSPREAD80/80", "nom": "KO Calendar Spread 80/80", "capa": "Options", "underlying": "KO", "strike": 80, "expiry": "2026-06-26" },
   { "ticker": "SO-CSP90", "nom": "SO Cash Secured Put 90", "capa": "Options", "underlying": "SO", "strike": 90, "expiry": "2026-07-31" },
   { "ticker": "URNM-CSP55", "nom": "URNM Cash Secured Put 55", "capa": "Options", "underlying": "URNM", "strike": 55, "expiry": "2026-07-17" },
-  { "ticker": "UL-CALENDARSPREAD57/57", "nom": "KO Calendar Spread 57/57", "capa": "Options", "underlying": "UL", "strike": 57, "expiry": "2026-07-10" }
+  { "ticker": "PAVE-CSP56", "nom": "PAVE Cash Secured Put 56", "capa": "Options", "underlying": "PAVE", "strike": 56, "expiry": "2026-07-17" },  
+  { "ticker": "UL-CALENDARSPREAD57/57", "nom": "UL Calendar Spread 57/57", "capa": "Options", "underlying": "UL", "strike": 57, "expiry": "2026-07-10" }
 ]
