@@ -241,6 +241,23 @@ with open("actius.json") as f:
     ACTIUS = json.load(f)
 
 
+def inferir_tipus_opcio(actiu):
+    t = actiu["ticker"].upper()
+    if "CALL" in t:
+        return "CALL"
+    if "CSP" in t or "BULLPUT" in t:
+        return "PUT"
+    if "CALENDAR" in t:
+        return "CALENDAR"
+    return None
+
+# enriquir actius d'opcions amb type
+for a in ACTIUS:
+    if a.get("capa") == "Options":
+        a["type"] = inferir_tipus_opcio(a)
+
+
+
 ULTIMA_ALERTA = None
 
 # ---------------------------------------------------------
@@ -304,6 +321,51 @@ def semafor_put(preu_subjacent, prima, dte, dist):
         "dte": s_dte,
         "dist": s_dist
     }
+
+
+def semafor_call(preu_subjacent, prima, dte, dist):
+    # Preu subjacient vs strike
+    if preu_subjacent < dist + preu_subjacent:  # no ens cal, usem directament dist
+        pass
+
+    # Preu (relació amb strike)
+    if preu_subjacent < dist + preu_subjacent:
+        pass
+
+    # Distància: per CC, dist = preu_subjacent - strike
+    if dist < 0:
+        s_dist = "🟢"   # lluny d’assignació
+    elif 0 <= dist <= 2:
+        s_dist = "🟡"   # zona de vigilància
+    else:
+        s_dist = "🔴"   # molt a prop / per sobre
+
+    # Prima (exemple senzill)
+    if prima >= 0.5:
+        s_prima = "🟢"
+    elif 0.2 <= prima < 0.5:
+        s_prima = "🟡"
+    else:
+        s_prima = "🔴"
+
+    # DTE
+    if dte >= 7:
+        s_dte = "🟢"
+    elif 3 <= dte < 7:
+        s_dte = "🟡"
+    else:
+        s_dte = "🔴"
+
+    # Preu subjacient (només per tenir un color, p.ex. neutre)
+    s_preu = "🟡"
+
+    return {
+        "preu": s_preu,
+        "prima": s_prima,
+        "dte": s_dte,
+        "dist": s_dist
+    }
+
 
 
 # ---------------------------------------------------------
@@ -458,6 +520,14 @@ def obtenir_put_synthetic(subjacent, strike, expiry_str, dies_hist=90, tipus_int
     }
 
 
+def calcular_call_des_de_put(put_price, S, K, T, r):
+    """
+    Put–call parity:
+      C = P + S - K * e^{-rT}
+    """
+    return put_price + S - K * math.exp(-r * T)
+
+
 
 def format_missatge(actiu, preu, variacio):
     direccio = "📉" if variacio < 0 else "📈"
@@ -512,11 +582,12 @@ def processar_actiu(actiu):
 
     #  { "ticker": "WTRG-PUT40", "nom": "WTRG Cash-Secured Put 40", "capa": "Options", "underlying": "WTRG", "strike": 40, "expiry": "2026-05-15" }      
     if actiu["capa"] == "Options":
-        subjacent = actiu["underlying"]   # <-- CORRECCIÓ
+        subjacent = actiu["underlying"]
         strike = actiu["strike"]
         expiry = actiu["expiry"]
-        
-        # 1) Llegir PUT sintètic
+        tipus = actiu.get("type")
+
+        # 1) PUT sintètic (com fins ara)
         try:
             put = obtenir_put_synthetic(subjacent, strike, expiry)
         except Exception as e:
@@ -524,27 +595,50 @@ def processar_actiu(actiu):
             print(txt)
             enviar_missatge(txt)
             return
-    
-        # --- CAMPOS SINTÈTICS CORRECTES ---
-        prima = put["lastPrice"]
+
         preu_subjacent = put["underlyingPrice"]
         vol_hist = put["histVol"]
         dte = put["daysToExpiry"]
-    
-        # --- CÀLCULS ADDICIONALS ---
-        dist = distancia_assignacio(preu_subjacent, strike)
-        marge = marge_cash_secured(strike)
-        semafor = semafor_put(preu_subjacent, prima, dte, dist)
-    
-        # --- JSON FINAL ---
+        dies_fins_venciment = dte
+        T = dies_fins_venciment / 365.0
+        r = 0.04  # mateix tipus que uses al Black–Scholes
+
+        if tipus == "PUT":
+            # --- PUT / CSP / BullPut (igual que abans) ---
+            prima = put["lastPrice"]
+            dist = distancia_assignacio(preu_subjacent, strike)  # strike - preu
+            marge = marge_cash_secured(strike)
+            semafor = semafor_put(preu_subjacent, prima, dte, dist)
+
+        elif tipus == "CALL":
+            # --- CALL sintètic via put–call parity ---
+            prima = calcular_call_des_de_put(
+                put_price=put["lastPrice"],
+                S=preu_subjacent,
+                K=strike,
+                T=T,
+                r=r
+            )
+            # distància CC: com de per sobre del strike estàs
+            dist = preu_subjacent - strike
+            marge = None  # per CC no hi ha marge cash-secured
+            semafor = semafor_call(preu_subjacent, prima, dte, dist)
+
+        else:
+            # de moment, calendar i altres → tractem com PUT
+            prima = put["lastPrice"]
+            dist = distancia_assignacio(preu_subjacent, strike)
+            marge = marge_cash_secured(strike)
+            semafor = semafor_put(preu_subjacent, prima, dte, dist)
+
         DADES_ACTIUS.append({
-            "ticker": ticker,
+            "ticker": actiu["ticker"],          # mantenim el ticker de l’estratègia
             "nom": actiu["nom"],
             "capa": actiu["capa"],
             "strike": strike,
             "expiry": expiry,
-            "preu": prima,                 # perquè el front no vegi undefined
-            "variacio": 0,                 # aquí no té sentit % diari → 0
+            "preu": prima,
+            "variacio": 0,
             "preu_subjacent": preu_subjacent,
             "prima": prima,
             "dte": dte,
@@ -556,19 +650,31 @@ def processar_actiu(actiu):
             "semafor": semafor,
             "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
         })
-    
-        # ALERTES
-        if prima > 2.50 or preu_subjacent < strike:
-            enviar_missatge(
-                f"⚠️ ALERTA {subjacent} {strike}\n"
-                f"Prima: {prima:.2f}\n"
-                f"Preu subjacent: {preu_subjacent:.2f}\n"
-                f"DTE: {dte}\n"
-                f"Distància assignació: {dist}\n"
-                f"Semàfor: {semafor}"
-            )
-    
+
+        # ALERTES (pots diferenciar PUT vs CALL si vols)
+        if tipus == "PUT":
+            if prima > 2.50 or preu_subjacent < strike:
+                enviar_missatge(
+                    f"⚠️ ALERTA PUT {subjacent} {strike}\n"
+                    f"Prima: {prima:.2f}\n"
+                    f"Preu subjacent: {preu_subjacent:.2f}\n"
+                    f"DTE: {dte}\n"
+                    f"Distància assignació: {dist}\n"
+                    f"Semàfor: {semafor}"
+                )
+        elif tipus == "CALL":
+            if dist > 0 and prima > 0.5:
+                enviar_missatge(
+                    f"⚠️ ALERTA CALL {subjacent} {strike}\n"
+                    f"Prima: {prima:.2f}\n"
+                    f"Preu subjacent: {preu_subjacent:.2f}\n"
+                    f"DTE: {dte}\n"
+                    f"Distància sobre strike: {dist}\n"
+                    f"Semàfor: {semafor}"
+                )
+
         return
+
  
     # 3) Fonamentals (si existeixen)
     fundamentals = FUNDAMENTALS_SINGLE_STOCK.get(ticker)
