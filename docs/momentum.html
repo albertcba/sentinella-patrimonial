@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <title>Sentinella Patrimonial — Momentum Sectorial/Subsectorial</title>
+
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #0f172a;
+            color: #e5e7eb;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            padding: 16px 24px;
+            background: #020617;
+            border-bottom: 1px solid #1f2937;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+        header p {
+            margin: 4px 0 0;
+            font-size: 13px;
+            color: #9ca3af;
+        }
+        main {
+            padding: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 20px;
+        }
+        .panel {
+            background: #020617;
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+            padding: 16px 18px;
+            margin-bottom: 18px;
+        }
+        .panel h2 {
+            margin: 0 0 8px;
+            font-size: 16px;
+        }
+        .panel h3 {
+            margin: 12px 0 6px;
+            font-size: 14px;
+            color: #9ca3af;
+        }
+        .panel small {
+            color: #6b7280;
+        }
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        label {
+            font-size: 12px;
+            color: #9ca3af;
+            display: block;
+            margin-bottom: 2px;
+        }
+        input, select {
+            width: 100%;
+            padding: 6px 8px;
+            border-radius: 4px;
+            border: 1px solid #374151;
+            background: #020617;
+            color: #e5e7eb;
+            font-size: 13px;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        button {
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: none;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        .btn-secondary {
+            background: #111827;
+            color: #e5e7eb;
+            border: 1px solid #374151;
+        }
+        .outputs p {
+            margin: 4px 0;
+            font-size: 13px;
+        }
+        .tag {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 999px;
+            font-size: 11px;
+            margin-right: 4px;
+        }
+        .tag-green { background: #064e3b; color: #a7f3d0; }
+        .tag-yellow { background: #78350f; color: #fde68a; }
+        .tag-red { background: #7f1d1d; color: #fecaca; }
+
+        .semaphore {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .light {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #1f2937;
+            border: 1px solid #374151;
+        }
+        .light.green { background: #22c55e; }
+        .light.yellow { background: #eab308; }
+        .light.red { background: #ef4444; }
+
+        .go-no-go {
+            margin-top: 10px;
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .go { background: #022c22; color: #6ee7b7; border: 1px solid #16a34a; }
+        .no-go { background: #450a0a; color: #fecaca; border: 1px solid #b91c1c; }
+        .neutral { background: #111827; color: #e5e7eb; border: 1px solid #4b5563; }
+
+        .section-note {
+            font-size: 11px;
+            color: #6b7280;
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Sentinella Patrimonial — Momentum Sectorial/Subsectorial</h1>
+    <p>Avaluació institucional del momentum sectorial, subsectorial i dels constituents</p>
+</header>
+
+<main>
+
+    <div class="grid">
+
+        <!-- ESQUERRA -->
+        <section>
+            <div class="panel">
+                <h2>1. Selecció de Sector / Subsector</h2>
+                <p class="section-note">Introdueix el sector i subsector que vols analitzar.</p>
+
+                <div class="form-row-2">
+                    <div>
+                        <label for="sector">Sector</label>
+                        <select id="sector">
+                            <option value="">— Selecciona —</option>
+                            <option value="Utilities">Utilities</option>
+                            <option value="Energy">Energy</option>
+                            <option value="Financials">Financials</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Consumer Defensive">Consumer Defensive</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="subsector">Subsector</label>
+                        <select id="subsector">
+                            <option value="">— Selecciona —</option>
+                            <option value="Utilities - Regulated Electric">Utilities - Regulated Electric</option>
+                            <option value="Utilities - Regulated Gas">Utilities - Regulated Gas</option>
+                            <option value="Utilities - Diversified">Utilities - Diversified</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="avaluarMomentum()">Avaluar Momentum</button>
+                <button class="btn-secondary" onclick="netejarFormulari()">Netejar</button>
+                <button class="btn-secondary" onclick="exportarJSONMomentum()">Exportar JSON</button>
+            </div>
+
+            <div class="panel">
+                <h2>2. Momentum del Subsector</h2>
+                <p class="section-note">YTD, 1Y, 3Y, 5Y i comparació amb S&P 500</p>
+
+                <div id="momentumSubsector"></div>
+
+                <div class="semaphore">
+                    <div class="light" id="lightSubsector"></div>
+                    <span id="textSubsector">—</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- DRETA -->
+        <section>
+            <div class="panel">
+                <h2>3. Constituents del Subsector</h2>
+                <p class="section-note">Top performers, high growth, largest companies</p>
+
+                <div id="constituents"></div>
+
+                <div class="semaphore">
+                    <div class="light" id="lightConstituents"></div>
+                    <span id="textConstituents">—</span>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>4. Lectura Global</h2>
+                <p class="section-note">Combinació institucional: sector + subsector + constituents</p>
+
+                <div class="go-no-go neutral" id="goNoGo">Neutral</div>
+            </div>
+        </section>
+
+    </div>
+
+</main>
+
+<script>
+
+/* -----------------------------
+   MOCK DATA (simulació Yahoo)
+----------------------------- */
+const MOCK_DATA = {
+    "Utilities - Regulated Electric": {
+        ytd: 14.81,
+        oneY: 19.42,
+        threeY: 38.10,
+        fiveY: 41.30,
+        sp500: {
+            ytd: 8.51,
+            oneY: 20.74,
+            threeY: 68.15,
+            fiveY: 72.28
+        },
+        constituents: [
+            { ticker: "EIX", perf: 26.06 },
+            { ticker: "ETR", perf: 24.54 },
+            { ticker: "PNW", perf: 23.30 },
+            { ticker: "IDA", perf: 22.12 },
+            { ticker: "EVRG", perf: 21.58 },
+            { ticker: "D", perf: 19.05 },
+            { ticker: "POR", perf: 9.86 },
+            { ticker: "DTE", perf: 19.44 },
+            { ticker: "MGEE", perf: 7.41 }
+        ]
+    }
+};
+
+/* -----------------------------
+   UTILITATS
+----------------------------- */
+function setTags(containerId, tags) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = "";
+    tags.forEach(t => {
+        const span = document.createElement("span");
+        span.className = "tag " + t.color;
+        span.textContent = t.label;
+        container.appendChild(span);
+    });
+}
+
+/* -----------------------------
+   AVALUACIÓ PRINCIPAL
+----------------------------- */
+function avaluarMomentum() {
+    const sector = document.getElementById("sector").value;
+    const subsector = document.getElementById("subsector").value;
+
+    if (!sector || !subsector) {
+        alert("Cal seleccionar sector i subsector.");
+        return;
+    }
+
+    const data = MOCK_DATA[subsector];
+    if (!data) {
+        alert("No hi ha dades disponibles per aquest subsector.");
+        return;
+    }
+
+    renderMomentumSubsector(data);
+    renderConstituents(data);
+    lecturaGlobal(data);
+}
+
+/* -----------------------------
+   MOMENTUM SUBSECTORIAL
+----------------------------- */
+function renderMomentumSubsector(data) {
+    const out = document.getElementById("momentumSubsector");
+    out.innerHTML = `
+        <p><strong>YTD:</strong> ${data.ytd}%</p>
+        <p><strong>1Y:</strong> ${data.oneY}%</p>
+        <p><strong>3Y:</strong> ${data.threeY}%</p>
+        <p><strong>5Y:</strong> ${data.fiveY}%</p>
+        <p><strong>Comparació S&P 500:</strong></p>
+        <p>YTD: ${data.sp500.ytd}% — 1Y: ${data.sp500.oneY}% — 3Y: ${data.sp500.threeY}% — 5Y: ${data.sp500.fiveY}%</p>
+    `;
+
+    const tags = [];
+
+    if (data.ytd > 10) tags.push({ label: "YTD fort", color: "tag-green" });
+    else if (data.ytd > 5) tags.push({ label: "YTD moderat", color: "tag-yellow" });
+    else tags.push({ label: "YTD feble", color: "tag-red" });
+
+    if (data.oneY > data.sp500.oneY) tags.push({ label: "1Y > S&P", color: "tag-green" });
+    else tags.push({ label: "1Y < S&P", color: "tag-yellow" });
+
+    if (data.threeY > 30) tags.push({ label: "3Y estable", color: "tag-green" });
+    else tags.push({ label: "3Y discret", color: "tag-yellow" });
+
+    setTags("momentumSubsector", tags);
+
+    const sem = document.getElementById("lightSubsector");
+    const txt = document.getElementById("textSubsector");
+
+    const greens = tags.filter(t => t.color === "tag-green").length;
+    const reds = tags.filter(t => t.color === "tag-red").length;
+
+    if (reds === 0 && greens >= 2) {
+        sem.className = "light green";
+        txt.textContent = "Momentum subsectorial fort";
+    } else if (reds >= 2) {
+        sem.className = "light red";
+        txt.textContent = "Momentum subsectorial feble";
+    } else {
+        sem.className = "light yellow";
+        txt.textContent = "Momentum subsectorial mixt";
+    }
+}
+
+/* -----------------------------
+   CONSTITUENTS
+----------------------------- */
+function renderConstituents(data) {
+    const out = document.getElementById("constituents");
+    out.innerHTML = "";
+
+    const tags = [];
+
+    data.constituents.forEach(c => {
+        const p = document.createElement("p");
+        p.textContent = `${c.ticker}: ${c.perf}%`;
+        out.appendChild(p);
+
+        if (c.perf > 20) tags.push({ label: `${c.ticker} >20%`, color: "tag-green" });
+        else if (c.perf > 10) tags.push({ label: `${c.ticker} >10%`, color: "tag-yellow" });
+        else tags.push({ label: `${c.ticker} feble`, color: "tag-red" });
+    });
+
+    setTags("constituents", tags);
+
+    const sem = document.getElementById("lightConstituents");
+    const txt = document.getElementById("textConstituents");
+
+    const greens = tags.filter(t => t.color === "tag-green").length;
+    const reds = tags.filter(t => t.color === "tag-red").length;
+
+    if (greens >= 4 && reds <= 2) {
+        sem.className = "light green";
+        txt.textContent = "Constituents forts";
+    } else if (reds >= 4) {
+        sem.className = "light red";
+        txt.textContent = "Constituents febles";
+    } else {
+        sem.className = "light yellow";
+        txt.textContent = "Constituents mixtos";
+    }
+}
+
+/* -----------------------------
+   LECTURA GLOBAL GO/NO‑GO
+----------------------------- */
+function lecturaGlobal(data) {
+    const semSub = document.getElementById("lightSubsector").className;
+    const semCons = document.getElementById("lightConstituents").className;
+
+    const go = document.getElementById("goNoGo");
+
+    if (semSub.includes("green") && semCons.includes("green")) {
+        go.className = "go-no-go go";
+        go.textContent = "GO: subsector i constituents amb momentum fort. Apte per operativa institucional.";
+    } else if (semSub.includes("red") || semCons.includes("red")) {
+        go.className = "go-no-go no-go";
+        go.textContent = "NO‑GO: momentum feble o constituents amb rendiment insuficient.";
+    } else {
+        go.className = "go-no-go neutral";
+        go.textContent = "Zona grisa: momentum mixt. Només operativa prudent o Calendars.";
+    }
+}
+
+/* -----------------------------
+   NETEJA
+----------------------------- */
+function netejarFormulari() {
+    document.getElementById("sector").value = "";
+    document.getElementById("subsector").value = "";
+
+    document.getElementById("momentumSubsector").innerHTML = "";
+    document.getElementById("constituents").innerHTML = "";
+
+    document.getElementById("lightSubsector").className = "light";
+    document.getElementById("lightConstituents").className = "light";
+
+    document.getElementById("textSubsector").textContent = "—";
+    document.getElementById("textConstituents").textContent = "—";
+
+    const go = document.getElementById("goNoGo");
+    go.className = "go-no-go neutral";
+    go.textContent = "Neutral";
+}
+
+/* -----------------------------
+   EXPORT JSON
+----------------------------- */
+function exportarJSONMomentum() {
+    const data = {
+        sector: document.getElementById("sector").value,
+        subsector: document.getElementById("subsector").value,
+        lectura: {
+            subsector: document.getElementById("textSubsector").textContent,
+            constituents: document.getElementById("textConstituents").textContent,
+            goNoGo: document.getElementById("goNoGo").textContent
+        },
+        timestamp: new Date().toISOString()
+    };
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `momentum_${data.subsector}_${data.timestamp}.json`;
+    a.click();
+
+    URL.revokeObjectURL(url);
+}
+
+</script>
+
+</body>
+</html>
