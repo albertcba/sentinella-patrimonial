@@ -243,7 +243,74 @@
             
                 <div id="jsonLoadedList"></div>
             </div>
+
+            <div class="panel">
+                <h2>7. Macro Sectorial (Sentinella)</h2>
+                <p class="section-note">Introdueix els semàfors del Macro Engine i Options Engine.</p>
             
+                <div class="form-row-2">
+                    <div>
+                        <label for="macroTGA">TGA</label>
+                        <select id="macroTGA">
+                            <option value="green">🟢</option>
+                            <option value="yellow">🟡</option>
+                            <option value="red">🔴</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="macroFed">Fed Balance</label>
+                        <select id="macroFed">
+                            <option value="green">🟢</option>
+                            <option value="yellow">🟡</option>
+                            <option value="red">🔴</option>
+                        </select>
+                    </div>
+                </div>
+            
+                <div class="form-row-2">
+                    <div>
+                        <label for="macroReal">Tipus Reals</label>
+                        <select id="macroReal">
+                            <option value="green">🟢</option>
+                            <option value="yellow">🟡</option>
+                            <option value="red">🔴</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="macroRegim">Règim Macro</label>
+                        <select id="macroRegim">
+                            <option value="green">🟢</option>
+                            <option value="yellow">🟡</option>
+                            <option value="red">🔴</option>
+                        </select>
+                    </div>
+                </div>
+            
+                <div class="form-row-2">
+                    <div>
+                        <label for="macroVIX">VIX</label>
+                        <select id="macroVIX">
+                            <option value="green">🟢</option>
+                            <option value="yellow">🟡</option>
+                            <option value="red">🔴</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="macroStoch">Estocàstic SPX</label>
+                        <select id="macroStoch">
+                            <option value="green">🟢</option>
+                            <option value="yellow">🟡</option>
+                            <option value="red">🔴</option>
+                        </select>
+                    </div>
+                </div>
+            
+                <div class="semaphore">
+                    <div class="light" id="lightMacro"></div>
+                    <span id="textMacro">—</span>
+                </div>
+            </div>
+                        
         </section>
 
         <!-- DRETA: RESULTATS -->
@@ -594,7 +661,36 @@ function goNoGoSectorial() {
         go.textContent = "Zona grisa: sector mixt.";
     }
 }
-       
+
+function semaforMacro() {
+    const vals = [
+        document.getElementById("macroTGA").value,
+        document.getElementById("macroFed").value,
+        document.getElementById("macroReal").value,
+        document.getElementById("macroRegim").value,
+        document.getElementById("macroVIX").value,
+        document.getElementById("macroStoch").value
+    ];
+
+    let green = vals.filter(v => v === "green").length;
+    let yellow = vals.filter(v => v === "yellow").length;
+    let red = vals.filter(v => v === "red").length;
+
+    const sem = document.getElementById("lightMacro");
+    const txt = document.getElementById("textMacro");
+
+    if (red >= 3) {
+        sem.className = "light red";
+        txt.textContent = "Macro desfavorable";
+    } else if (yellow >= 3) {
+        sem.className = "light yellow";
+        txt.textContent = "Macro mixta";
+    } else {
+        sem.className = "light green";
+        txt.textContent = "Macro favorable";
+    }
+}
+           
 </script>
 
     
