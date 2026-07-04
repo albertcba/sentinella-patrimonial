@@ -548,6 +548,29 @@ function exportarJSONMomentum() {
             constituents: document.getElementById("textConstituents").textContent,
             goNoGo: document.getElementById("goNoGo").textContent
         },
+        fonamentalsSectorials: {
+            peMitja: peMitjaGlobal,
+            margeMitja: margeMitjaGlobal,
+            roeMitja: roeMitjaGlobal,
+            roaMitja: roaMitjaGlobal,
+            deuteMitja: deuteMitjaGlobal,
+            pctFcfNeg: pctFcfNegGlobal,
+            pctNoGo: pctNoGoGlobal
+        },
+        macro: {
+            tga: document.getElementById("macroTGA").value,
+            fed: document.getElementById("macroFed").value,
+            realYields: document.getElementById("macroReal").value,
+            regimMacro: document.getElementById("macroRegim").value,
+            vix: document.getElementById("macroVIX").value,
+            stoch: document.getElementById("macroStoch").value,
+            macroLectura: document.getElementById("textMacro").textContent
+        },        
+        sector360: {
+            semafor: document.getElementById("lightSector360").className,
+            lectura: document.getElementById("textSector360").textContent,
+            goNoGo: document.getElementById("goNoGo360").textContent
+        },
         timestamp: new Date().toISOString()
     };
 
