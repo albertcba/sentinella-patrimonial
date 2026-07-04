@@ -389,7 +389,6 @@ let pctNoGoGlobal = null;
 // ------------------------------
 // Utils
 // ------------------------------
-    
 function parseNumber(id) {
     const v = document.getElementById(id).value;
     const n = parseFloat(v);
@@ -410,7 +409,6 @@ function setTags(containerId, tags) {
 // ------------------------------
 // Constituents
 // ------------------------------
-    
 function afegirConstituent() {
     const div = document.createElement("div");
     div.className = "form-row-2";
@@ -430,7 +428,6 @@ function afegirConstituent() {
 // ------------------------------
 // Momentum + Constituents
 // ------------------------------
-    
 function avaluarMomentum() {
     const ytd = parseNumber("ytd");
     const oneY = parseNumber("oneY");
@@ -515,9 +512,8 @@ function avaluarMomentum() {
         txtC.textContent = "Constituents mixtos";
     }
 
-    // GO / NO‑GO
+    // Bidimensional GO/NO-GO antic
     const go = document.getElementById("goNoGo");
-
     if (sem.className.includes("green") && semC.className.includes("green")) {
         go.className = "go-no-go go";
         go.textContent = "GO: subsector i constituents amb momentum fort.";
@@ -529,103 +525,55 @@ function avaluarMomentum() {
         go.textContent = "Zona grisa: momentum mixt.";
     }
 
+    // Agregats + macro + 360
     calcularAgregatsSectorials();
-    goNoGoSectorial();
     semaforMacro();
     goNoGoSectorial360();
-    
-   
 }
 
 // ------------------------------
 // Netejar
 // ------------------------------
-    
 function netejarFormulari() {
     document.querySelectorAll("input").forEach(i => i.value = "");
     document.getElementById("constituentsInputs").innerHTML = "";
     document.getElementById("momentumSubsector").innerHTML = "";
     document.getElementById("constituents").innerHTML = "";
+    document.getElementById("jsonLoadedList").innerHTML = "";
+    sectorFundamentals = [];
+
+    document.getElementById("sectorAggregates").innerHTML = "";
+
     document.getElementById("lightSubsector").className = "light";
     document.getElementById("lightConstituents").className = "light";
+    document.getElementById("lightSectorFund").className = "light";
+    document.getElementById("lightMacro").className = "light";
+    document.getElementById("lightSector360").className = "light";
+
     document.getElementById("textSubsector").textContent = "—";
     document.getElementById("textConstituents").textContent = "—";
+    document.getElementById("textSectorFund").textContent = "—";
+    document.getElementById("textMacro").textContent = "—";
+    document.getElementById("textSector360").textContent = "—";
+
     document.getElementById("goNoGo").className = "go-no-go neutral";
     document.getElementById("goNoGo").textContent = "Neutral";
+
+    document.getElementById("goNoGo360").className = "go-no-go neutral";
+    document.getElementById("goNoGo360").textContent = "GO / NO‑GO: pendent d’avaluació";
+
+    peMitjaGlobal = null;
+    margeMitjaGlobal = null;
+    roeMitjaGlobal = null;
+    roaMitjaGlobal = null;
+    deuteMitjaGlobal = null;
+    pctFcfNegGlobal = null;
+    pctNoGoGlobal = null;
 }
 
 // ------------------------------
-// Exportar JSON 360º
+// Carregar JSON fonamentals
 // ------------------------------
-    
-function exportarJSONMomentum() {
-
-    if (peMitjaGlobal === null) {
-        alert("Cal carregar els JSON fonamentals i avaluar abans d’exportar.");
-        return;
-    }
-    
-    const data = {
-        sector: document.getElementById("sector").value,
-        subsector: document.getElementById("subsector").value,
-        momentum: {
-            ytd: parseNumber("ytd"),
-            oneY: parseNumber("oneY"),
-            threeY: parseNumber("threeY"),
-            fiveY: parseNumber("fiveY"),
-            spYtd: parseNumber("spYtd"),
-            spOneY: parseNumber("spOneY"),
-            spThreeY: parseNumber("spThreeY"),
-            spFiveY: parseNumber("spFiveY")
-        },
-        constituents: Array.from(document.querySelectorAll(".constituent-name")).map((n, i) => ({
-            name: n.value,
-            perf: parseFloat(document.querySelectorAll(".constituent-perf")[i].value)
-        })),
-        lectura: {
-            subsector: document.getElementById("textSubsector").textContent,
-            constituents: document.getElementById("textConstituents").textContent,
-            goNoGo: document.getElementById("goNoGo").textContent
-        },
-        fonamentalsSectorials: {
-            peMitja: peMitjaGlobal,
-            margeMitja: margeMitjaGlobal,
-            roeMitja: roeMitjaGlobal,
-            roaMitja: roaMitjaGlobal,
-            deuteMitja: deuteMitjaGlobal,
-            pctFcfNeg: pctFcfNegGlobal,
-            pctNoGo: pctNoGoGlobal
-        },
-        macro: {
-            tga: document.getElementById("macroTGA").value,
-            fed: document.getElementById("macroFed").value,
-            realYields: document.getElementById("macroReal").value,
-            regimMacro: document.getElementById("macroRegim").value,
-            vix: document.getElementById("macroVIX").value,
-            stoch: document.getElementById("macroStoch").value,
-            macroLectura: document.getElementById("textMacro").textContent
-        },        
-        sector360: {
-            semafor: document.getElementById("lightSector360").className,
-            lectura: document.getElementById("textSector360").textContent,
-            goNoGo: document.getElementById("goNoGo360").textContent
-        },
-        timestamp: new Date().toISOString()
-    };
-
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `momentum_${data.subsector}_${data.timestamp}.json`;
-    a.click();
-
-    URL.revokeObjectURL(url);
-}
-
-let sectorFundamentals = [];
-
 function carregarJSON() {
     const file = document.getElementById("jsonInput").files[0];
     if (!file) return;
@@ -643,6 +591,9 @@ function carregarJSON() {
     reader.readAsText(file);
 }
 
+// ------------------------------
+// Agregats fonamentals sectorials
+// ------------------------------
 function calcularAgregatsSectorials() {
     if (sectorFundamentals.length === 0) return;
 
@@ -685,7 +636,7 @@ function calcularAgregatsSectorials() {
     deuteMitjaGlobal = agregats.debtMitja;
     pctFcfNegGlobal = agregats.pctFcfNeg;
     pctNoGoGlobal = agregats.pctNoGo;
-    
+
     renderAgregatsSectorials(agregats);
     semaforSectorial(agregats);
 }
@@ -731,25 +682,9 @@ function semaforSectorial(a) {
     }
 }
 
-function goNoGoSectorial() {
-    const mom = document.getElementById("lightSubsector").className;
-    const cons = document.getElementById("lightConstituents").className;
-    const fund = document.getElementById("lightSectorFund").className;
-
-    const go = document.getElementById("goNoGo");
-
-    if (mom.includes("green") && cons.includes("green") && fund.includes("green")) {
-        go.className = "go-no-go go";
-        go.textContent = "GO: sector fort en momentum i fonamentals.";
-    } else if (fund.includes("red") || mom.includes("red")) {
-        go.className = "go-no-go no-go";
-        go.textContent = "NO‑GO: feblesa fonamental o de momentum.";
-    } else {
-        go.className = "go-no-go neutral";
-        go.textContent = "Zona grisa: sector mixt.";
-    }
-}
-
+// ------------------------------
+// Macro (Sentinella)
+// ------------------------------
 function semaforMacro() {
     const vals = [
         document.getElementById("macroTGA").value,
@@ -779,6 +714,9 @@ function semaforMacro() {
     }
 }
 
+// ------------------------------
+// GO/NO-GO Sectorial 360º
+// ------------------------------
 function goNoGoSectorial360() {
     const mom = document.getElementById("lightSubsector").className;
     const cons = document.getElementById("lightConstituents").className;
@@ -789,14 +727,12 @@ function goNoGoSectorial360() {
     const txt = document.getElementById("textSector360");
     const go = document.getElementById("goNoGo360");
 
-    // Comptem verds, grocs, vermells
     const states = [mom, cons, fund, macro];
 
     let green = states.filter(s => s.includes("green")).length;
     let yellow = states.filter(s => s.includes("yellow")).length;
     let red = states.filter(s => s.includes("red")).length;
 
-    // Lògica institucional
     if (red === 0 && green >= 3) {
         sem.className = "light green";
         txt.textContent = "Sector fort en totes les dimensions";
@@ -816,10 +752,83 @@ function goNoGoSectorial360() {
         go.textContent = "Zona grisa: operativa prudent (Calendars, Income).";
     }
 }
-    
-</script>
 
-    
+// ------------------------------
+// Exportar JSON 360º
+// ------------------------------
+function exportarJSONMomentum() {
+    if (peMitjaGlobal === null) {
+        alert("Cal carregar els JSON fonamentals i avaluar abans d’exportar.");
+        return;
+    }
+
+    const data = {
+        sector: document.getElementById("sector").value,
+        subsector: document.getElementById("subsector").value,
+
+        momentum: {
+            ytd: parseNumber("ytd"),
+            oneY: parseNumber("oneY"),
+            threeY: parseNumber("threeY"),
+            fiveY: parseNumber("fiveY"),
+            spYtd: parseNumber("spYtd"),
+            spOneY: parseNumber("spOneY"),
+            spThreeY: parseNumber("spThreeY"),
+            spFiveY: parseNumber("spFiveY")
+        },
+
+        constituents: Array.from(document.querySelectorAll(".constituent-name")).map((n, i) => ({
+            name: n.value,
+            perf: parseFloat(document.querySelectorAll(".constituent-perf")[i].value)
+        })),
+
+        lectura: {
+            subsector: document.getElementById("textSubsector").textContent,
+            constituents: document.getElementById("textConstituents").textContent,
+            goNoGo: document.getElementById("goNoGo").textContent
+        },
+
+        fonamentalsSectorials: {
+            peMitja: peMitjaGlobal,
+            margeMitja: margeMitjaGlobal,
+            roeMitja: roeMitjaGlobal,
+            roaMitja: roaMitjaGlobal,
+            deuteMitja: deuteMitjaGlobal,
+            pctFcfNeg: pctFcfNegGlobal,
+            pctNoGo: pctNoGoGlobal
+        },
+
+        macro: {
+            tga: document.getElementById("macroTGA").value,
+            fed: document.getElementById("macroFed").value,
+            realYields: document.getElementById("macroReal").value,
+            regimMacro: document.getElementById("macroRegim").value,
+            vix: document.getElementById("macroVIX").value,
+            stoch: document.getElementById("macroStoch").value,
+            macroLectura: document.getElementById("textMacro").textContent
+        },
+
+        sector360: {
+            semafor: document.getElementById("lightSector360").className,
+            lectura: document.getElementById("textSector360").textContent,
+            goNoGo: document.getElementById("goNoGo360").textContent
+        },
+
+        timestamp: new Date().toISOString()
+    };
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `momentum_sectorial_${data.subsector}_${data.timestamp}.json`;
+    a.click();
+
+    URL.revokeObjectURL(url);
+}
+
+</script>
 
 </body>
 </html>
