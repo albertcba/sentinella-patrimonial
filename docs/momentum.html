@@ -233,6 +233,17 @@
                     <button class="btn-secondary" onclick="exportarJSONMomentum()">Exportar JSON</button>
                 </div>
             </div>
+
+            <div class="panel">
+                <h2>5. Fonamentals Sectorials (JSON)</h2>
+                <p class="section-note">Carrega els JSON exportats des de fonamentals.html per cada empresa del subsector.</p>
+            
+                <input type="file" id="jsonInput" accept=".json">
+                <button class="btn-secondary" onclick="carregarJSON()">Afegir JSON</button>
+            
+                <div id="jsonLoadedList"></div>
+            </div>
+            
         </section>
 
         <!-- DRETA: RESULTATS -->
@@ -261,6 +272,19 @@
                 <h2>4. Lectura Global</h2>
                 <div class="go-no-go neutral" id="goNoGo">Neutral</div>
             </div>
+
+            <div class="panel">
+                <h2>6. Agregats Fonamentals Sectorials</h2>
+                <p class="section-note">Mitjanes i percentatges calculats a partir dels JSON carregats.</p>
+            
+                <div id="sectorAggregates"></div>
+            
+                <div class="semaphore">
+                    <div class="light" id="lightSectorFund"></div>
+                    <span id="textSectorFund">—</span>
+                </div>
+            </div>
+            
         </section>
 
     </div>
@@ -398,6 +422,10 @@ function avaluarMomentum() {
         go.className = "go-no-go neutral";
         go.textContent = "Zona grisa: momentum mixt.";
     }
+
+    calcularAgregatsSectorials();
+    goNoGoSectorial();
+   
 }
 
 function netejarFormulari() {
@@ -450,6 +478,123 @@ function exportarJSONMomentum() {
     URL.revokeObjectURL(url);
 }
 
+let sectorFundamentals = [];
+
+function carregarJSON() {
+    const file = document.getElementById("jsonInput").files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const data = JSON.parse(e.target.result);
+        sectorFundamentals.push(data);
+
+        const div = document.getElementById("jsonLoadedList");
+        const p = document.createElement("p");
+        p.textContent = `Carregat: ${data.actiu}`;
+        div.appendChild(p);
+    };
+    reader.readAsText(file);
+}
+
+function calcularAgregatsSectorials() {
+    if (sectorFundamentals.length === 0) return;
+
+    let pe = [];
+    let margin = [];
+    let roe = [];
+    let roa = [];
+    let debt = [];
+    let fcfNegatius = 0;
+    let noGoCount = 0;
+
+    sectorFundamentals.forEach(f => {
+        pe.push(f.fonamentals.pe);
+        margin.push(f.fonamentals.profitMargin);
+        roe.push(f.fonamentals.roe);
+        roa.push(f.fonamentals.roa);
+        debt.push(f.fonamentals.debtEquity);
+
+        if (f.fonamentals.fcfB < 0) fcfNegatius++;
+        if (f.lectura.goNoGo.includes("NO‑GO")) noGoCount++;
+    });
+
+    const avg = arr => arr.reduce((a,b)=>a+b,0) / arr.length;
+
+    const agregats = {
+        peMitja: avg(pe),
+        margeMitja: avg(margin),
+        roeMitja: avg(roe),
+        roaMitja: avg(roa),
+        debtMitja: avg(debt),
+        pctFcfNeg: (fcfNegatius / sectorFundamentals.length) * 100,
+        pctNoGo: (noGoCount / sectorFundamentals.length) * 100
+    };
+
+    renderAgregatsSectorials(agregats);
+    semaforSectorial(agregats);
+}
+
+function renderAgregatsSectorials(a) {
+    const div = document.getElementById("sectorAggregates");
+    div.innerHTML = `
+        <p><strong>PE mitjà:</strong> ${a.peMitja.toFixed(2)}</p>
+        <p><strong>Marge mitjà:</strong> ${a.margeMitja.toFixed(2)}%</p>
+        <p><strong>ROE mitjà:</strong> ${a.roeMitja.toFixed(2)}%</p>
+        <p><strong>ROA mitjà:</strong> ${a.roaMitja.toFixed(2)}%</p>
+        <p><strong>Deute mitjà:</strong> ${a.debtMitja.toFixed(2)}%</p>
+        <p><strong>% FCF negatiu:</strong> ${a.pctFcfNeg.toFixed(1)}%</p>
+        <p><strong>% NO‑GO fonamental:</strong> ${a.pctNoGo.toFixed(1)}%</p>
+    `;
+}
+
+function semaforSectorial(a) {
+    const sem = document.getElementById("lightSectorFund");
+    const txt = document.getElementById("textSectorFund");
+
+    let scoreRed = 0;
+    let scoreYellow = 0;
+    let scoreGreen = 0;
+
+    if (a.peMitja < 20) scoreGreen++; else if (a.peMitja < 25) scoreYellow++; else scoreRed++;
+    if (a.margeMitja > 10) scoreGreen++; else if (a.margeMitja > 5) scoreYellow++; else scoreRed++;
+    if (a.roeMitja > 10) scoreGreen++; else if (a.roeMitja > 5) scoreYellow++; else scoreRed++;
+    if (a.roaMitja > 5) scoreGreen++; else if (a.roaMitja > 2) scoreYellow++; else scoreRed++;
+    if (a.debtMitja < 100) scoreGreen++; else if (a.debtMitja < 150) scoreYellow++; else scoreRed++;
+    if (a.pctFcfNeg < 20) scoreGreen++; else if (a.pctFcfNeg < 40) scoreYellow++; else scoreRed++;
+    if (a.pctNoGo < 20) scoreGreen++; else if (a.pctNoGo < 40) scoreYellow++; else scoreRed++;
+
+    if (scoreRed === 0 && scoreGreen >= 4) {
+        sem.className = "light green";
+        txt.textContent = "Sector fonamentalment sa";
+    } else if (scoreRed >= 3) {
+        sem.className = "light red";
+        txt.textContent = "Sector fonamentalment feble";
+    } else {
+        sem.className = "light yellow";
+        txt.textContent = "Sector fonamentalment mixt";
+    }
+}
+
+function goNoGoSectorial() {
+    const mom = document.getElementById("lightSubsector").className;
+    const cons = document.getElementById("lightConstituents").className;
+    const fund = document.getElementById("lightSectorFund").className;
+
+    const go = document.getElementById("goNoGo");
+
+    if (mom.includes("green") && cons.includes("green") && fund.includes("green")) {
+        go.className = "go-no-go go";
+        go.textContent = "GO: sector fort en momentum i fonamentals.";
+    } else if (fund.includes("red") || mom.includes("red")) {
+        go.className = "go-no-go no-go";
+        go.textContent = "NO‑GO: feblesa fonamental o de momentum.";
+    } else {
+        go.className = "go-no-go neutral";
+        go.textContent = "Zona grisa: sector mixt.";
+    }
+}
+       
 </script>
 
     
