@@ -155,48 +155,90 @@
 </header>
 
 <main>
-
     <div class="grid">
 
-        <!-- ESQUERRA -->
+        <!-- ESQUERRA: FORMULARI -->
         <section>
             <div class="panel">
-                <h2>1. Selecció de Sector / Subsector</h2>
-                <p class="section-note">Introdueix el sector i subsector que vols analitzar.</p>
+                <h2>1. Dades del Sector / Subsector</h2>
+                <p class="section-note">Introdueix les dades que veus a Yahoo Finance.</p>
 
                 <div class="form-row-2">
                     <div>
                         <label for="sector">Sector</label>
-                        <select id="sector">
-                            <option value="">— Selecciona —</option>
-                            <option value="Utilities">Utilities</option>
-                            <option value="Energy">Energy</option>
-                            <option value="Financials">Financials</option>
-                            <option value="Technology">Technology</option>
-                            <option value="Consumer Defensive">Consumer Defensive</option>
-                        </select>
+                        <input id="sector" type="text" placeholder="Utilities, Energy, Technology...">
                     </div>
-
                     <div>
                         <label for="subsector">Subsector</label>
-                        <select id="subsector">
-                            <option value="">— Selecciona —</option>
-                            <option value="Utilities - Regulated Electric">Utilities - Regulated Electric</option>
-                            <option value="Utilities - Regulated Gas">Utilities - Regulated Gas</option>
-                            <option value="Utilities - Diversified">Utilities - Diversified</option>
-                        </select>
+                        <input id="subsector" type="text" placeholder="Utilities - Regulated Electric">
                     </div>
                 </div>
 
-                <button class="btn-primary" onclick="avaluarMomentum()">Avaluar Momentum</button>
-                <button class="btn-secondary" onclick="netejarFormulari()">Netejar</button>
-                <button class="btn-secondary" onclick="exportarJSONMomentum()">Exportar JSON</button>
-            </div>
+                <h3>Momentum del subsector</h3>
+                <div class="form-row-2">
+                    <div>
+                        <label for="ytd">YTD (%)</label>
+                        <input id="ytd" type="number" step="0.01">
+                    </div>
+                    <div>
+                        <label for="oneY">1Y (%)</label>
+                        <input id="oneY" type="number" step="0.01">
+                    </div>
+                </div>
 
+                <div class="form-row-2">
+                    <div>
+                        <label for="threeY">3Y (%)</label>
+                        <input id="threeY" type="number" step="0.01">
+                    </div>
+                    <div>
+                        <label for="fiveY">5Y (%)</label>
+                        <input id="fiveY" type="number" step="0.01">
+                    </div>
+                </div>
+
+                <h3>Comparació amb S&P 500</h3>
+                <div class="form-row-2">
+                    <div>
+                        <label for="spYtd">S&P YTD (%)</label>
+                        <input id="spYtd" type="number" step="0.01">
+                    </div>
+                    <div>
+                        <label for="spOneY">S&P 1Y (%)</label>
+                        <input id="spOneY" type="number" step="0.01">
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div>
+                        <label for="spThreeY">S&P 3Y (%)</label>
+                        <input id="spThreeY" type="number" step="0.01">
+                    </div>
+                    <div>
+                        <label for="spFiveY">S&P 5Y (%)</label>
+                        <input id="spFiveY" type="number" step="0.01">
+                    </div>
+                </div>
+
+                <h3>Constituents (manual)</h3>
+                <p class="section-note">Introdueix fins a 10 empreses amb el seu rendiment 1Y.</p>
+
+                <div id="constituentsInputs"></div>
+
+                <button class="btn-secondary" onclick="afegirConstituent()">Afegir constituent</button>
+
+                <div style="margin-top: 12px;">
+                    <button class="btn-primary" onclick="avaluarMomentum()">Avaluar Momentum</button>
+                    <button class="btn-secondary" onclick="netejarFormulari()">Netejar</button>
+                    <button class="btn-secondary" onclick="exportarJSONMomentum()">Exportar JSON</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- DRETA: RESULTATS -->
+        <section>
             <div class="panel">
                 <h2>2. Momentum del Subsector</h2>
-                <p class="section-note">YTD, 1Y, 3Y, 5Y i comparació amb S&P 500</p>
-
                 <div id="momentumSubsector"></div>
 
                 <div class="semaphore">
@@ -204,14 +246,9 @@
                     <span id="textSubsector">—</span>
                 </div>
             </div>
-        </section>
 
-        <!-- DRETA -->
-        <section>
             <div class="panel">
-                <h2>3. Constituents del Subsector</h2>
-                <p class="section-note">Top performers, high growth, largest companies</p>
-
+                <h2>3. Constituents</h2>
                 <div id="constituents"></div>
 
                 <div class="semaphore">
@@ -222,50 +259,21 @@
 
             <div class="panel">
                 <h2>4. Lectura Global</h2>
-                <p class="section-note">Combinació institucional: sector + subsector + constituents</p>
-
                 <div class="go-no-go neutral" id="goNoGo">Neutral</div>
             </div>
         </section>
 
     </div>
-
 </main>
 
 <script>
 
-/* -----------------------------
-   MOCK DATA (simulació Yahoo)
------------------------------ */
-const MOCK_DATA = {
-    "Utilities - Regulated Electric": {
-        ytd: 14.81,
-        oneY: 19.42,
-        threeY: 38.10,
-        fiveY: 41.30,
-        sp500: {
-            ytd: 8.51,
-            oneY: 20.74,
-            threeY: 68.15,
-            fiveY: 72.28
-        },
-        constituents: [
-            { ticker: "EIX", perf: 26.06 },
-            { ticker: "ETR", perf: 24.54 },
-            { ticker: "PNW", perf: 23.30 },
-            { ticker: "IDA", perf: 22.12 },
-            { ticker: "EVRG", perf: 21.58 },
-            { ticker: "D", perf: 19.05 },
-            { ticker: "POR", perf: 9.86 },
-            { ticker: "DTE", perf: 19.44 },
-            { ticker: "MGEE", perf: 7.41 }
-        ]
-    }
-};
+function parseNumber(id) {
+    const v = document.getElementById(id).value;
+    const n = parseFloat(v);
+    return isNaN(n) ? null : n;
+}
 
-/* -----------------------------
-   UTILITATS
------------------------------ */
 function setTags(containerId, tags) {
     const container = document.getElementById(containerId);
     container.innerHTML = "";
@@ -277,62 +285,52 @@ function setTags(containerId, tags) {
     });
 }
 
-/* -----------------------------
-   AVALUACIÓ PRINCIPAL
------------------------------ */
-function avaluarMomentum() {
-    const sector = document.getElementById("sector").value;
-    const subsector = document.getElementById("subsector").value;
-
-    if (!sector || !subsector) {
-        alert("Cal seleccionar sector i subsector.");
-        return;
-    }
-
-    const data = MOCK_DATA[subsector];
-    if (!data) {
-        alert("No hi ha dades disponibles per aquest subsector.");
-        return;
-    }
-
-    renderMomentumSubsector(data);
-    renderConstituents(data);
-    lecturaGlobal(data);
+function afegirConstituent() {
+    const div = document.createElement("div");
+    div.className = "form-row-2";
+    div.innerHTML = `
+        <div>
+            <label>Empresa</label>
+            <input type="text" class="constituent-name">
+        </div>
+        <div>
+            <label>Rendiment 1Y (%)</label>
+            <input type="number" step="0.01" class="constituent-perf">
+        </div>
+    `;
+    document.getElementById("constituentsInputs").appendChild(div);
 }
 
-/* -----------------------------
-   MOMENTUM SUBSECTORIAL
------------------------------ */
-function renderMomentumSubsector(data) {
-    const out = document.getElementById("momentumSubsector");
-    out.innerHTML = `
-        <p><strong>YTD:</strong> ${data.ytd}%</p>
-        <p><strong>1Y:</strong> ${data.oneY}%</p>
-        <p><strong>3Y:</strong> ${data.threeY}%</p>
-        <p><strong>5Y:</strong> ${data.fiveY}%</p>
-        <p><strong>Comparació S&P 500:</strong></p>
-        <p>YTD: ${data.sp500.ytd}% — 1Y: ${data.sp500.oneY}% — 3Y: ${data.sp500.threeY}% — 5Y: ${data.sp500.fiveY}%</p>
-    `;
+function avaluarMomentum() {
+    const ytd = parseNumber("ytd");
+    const oneY = parseNumber("oneY");
+    const threeY = parseNumber("threeY");
+    const fiveY = parseNumber("fiveY");
 
-    const tags = [];
+    const spYtd = parseNumber("spYtd");
+    const spOneY = parseNumber("spOneY");
+    const spThreeY = parseNumber("spThreeY");
+    const spFiveY = parseNumber("spFiveY");
 
-    if (data.ytd > 10) tags.push({ label: "YTD fort", color: "tag-green" });
-    else if (data.ytd > 5) tags.push({ label: "YTD moderat", color: "tag-yellow" });
-    else tags.push({ label: "YTD feble", color: "tag-red" });
+    const momentumTags = [];
 
-    if (data.oneY > data.sp500.oneY) tags.push({ label: "1Y > S&P", color: "tag-green" });
-    else tags.push({ label: "1Y < S&P", color: "tag-yellow" });
+    if (ytd > 10) momentumTags.push({ label: "YTD fort", color: "tag-green" });
+    else if (ytd > 5) momentumTags.push({ label: "YTD moderat", color: "tag-yellow" });
+    else momentumTags.push({ label: "YTD feble", color: "tag-red" });
 
-    if (data.threeY > 30) tags.push({ label: "3Y estable", color: "tag-green" });
-    else tags.push({ label: "3Y discret", color: "tag-yellow" });
+    if (oneY > spOneY) momentumTags.push({ label: "1Y > S&P", color: "tag-green" });
+    else momentumTags.push({ label: "1Y < S&P", color: "tag-yellow" });
 
-    setTags("momentumSubsector", tags);
+    if (threeY > 30) momentumTags.push({ label: "3Y estable", color: "tag-green" });
+    else momentumTags.push({ label: "3Y discret", color: "tag-yellow" });
+
+    setTags("momentumSubsector", momentumTags);
+
+    const greens = momentumTags.filter(t => t.color === "tag-green").length;
+    const reds = momentumTags.filter(t => t.color === "tag-red").length;
 
     const sem = document.getElementById("lightSubsector");
     const txt = document.getElementById("textSubsector");
-
-    const greens = tags.filter(t => t.color === "tag-green").length;
-    const reds = tags.filter(t => t.color === "tag-red").length;
 
     if (reds === 0 && greens >= 2) {
         sem.className = "light green";
@@ -344,96 +342,95 @@ function renderMomentumSubsector(data) {
         sem.className = "light yellow";
         txt.textContent = "Momentum subsectorial mixt";
     }
-}
 
-/* -----------------------------
-   CONSTITUENTS
------------------------------ */
-function renderConstituents(data) {
-    const out = document.getElementById("constituents");
-    out.innerHTML = "";
+    // Constituents
+    const names = document.querySelectorAll(".constituent-name");
+    const perfs = document.querySelectorAll(".constituent-perf");
 
-    const tags = [];
+    const consTags = [];
+    const consDiv = document.getElementById("constituents");
+    consDiv.innerHTML = "";
 
-    data.constituents.forEach(c => {
+    for (let i = 0; i < names.length; i++) {
+        const name = names[i].value.trim();
+        const perf = parseFloat(perfs[i].value);
+
+        if (!name || isNaN(perf)) continue;
+
         const p = document.createElement("p");
-        p.textContent = `${c.ticker}: ${c.perf}%`;
-        out.appendChild(p);
+        p.textContent = `${name}: ${perf}%`;
+        consDiv.appendChild(p);
 
-        if (c.perf > 20) tags.push({ label: `${c.ticker} >20%`, color: "tag-green" });
-        else if (c.perf > 10) tags.push({ label: `${c.ticker} >10%`, color: "tag-yellow" });
-        else tags.push({ label: `${c.ticker} feble`, color: "tag-red" });
-    });
-
-    setTags("constituents", tags);
-
-    const sem = document.getElementById("lightConstituents");
-    const txt = document.getElementById("textConstituents");
-
-    const greens = tags.filter(t => t.color === "tag-green").length;
-    const reds = tags.filter(t => t.color === "tag-red").length;
-
-    if (greens >= 4 && reds <= 2) {
-        sem.className = "light green";
-        txt.textContent = "Constituents forts";
-    } else if (reds >= 4) {
-        sem.className = "light red";
-        txt.textContent = "Constituents febles";
-    } else {
-        sem.className = "light yellow";
-        txt.textContent = "Constituents mixtos";
+        if (perf > 20) consTags.push({ label: `${name} >20%`, color: "tag-green" });
+        else if (perf > 10) consTags.push({ label: `${name} >10%`, color: "tag-yellow" });
+        else consTags.push({ label: `${name} feble`, color: "tag-red" });
     }
-}
 
-/* -----------------------------
-   LECTURA GLOBAL GO/NO‑GO
------------------------------ */
-function lecturaGlobal(data) {
-    const semSub = document.getElementById("lightSubsector").className;
-    const semCons = document.getElementById("lightConstituents").className;
+    setTags("constituents", consTags);
 
+    const greensC = consTags.filter(t => t.color === "tag-green").length;
+    const redsC = consTags.filter(t => t.color === "tag-red").length;
+
+    const semC = document.getElementById("lightConstituents");
+    const txtC = document.getElementById("textConstituents");
+
+    if (greensC >= 4 && redsC <= 2) {
+        semC.className = "light green";
+        txtC.textContent = "Constituents forts";
+    } else if (redsC >= 4) {
+        semC.className = "light red";
+        txtC.textContent = "Constituents febles";
+    } else {
+        semC.className = "light yellow";
+        txtC.textContent = "Constituents mixtos";
+    }
+
+    // GO / NO‑GO
     const go = document.getElementById("goNoGo");
 
-    if (semSub.includes("green") && semCons.includes("green")) {
+    if (sem.className.includes("green") && semC.className.includes("green")) {
         go.className = "go-no-go go";
-        go.textContent = "GO: subsector i constituents amb momentum fort. Apte per operativa institucional.";
-    } else if (semSub.includes("red") || semCons.includes("red")) {
+        go.textContent = "GO: subsector i constituents amb momentum fort.";
+    } else if (sem.className.includes("red") || semC.className.includes("red")) {
         go.className = "go-no-go no-go";
-        go.textContent = "NO‑GO: momentum feble o constituents amb rendiment insuficient.";
+        go.textContent = "NO‑GO: momentum feble o constituents insuficients.";
     } else {
         go.className = "go-no-go neutral";
-        go.textContent = "Zona grisa: momentum mixt. Només operativa prudent o Calendars.";
+        go.textContent = "Zona grisa: momentum mixt.";
     }
 }
 
-/* -----------------------------
-   NETEJA
------------------------------ */
 function netejarFormulari() {
-    document.getElementById("sector").value = "";
-    document.getElementById("subsector").value = "";
-
+    document.querySelectorAll("input").forEach(i => i.value = "");
+    document.getElementById("constituentsInputs").innerHTML = "";
     document.getElementById("momentumSubsector").innerHTML = "";
     document.getElementById("constituents").innerHTML = "";
-
     document.getElementById("lightSubsector").className = "light";
     document.getElementById("lightConstituents").className = "light";
-
     document.getElementById("textSubsector").textContent = "—";
     document.getElementById("textConstituents").textContent = "—";
-
-    const go = document.getElementById("goNoGo");
-    go.className = "go-no-go neutral";
-    go.textContent = "Neutral";
+    document.getElementById("goNoGo").className = "go-no-go neutral";
+    document.getElementById("goNoGo").textContent = "Neutral";
 }
 
-/* -----------------------------
-   EXPORT JSON
------------------------------ */
 function exportarJSONMomentum() {
     const data = {
         sector: document.getElementById("sector").value,
         subsector: document.getElementById("subsector").value,
+        momentum: {
+            ytd: parseNumber("ytd"),
+            oneY: parseNumber("oneY"),
+            threeY: parseNumber("threeY"),
+            fiveY: parseNumber("fiveY"),
+            spYtd: parseNumber("spYtd"),
+            spOneY: parseNumber("spOneY"),
+            spThreeY: parseNumber("spThreeY"),
+            spFiveY: parseNumber("spFiveY")
+        },
+        constituents: Array.from(document.querySelectorAll(".constituent-name")).map((n, i) => ({
+            name: n.value,
+            perf: parseFloat(document.querySelectorAll(".constituent-perf")[i].value)
+        })),
         lectura: {
             subsector: document.getElementById("textSubsector").textContent,
             constituents: document.getElementById("textConstituents").textContent,
@@ -454,6 +451,8 @@ function exportarJSONMomentum() {
 }
 
 </script>
+
+    
 
 </body>
 </html>
