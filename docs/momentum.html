@@ -351,6 +351,20 @@
                     <span id="textSectorFund">—</span>
                 </div>
             </div>
+
+            <div class="panel">
+                <h2>8. Lectura Sectorial 360º</h2>
+                <p class="section-note">Combinació institucional de Momentum + Fonamentals Sectorials + Macro.</p>
+            
+                <div class="semaphore">
+                    <div class="light" id="lightSector360"></div>
+                    <span id="textSector360">—</span>
+                </div>
+            
+                <div class="go-no-go neutral" id="goNoGo360">
+                    GO / NO‑GO: pendent d’avaluació
+                </div>
+            </div>
             
         </section>
 
@@ -492,6 +506,9 @@ function avaluarMomentum() {
 
     calcularAgregatsSectorials();
     goNoGoSectorial();
+    semaforMacro();
+    goNoGoSectorial360();
+    
    
 }
 
@@ -690,7 +707,45 @@ function semaforMacro() {
         txt.textContent = "Macro favorable";
     }
 }
-           
+
+function goNoGoSectorial360() {
+    const mom = document.getElementById("lightSubsector").className;
+    const cons = document.getElementById("lightConstituents").className;
+    const fund = document.getElementById("lightSectorFund").className;
+    const macro = document.getElementById("lightMacro").className;
+
+    const sem = document.getElementById("lightSector360");
+    const txt = document.getElementById("textSector360");
+    const go = document.getElementById("goNoGo360");
+
+    // Comptem verds, grocs, vermells
+    const states = [mom, cons, fund, macro];
+
+    let green = states.filter(s => s.includes("green")).length;
+    let yellow = states.filter(s => s.includes("yellow")).length;
+    let red = states.filter(s => s.includes("red")).length;
+
+    // Lògica institucional
+    if (red === 0 && green >= 3) {
+        sem.className = "light green";
+        txt.textContent = "Sector fort en totes les dimensions";
+        go.className = "go-no-go go";
+        go.textContent = "GO: Sector apte per operativa institucional (Calendars, CC, Income).";
+    }
+    else if (red >= 2) {
+        sem.className = "light red";
+        txt.textContent = "Sector feble en una o més dimensions crítiques";
+        go.className = "go-no-go no-go";
+        go.textContent = "NO‑GO: Sector amb risc elevat (macro, fonamentals o momentum).";
+    }
+    else {
+        sem.className = "light yellow";
+        txt.textContent = "Sector mixt: divergència entre macro, momentum o fonamentals";
+        go.className = "go-no-go neutral";
+        go.textContent = "Zona grisa: operativa prudent (Calendars, Income).";
+    }
+}
+    
 </script>
 
     
