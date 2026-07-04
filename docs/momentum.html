@@ -373,6 +373,23 @@
 
 <script>
 
+// ------------------------------
+// Globals
+// ------------------------------
+let sectorFundamentals = [];
+
+let peMitjaGlobal = null;
+let margeMitjaGlobal = null;
+let roeMitjaGlobal = null;
+let roaMitjaGlobal = null;
+let deuteMitjaGlobal = null;
+let pctFcfNegGlobal = null;
+let pctNoGoGlobal = null;
+
+// ------------------------------
+// Utils
+// ------------------------------
+    
 function parseNumber(id) {
     const v = document.getElementById(id).value;
     const n = parseFloat(v);
@@ -390,6 +407,10 @@ function setTags(containerId, tags) {
     });
 }
 
+// ------------------------------
+// Constituents
+// ------------------------------
+    
 function afegirConstituent() {
     const div = document.createElement("div");
     div.className = "form-row-2";
@@ -406,6 +427,10 @@ function afegirConstituent() {
     document.getElementById("constituentsInputs").appendChild(div);
 }
 
+// ------------------------------
+// Momentum + Constituents
+// ------------------------------
+    
 function avaluarMomentum() {
     const ytd = parseNumber("ytd");
     const oneY = parseNumber("oneY");
@@ -512,6 +537,10 @@ function avaluarMomentum() {
    
 }
 
+// ------------------------------
+// Netejar
+// ------------------------------
+    
 function netejarFormulari() {
     document.querySelectorAll("input").forEach(i => i.value = "");
     document.getElementById("constituentsInputs").innerHTML = "";
@@ -525,7 +554,17 @@ function netejarFormulari() {
     document.getElementById("goNoGo").textContent = "Neutral";
 }
 
+// ------------------------------
+// Exportar JSON 360º
+// ------------------------------
+    
 function exportarJSONMomentum() {
+
+    if (peMitjaGlobal === null) {
+        alert("Cal carregar els JSON fonamentals i avaluar abans d’exportar.");
+        return;
+    }
+    
     const data = {
         sector: document.getElementById("sector").value,
         subsector: document.getElementById("subsector").value,
@@ -638,6 +677,15 @@ function calcularAgregatsSectorials() {
         pctNoGo: (noGoCount / sectorFundamentals.length) * 100
     };
 
+    // guardar globals
+    peMitjaGlobal = agregats.peMitja;
+    margeMitjaGlobal = agregats.margeMitja;
+    roeMitjaGlobal = agregats.roeMitja;
+    roaMitjaGlobal = agregats.roaMitja;
+    deuteMitjaGlobal = agregats.debtMitja;
+    pctFcfNegGlobal = agregats.pctFcfNeg;
+    pctNoGoGlobal = agregats.pctNoGo;
+    
     renderAgregatsSectorials(agregats);
     semaforSectorial(agregats);
 }
