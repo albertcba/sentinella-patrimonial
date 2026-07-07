@@ -46,7 +46,7 @@
   { "ticker": "PEP-BULLPUT130/125", "nom": "PEP Bull Put 130/125", "capa": "Options", "underlying": "PEP", "strike": 130, "expiry": "2026-07-17" },
   { "ticker": "URNM-CSP55", "nom": "URNM Cash Secured Put 55", "capa": "Options", "underlying": "URNM", "strike": 55, "expiry": "2026-07-17" },
   { "ticker": "PAVE-CSP56", "nom": "PAVE Cash Secured Put 56", "capa": "Options", "underlying": "PAVE", "strike": 56, "expiry": "2026-07-17" },  
-  { "ticker": "NEE-CSP86", "nom": "NEE Cash Secured Put 86", "capa": "Options", "underlying": "NEE", "strike": 56, "expiry": "2026-07-17" },    
+  { "ticker": "NEE-CSP86", "nom": "NEE Cash Secured Put 86", "capa": "Options", "underlying": "NEE", "strike": 86, "expiry": "2026-07-17" },    
   { "ticker": "UL-CALENDARSPREAD57/57", "nom": "UL Calendar Spread 57/57", "capa": "Options", "underlying": "UL", "strike": 57, "expiry": "2026-07-10" },
   { "ticker": "KO-CALENDARSPREAD80/80", "nom": "KO Calendar Spread 80/80", "capa": "Options", "underlying": "KO", "strike": 57, "expiry": "2026-07-10" },
   { "ticker": "XLU-CALENDARSPREAD80/80", "nom": "XLU Calendar Spread 44/44", "capa": "Options", "underlying": "XLU", "strike": 57, "expiry": "2026-07-10" },
