@@ -94,70 +94,6 @@ MACRO = obtenir_macro()
 
 
 # ---------------------------------------------------------
-#   MACRO ENGINE EXTENS — NOUS INDICADORS
-# ---------------------------------------------------------
-
-def obtenir_treasury_10y():
-    try:
-        vals = obtenir_fred_robust("DGS10")
-        return tendencia_robusta(vals)
-    except:
-        return 0
-
-def obtenir_hy_ig_spread():
-    """
-    Spread HY – IG amb semàfor específic (no robust).
-    """
-    try:
-        hy = obtenir_fred_robust("BAMLH0A0HYM2")[0]
-        ig = obtenir_fred_robust("BAMLH0A0CM")[0]
-        spread = hy - ig
-
-        if spread < 3:
-            return +1   # 🟢 crèdit sa
-        if 3 <= spread <= 4:
-            return 0    # 🟡 tensió moderada
-        return -1       # 🔴 crèdit tens → patacada probable
-
-    except:
-        return 0
-
-def obtenir_move_index():
-    """
-    MOVE = volatilitat de bons (VIX dels treasuries).
-    """
-    try:
-        move = obtenir_fred_robust("MOVE")[0]
-
-        if move < 100:
-            return +1   # 🟢 tranquil
-        if 100 <= move <= 120:
-            return 0    # 🟡 tensió moderada
-        return -1       # 🔴 tensió severa → patacada
-
-    except:
-        return 0
-
-# Fluxos institucionals: camp manual
-FLUXOS_INSTITUCIONALS = 0   # pots posar +1 / 0 / -1 manualment
-
-def obtenir_macro_extens():
-    base = obtenir_macro()
-
-    return {
-        "tga": base["tga"],
-        "fed_balance": base["fed_balance"],
-        "tipus_reals": base["tipus_reals"],
-        "treasury_10y": obtenir_treasury_10y(),
-        "hy_ig_spread": obtenir_hy_ig_spread(),
-        "move": obtenir_move_index(),
-        "fluxos": FLUXOS_INSTITUCIONALS
-    }
-
-MACRO = obtenir_macro_extens()
-
-
-# ---------------------------------------------------------
 #   SENSIBILITAT MACRO PER ACTIU
 # ---------------------------------------------------------
 
@@ -334,24 +270,17 @@ def semafor_macro_actiu(actiu, macro):
         return None
 
     s = SENSIBILITAT_MACRO[ticker]
-
     score = (
-        s.get("tga", 0) * macro["tga"] +
-        s.get("fed_balance", 0) * macro["fed_balance"] +
-        s.get("tipus_reals", 0) * macro["tipus_reals"] +
-        s.get("treasury_10y", 0) * macro["treasury_10y"] +
-        s.get("hy_ig_spread", 0) * macro["hy_ig_spread"] +
-        s.get("move", 0) * macro["move"] +
-        s.get("fluxos", 0) * macro["fluxos"]
+        s["tga"] * macro["tga"] +
+        s["fed_balance"] * macro["fed_balance"] +
+        s["tipus_reals"] * macro["tipus_reals"]
     )
 
-    if score >= 3:
+    if score >= 2:
         return "🟢"
-    if score <= -3:
+    if score <= -2:
         return "🔴"
     return "🟡"
-
-
 
 def semafor_put(preu_subjacent, prima, dte, dist):
     # Preu subjacient
