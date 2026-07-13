@@ -336,13 +336,13 @@ def semafor_macro_actiu(actiu, macro):
     s = SENSIBILITAT_MACRO[ticker]
 
     score = (
-        s["tga"] * macro["tga"] +
-        s["fed_balance"] * macro["fed_balance"] +
-        s["tipus_reals"] * macro["tipus_reals"] +
-        s["treasury_10y"] * macro["treasury_10y"] +
-        s["hy_ig_spread"] * macro["hy_ig_spread"] +
-        s["move"] * macro["move"] +
-        s["fluxos"] * macro["fluxos"]
+        s.get("tga", 0) * macro["tga"] +
+        s.get("fed_balance", 0) * macro["fed_balance"] +
+        s.get("tipus_reals", 0) * macro["tipus_reals"] +
+        s.get("treasury_10y", 0) * macro["treasury_10y"] +
+        s.get("hy_ig_spread", 0) * macro["hy_ig_spread"] +
+        s.get("move", 0) * macro["move"] +
+        s.get("fluxos", 0) * macro["fluxos"]
     )
 
     if score >= 3:
@@ -350,6 +350,7 @@ def semafor_macro_actiu(actiu, macro):
     if score <= -3:
         return "🔴"
     return "🟡"
+
 
 
 def semafor_put(preu_subjacent, prima, dte, dist):
