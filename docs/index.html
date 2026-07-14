@@ -266,6 +266,10 @@
           <div id="legend-tga" class="legend-line"></div>
           <div id="legend-fed" class="legend-line"></div>
           <div id="legend-tipus" class="legend-line"></div>
+          <div id="legend-treasury10" class="legend-line"></div>
+          <div id="legend-credit" class="legend-line"></div>
+          <div id="legend-move" class="legend-line"></div>
+          <div id="legend-flows" class="legend-line"></div>
         </div>      
         <div class="list">
           <div class="row">
@@ -279,6 +283,22 @@
           <div class="row">
             <span class="label">Tipus Reals</span>
             <span class="value mono" id="macro-tipus"></span>
+          </div>
+          <div class="row">
+            <span class="label">10Y Treasury Yield</span>
+            <span class="value mono" id="macro-treasury10"></span>
+          </div>
+          <div class="row">
+            <span class="label">Credit Spread</span>
+            <span class="value mono" id="macro-credit"></span>
+          </div>
+          <div class="row">
+            <span class="label">MOVE Index</span>
+            <span class="value mono" id="macro-move"></span>
+          </div>
+          <div class="row">
+            <span class="label">Institutional Flows</span>
+            <span class="value mono" id="macro-flows"></span>
           </div>
         </div>
       </div>
@@ -587,6 +607,18 @@
           document.getElementById("macro-tipus").innerHTML =
             `<span class="${macroClass(dades.macro.tipus_reals)}">${macroEmoji(dades.macro.tipus_reals)}</span>`;
 
+          document.getElementById("macro-treasury10").innerHTML =
+            `<span class="${macroClass(dades.macro.treasury10y)}">${macroEmoji(dades.macro.treasury10y)}</span>`;
+          
+          document.getElementById("macro-credit").innerHTML =
+            `<span class="${macroClass(dades.macro.credit_spread)}">${macroEmoji(dades.macro.credit_spread)}</span>`;
+          
+          document.getElementById("macro-move").innerHTML =
+            `<span class="${macroClass(dades.macro.move)}">${macroEmoji(dades.macro.move)}</span>`;
+          
+          document.getElementById("macro-flows").innerHTML =
+            `<span class="${macroClass(dades.macro.flows)}">${macroEmoji(dades.macro.flows)}</span>`;
+          
           function llegendaTGA(v) {
             if (v === -1) return "TGA 🔴 — Descens fort: augment de liquiditat al sistema.";
             if (v === 1) return "TGA 🟢 — Pujada forta: absorció temporal de liquiditat.";
@@ -604,12 +636,39 @@
             if (v === 1) return "Tipus Reals 🟢 — Puja: pressió sobre actius sensibles a tipus.";
             return "Tipus Reals 🟡 — Estabilitat en el cost real del capital.";
           }
+
+          function llegendaTreasury10(v) {
+            if (v === -1) return "10Y Treasury 🔴 — Caiguda de yields: suport per actius de durada llarga.";
+            if (v === 1)  return "10Y Treasury 🟢 — Pujada de yields: pressió sobre equities i duration.";
+            return "10Y Treasury 🟡 — Moviment moderat en tipus a llarg termini.";
+          }
+          
+          function llegendaCredit(v) {
+            if (v === -1) return "Credit Spread 🔴 — Ampliació: risc de crèdit elevat.";
+            if (v === 1)  return "Credit Spread 🟢 — Compressió: entorn de risc més benigne.";
+            return "Credit Spread 🟡 — Spreads estables: risc de crèdit moderat.";
+          }
+          
+          function llegendaMove(v) {
+            if (v === -1) return "MOVE 🔴 — Volatilitat baixa en bons: entorn estable.";
+            if (v === 1)  return "MOVE 🟢 — Volatilitat alta en bons: risc sistèmic elevat.";
+            return "MOVE 🟡 — Volatilitat moderada en renda fixa.";
+          }
+          
+          function llegendaFlows(v) {
+            if (v === -1) return "Institutional Flows 🔴 — Sortides netes: pressió sobre actius de risc.";
+            if (v === 1)  return "Institutional Flows 🟢 — Entrades netes: suport per actius de risc.";
+            return "Institutional Flows 🟡 — Fluxos neutres o mixtos.";
+          }
           
           document.getElementById("legend-tga").textContent = llegendaTGA(dades.macro.tga);
           document.getElementById("legend-fed").textContent = llegendaFed(dades.macro.fed_balance);
           document.getElementById("legend-tipus").textContent = llegendaTipus(dades.macro.tipus_reals);
-
-          
+          document.getElementById("legend-treasury10").textContent = llegendaTreasury10(dades.macro.treasury10y);
+          document.getElementById("legend-credit").textContent     = llegendaCredit(dades.macro.credit_spread);
+          document.getElementById("legend-move").textContent       = llegendaMove(dades.macro.move);
+          document.getElementById("legend-flows").textContent      = llegendaFlows(dades.macro.flows);
+                    
         }
 
         // --- TARGETA OPTIONS ENGINE ---
