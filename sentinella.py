@@ -75,16 +75,46 @@ def obtenir_macro():
         tga_vals = obtenir_fred_robust("WTREGEN")
         fed_vals = obtenir_fred_robust("WALCL")
         tr_vals  = obtenir_fred_robust("DFII10")
+        # NOUS INDICADORS MACRO
+        treasury10_vals = obtenir_fred_robust("DGS10")  # 10Y Treasury Yield
 
+        hy_vals = obtenir_fred_robust("BAMLH0A0HYM2")   # HY spreads
+        ig_vals = obtenir_fred_robust("BAMLCC0A0CMTRIV") # IG spreads
+
+        # Spread HY - IG
+        credit_spread_vals = []
+        for i in range(min(len(hy_vals), len(ig_vals))):
+            credit_spread_vals.append(hy_vals[i] - ig_vals[i])
+
+        # MOVE i FLOWS (placeholder fins que afegim API)
+        move = 0
+        flows = 0
+        
         return {
             "tga": tendencia_robusta(tga_vals),
             "fed_balance": tendencia_robusta(fed_vals),
-            "tipus_reals": tendencia_robusta(tr_vals)
+            "tipus_reals": tendencia_robusta(tr_vals),
+
+            # NOUS
+            "treasury10y": tendencia_robusta(treasury10_vals),
+            "credit_spread": tendencia_robusta(credit_spread_vals),
+            "move": move,
+            "flows": flows
         }
+
 
     except Exception as e:
         print("⚠️ Error robust Macro Engine:", e)
-        return {"tga": 0, "fed_balance": 0, "tipus_reals": 0}
+        return {
+            "tga": 0,
+            "fed_balance": 0,
+            "tipus_reals": 0,
+            "treasury10y": 0,
+            "credit_spread": 0,
+            "move": 0,
+            "flows": 0
+        }
+
 
 
 
