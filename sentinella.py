@@ -303,7 +303,11 @@ def semafor_macro_actiu(actiu, macro):
     score = (
         s["tga"] * macro["tga"] +
         s["fed_balance"] * macro["fed_balance"] +
-        s["tipus_reals"] * macro["tipus_reals"]
+        s["tipus_reals"] * macro["tipus_reals"] +
+        s["treasury10y"] * macro["treasury10y"] +
+        s["credit_spread"] * macro["credit_spread"] +
+        s["move"] * macro["move"] +
+        s["flows"] * macro["flows"]
     )
 
     if score >= 2:
