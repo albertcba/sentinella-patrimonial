@@ -1,30 +1,29 @@
 {
-  "GLDM":      { "tga": 0, "fed_balance": 1, "tipus_reals": -2 },
-  "ZGLD.SW":   { "tga": 0, "fed_balance": 1, "tipus_reals": -2 },
-  "SSLV.L":    { "tga": 0, "fed_balance": 1, "tipus_reals": -2 },
-  "SILJ":      { "tga": 0, "fed_balance": 1, "tipus_reals": -2 },
+  "GLDM":      { "tga": 0, "fed_balance": 1, "tipus_reals": -2, "treasury10y": -1, "credit_spread": 0, "move": 1, "flows": 1 },
+  "ZGLD.SW":   { "tga": 0, "fed_balance": 1, "tipus_reals": -2, "treasury10y": -1, "credit_spread": 0, "move": 1, "flows": 1 },
+  "SSLV.L":    { "tga": 0, "fed_balance": 1, "tipus_reals": -2, "treasury10y": -1, "credit_spread": 0, "move": 1, "flows": 1 },
+  "SILJ":      { "tga": 0, "fed_balance": 1, "tipus_reals": -2, "treasury10y": -1, "credit_spread": 0, "move": 1, "flows": 1 },
 
-  "IBIT":      { "tga": 1, "fed_balance": 1, "tipus_reals": -1 },
-  "ABTC.SW":   { "tga": 1, "fed_balance": 1, "tipus_reals": -1 },
+  "IBIT":      { "tga": 1, "fed_balance": 1, "tipus_reals": -1, "treasury10y": 0, "credit_spread": 1, "move": 1, "flows": 2 },
+  "ABTC.SW":   { "tga": 1, "fed_balance": 1, "tipus_reals": -1, "treasury10y": 0, "credit_spread": 1, "move": 1, "flows": 2 },
 
-  "REMX":      { "tga": 0, "fed_balance": 1, "tipus_reals": -1 },
-  "XDWM.L":    { "tga": 0, "fed_balance": 1, "tipus_reals": -1 },
+  "REMX":      { "tga": 0, "fed_balance": 1, "tipus_reals": -1, "treasury10y": 1, "credit_spread": 1, "move": 1, "flows": 1 },
+  "XDWM.L":    { "tga": 0, "fed_balance": 1, "tipus_reals": -1, "treasury10y": 1, "credit_spread": 1, "move": 1, "flows": 1 },
 
-  "IUES.L":    { "tga": 1, "fed_balance": 1, "tipus_reals": 0 },
-  "IUUS.L":    { "tga": 0, "fed_balance": 1, "tipus_reals": 0 },
-  "INFR.L":    { "tga": 0, "fed_balance": 1, "tipus_reals": 0 },
-  "IH2O.L":    { "tga": 0, "fed_balance": 1, "tipus_reals": 0 },
-  "WCOA.L":    { "tga": 1, "fed_balance": 1, "tipus_reals": 0 },
-  "AGAP.L":    { "tga": 1, "fed_balance": 1, "tipus_reals": 0 },
-  "URNM.L":    { "tga": 0, "fed_balance": 1, "tipus_reals": 0 },
+  "IUES.L":    { "tga": 1, "fed_balance": 1, "tipus_reals": 0, "treasury10y": 1, "credit_spread": 1, "move": 1, "flows": 1 },
+  "IUUS.L":    { "tga": 0, "fed_balance": 1, "tipus_reals": 0, "treasury10y": 1, "credit_spread": 1, "move": 1, "flows": 1 },
+  "INFR.L":    { "tga": 0, "fed_balance": 1, "tipus_reals": 0, "treasury10y": 1, "credit_spread": 1, "move": 1, "flows": 1 },
+  "IH2O.L":    { "tga": 0, "fed_balance": 1, "tipus_reals": 0, "treasury10y": 1, "credit_spread": 1, "move": 1, "flows": 1 },
+  "WCOA.L":    { "tga": 1, "fed_balance": 1, "tipus_reals": 0, "treasury10y": 1, "credit_spread": 1, "move": 1, "flows": 1 },
+  "AGAP.L":    { "tga": 1, "fed_balance": 1, "tipus_reals": 0, "treasury10y": 1, "credit_spread": 1, "move": 1, "flows": 1 },
+  "URNM.L":    { "tga": 0, "fed_balance": 1, "tipus_reals": 0, "treasury10y": 1, "credit_spread": 2, "move": 1, "flows": 2 },
 
-  "NUCL.L":    { "tga": 0, "fed_balance": 1, "tipus_reals": 0 },
-  "COPX":      { "tga": 1, "fed_balance": 1, "tipus_reals": -1 },
+  "NUCL.L":    { "tga": 0, "fed_balance": 1, "tipus_reals": 0, "treasury10y": 1, "credit_spread": 2, "move": 1, "flows": 2 },
+  "COPX":      { "tga": 1, "fed_balance": 1, "tipus_reals": -1, "treasury10y": 1, "credit_spread": 2, "move": 1, "flows": 2 },
 
-  "NXE":       { "tga": 0, "fed_balance": 1, "tipus_reals": -2 },
+  "NXE":       { "tga": 0, "fed_balance": 1, "tipus_reals": -2, "treasury10y": 1, "credit_spread": 2, "move": 1, "flows": 2 },
 
-  "BWXT":    { "tga": 0, "fed_balance": 1, "tipus_reals": -1 },
-  "LEU":     { "tga": 1, "fed_balance": 1, "tipus_reals": -2 },
-  "SU":      { "tga": 0, "fed_balance": 1, "tipus_reals": 0 }
-
+  "BWXT":      { "tga": 0, "fed_balance": 1, "tipus_reals": -1, "treasury10y": 1, "credit_spread": 1, "move": 1, "flows": 1 },
+  "LEU":       { "tga": 1, "fed_balance": 1, "tipus_reals": -2, "treasury10y": 1, "credit_spread": 2, "move": 1, "flows": 2 },
+  "SU":        { "tga": 0, "fed_balance": 1, "tipus_reals": 0, "treasury10y": 1, "credit_spread": 1, "move": 1, "flows": 1 }
 }
