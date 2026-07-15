@@ -50,5 +50,6 @@
   { "ticker": "XLF-CALENDARSPREAD54/54", "nom": "XLF Calendar Spread 54/54", "capa": "Options", "underlying": "XLF", "strike": 54, "expiry": "2026-07-31" },
   { "ticker": "KO-CALENDARSPREAD84/84", "nom": "KO Calendar Spread 84/84", "capa": "Options", "underlying": "KO", "strike": 84, "expiry": "2026-07-17" },
   { "ticker": "XLU-CALENDARSPREAD45/45", "nom": "XLU Calendar Spread 45/45", "capa": "Options", "underlying": "XLU", "strike": 45, "expiry": "2026-07-17" },
-  { "ticker": "XLF-CALENDARSPREAD55/55", "nom": "XLF Calendar Spread 55/55", "capa": "Options", "underlying": "XLF", "strike": 55, "expiry": "2026-07-17" }  
+  { "ticker": "XLF-CALENDARSPREAD55/55", "nom": "XLF Calendar Spread 55/55", "capa": "Options", "underlying": "XLF", "strike": 55, "expiry": "2026-07-17" },
+  { "ticker": "XLU-IRONCONDOR44.5/46.5", "nom": "XLU Iron Condor 44.5/46.5", "capa": "Options", "underlying": "XLU", "strike": 44.5, "expiry": "2026-07-24" }  
 ]
