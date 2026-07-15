@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <title>Sentinella Patrimonial — CSP contracíclic</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #0f172a;
+            color: #e5e7eb;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            padding: 16px 24px;
+            background: #020617;
+            border-bottom: 1px solid #1f2937;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+        header p {
+            margin: 4px 0 0;
+            font-size: 13px;
+            color: #9ca3af;
+        }
+        main {
+            padding: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 20px;
+        }
+        .panel {
+            background: #020617;
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+            padding: 16px 18px;
+            margin-bottom: 18px;
+        }
+        .panel h2 {
+            margin: 0 0 8px;
+            font-size: 16px;
+        }
+        .panel h3 {
+            margin: 12px 0 6px;
+            font-size: 14px;
+            color: #9ca3af;
+        }
+        .panel small {
+            color: #6b7280;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        label {
+            font-size: 12px;
+            color: #9ca3af;
+            display: block;
+            margin-bottom: 2px;
+        }
+        input, select {
+            width: 100%;
+            padding: 6px 8px;
+            border-radius: 4px;
+            border: 1px solid #374151;
+            background: #020617;
+            color: #e5e7eb;
+            font-size: 13px;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        .inline-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .inline-row > div {
+            flex: 1;
+        }
+        button {
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: none;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        .btn-secondary {
+            background: #111827;
+            color: #e5e7eb;
+            border: 1px solid #374151;
+        }
+        .outputs {
+            font-size: 13px;
+        }
+        .outputs p {
+            margin: 4px 0;
+        }
+        .tag {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 999px;
+            font-size: 11px;
+            margin-right: 4px;
+        }
+        .tag-green { background: #064e3b; color: #a7f3d0; }
+        .tag-yellow { background: #78350f; color: #fde68a; }
+        .tag-red { background: #7f1d1d; color: #fecaca; }
+
+        .semaphore {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .light {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #1f2937;
+            border: 1px solid #374151;
+        }
+        .light.green { background: #22c55e; }
+        .light.yellow { background: #eab308; }
+        .light.red { background: #ef4444; }
+
+        .go-no-go {
+            margin-top: 10px;
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .go { background: #022c22; color: #6ee7b7; border: 1px solid #16a34a; }
+        .no-go { background: #450a0a; color: #fecaca; border: 1px solid #b91c1c; }
+        .neutral { background: #111827; color: #e5e7eb; border: 1px solid #4b5563; }
+
+        .section-note {
+            font-size: 11px;
+            color: #6b7280;
+            margin-bottom: 6px;
+        }
+        pre {
+            font-size: 11px;
+            background: #020617;
+            border: 1px solid #1f2937;
+            border-radius: 6px;
+            padding: 8px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Sentinella Patrimonial — Avaluació CSP contracíclic</h1>
+    <p>Formulari institucional per validar EM, eficiència, skew i risc d’un Cash‑Secured Put contracíclic.</p>
+</header>
+
+<main>
+    <div class="grid">
+        <!-- ESQUERRA: FORMULARI -->
+        <section>
+            <div class="panel">
+                <h2>1. Dades del CSP</h2>
+                <p class="section-note">Introdueix el que veus a la cadena d’opcions per aquest CSP concret.</p>
+
+                <div class="inline-row">
+                    <div>
+                        <label for="cspTicker">Ticker / Actiu</label>
+                        <input id="cspTicker" type="text" placeholder="AIQ, ROBO, XLF...">
+                    </div>
+                    <div>
+                        <label for="cspUnderlyingPrice">Preu subjacient actual</label>
+                        <input id="cspUnderlyingPrice" type="number" step="0.01" placeholder="p.ex. 61.80">
+                    </div>
+                    <div>
+                        <label for="cspAccountSize">Mida compte (aprox.)</label>
+                        <input id="cspAccountSize" type="number" step="100" placeholder="p.ex. 25000">
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div>
+                        <label for="cspExpiryDTE">Venciment (DTE)</label>
+                        <input id="cspExpiryDTE" type="number" placeholder="p.ex. 90">
+                    </div>
+                    <div>
+                        <label for="cspMacroRisk">Risc macro / sectorial</label>
+                        <select id="cspMacroRisk">
+                            <option value="low">Baix</option>
+                            <option value="medium">Mitjà</option>
+                            <option value="high">Alt</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h3>Paràmetres del PUT</h3>
+                <div class="form-row">
+                    <div>
+                        <label for="cspStrike">Strike del PUT</label>
+                        <input id="cspStrike" type="number" step="0.5" placeholder="p.ex. 55">
+                    </div>
+                    <div>
+                        <label for="cspPremium">Prima (crèdit per contracte)</label>
+                        <input id="cspPremium" type="number" step="0.01" placeholder="p.ex. 1.80">
+                    </div>
+                    <div>
+                        <label for="cspDelta">Delta del PUT</label>
+                        <input id="cspDelta" type="number" step="0.01" placeholder="p.ex. 0.15">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <label for="cspIVATM">IV ATM (%)</label>
+                        <input id="cspIVATM" type="number" step="0.1" placeholder="p.ex. 35.6">
+                    </div>
+                    <div>
+                        <label for="cspIVOTM">IV OTM PUT (%)</label>
+                        <input id="cspIVOTM" type="number" step="0.1" placeholder="p.ex. 41.5">
+                    </div>
+                    <div>
+                        <label for="cspSkewQuality">Qualitat del skew</label>
+                        <select id="cspSkewQuality">
+                            <option value="good">Sa / positiu</option>
+                            <option value="neutral">Neutre</option>
+                            <option value="bad">Pla / invers</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h3>EM i context contracíclic</h3>
+                <div class="form-row-2">
+                    <div>
+                        <label for="cspPreuAcceptable">Preu acceptable d’assignació</label>
+                        <input id="cspPreuAcceptable" type="number" step="0.1" placeholder="p.ex. 53">
+                    </div>
+                    <div>
+                        <label for="cspEntryMode">Mode d’entrada</label>
+                        <select id="cspEntryMode">
+                            <option value="pullback">Només en caiguda / pullback</option>
+                            <option value="anytime">Qualsevol moment</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div>
+                        <label for="cspLayering">Capa / exposició</label>
+                        <select id="cspLayering">
+                            <option value="small">Exposició testimonial</option>
+                            <option value="medium">Exposició moderada</option>
+                            <option value="large">Exposició alta</option>
+                        </select>
+                    </div>
+                    <div>
+                        <small>EM: POP ≈ 1 − delta, L = strike − preu acceptable.</small>
+                    </div>
+                </div>
+
+                <div class="inline-row" style="margin-top: 12px;">
+                    <button class="btn-primary" type="button" onclick="avaluarCSP()">Avaluar CSP</button>
+                    <button class="btn-secondary" type="button" onclick="netejarCSP()">Netejar</button>
+                    <button class="btn-secondary" type="button" onclick="exportarCSPJSON()">Exportar JSON</button>
+                </div>
+
+                <h3>Detall EM</h3>
+                <div class="outputs">
+                    <p id="semafor_em_csp">EM CSP: pendent</p>
+                    <pre id="resultat_em_csp"></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- DRETA: LECTURA INSTITUCIONAL -->
+        <section>
+            <div class="panel">
+                <h2>2. Lectura institucional del CSP</h2>
+                <p class="section-note">Resultats basats en les dades introduïdes. No és recomanació, és lectura de consistència.</p>
+
+                <div class="outputs" id="cspOutputs">
+                    <p><strong>Marge cash‑secured:</strong> <span id="cspMargin">—</span></p>
+                    <p><strong>Pes sobre el compte:</strong> <span id="cspAccountRisk">—</span></p>
+                    <p><strong>Rendiment brut (% sobre marge):</strong> <span id="cspYield">—</span></p>
+                    <p><strong>Rendiment anualitzat (aprox.):</strong> <span id="cspAnnualYield">—</span></p>
+                    <p><strong>Distància a strike (%):</strong> <span id="cspDistance">—</span></p>
+                    <p><strong>Esperança EM qualitativa:</strong> <span id="cspEM">—</span></p>
+
+                    <h3>Eficiència de la prima</h3>
+                    <p id="cspEfficiencyText">—</p>
+                    <div id="cspEfficiencyTags"></div>
+
+                    <h3>Skew i volatilitat</h3>
+                    <p id="cspSkewText">—</p>
+                    <div id="cspSkewTags"></div>
+
+                    <h3>Risc i exposició</h3>
+                    <p id="cspRiskText">—</p>
+                    <div id="cspRiskTags"></div>
+
+                    <h3>Coherència amb playbook contracíclic</h3>
+                    <p id="cspPlaybookText">—</p>
+                    <div id="cspPlaybookTags"></div>
+
+                    <div class="semaphore">
+                        <span>Semàfor global:</span>
+                        <div class="light" id="cspSemGreen"></div>
+                        <div class="light" id="cspSemYellow"></div>
+                        <div class="light" id="cspSemRed"></div>
+                    </div>
+
+                    <div id="cspGoNoGo" class="go-no-go neutral" style="margin-top: 12px;">
+                        GO / NO‑GO: pendent d’avaluació
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script>
+function parseNumber(id) {
+    const v = document.getElementById(id).value;
+    const n = parseFloat(v);
+    return isNaN(n) ? null : n;
+}
+
+function setTags(containerId, tags) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = "";
+    tags.forEach(t => {
+        const span = document.createElement("span");
+        span.className = "tag " + t.color;
+        span.textContent = t.label;
+        container.appendChild(span);
+    });
+}
+
+function calcularEM_CSP(strike, premium, delta, preuAcceptable) {
+    const POP = 1 - Math.abs(delta);
+    const L = strike - preuAcceptable;
+    const EM = POP * premium - (1 - POP) * L;
+    return { POP, L, EM };
+}
+
+function avaluarCSP() {
+    const underlying = parseNumber("cspUnderlyingPrice");
+    const accountSize = parseNumber("cspAccountSize");
+    const dte = parseNumber("cspExpiryDTE");
+    const strike = parseNumber("cspStrike");
+    const premium = parseNumber("cspPremium");
+    const delta = parseNumber("cspDelta");
+    const ivATM = parseNumber("cspIVATM");
+    const ivOTM = parseNumber("cspIVOTM");
+    const preuAcceptable = parseNumber("cspPreuAcceptable");
+
+    const macroRisk = document.getElementById("cspMacroRisk").value;
+    const skewQuality = document.getElementById("cspSkewQuality").value;
+    const entryMode = document.getElementById("cspEntryMode").value;
+    const layering = document.getElementById("cspLayering").value;
+
+    if (!underlying || !accountSize || !dte || !strike || !premium || !delta || !preuAcceptable) {
+        alert("Falten dades bàsiques del CSP (preu, compte, DTE, strike, premium, delta, preu acceptable).");
+        return;
+    }
+
+    // MARGE I PES SOBRE COMPTE
+    const margin = strike * 100;
+    const accountRiskPct = (margin / accountSize) * 100;
+
+    document.getElementById("cspMargin").textContent = margin.toFixed(0) + " € (equivalent)";
+    document.getElementById("cspAccountRisk").textContent = accountRiskPct.toFixed(1) + " % del compte";
+
+    // RENDIMENT I DISTÀNCIA
+    const grossCredit = premium * 100;
+    const grossYieldPct = (grossCredit / margin) * 100;
+    const annualYieldPct = grossYieldPct * (365 / dte);
+
+    document.getElementById("cspYield").textContent = grossYieldPct.toFixed(2) + " %";
+    document.getElementById("cspAnnualYield").textContent = annualYieldPct.toFixed(2) + " % anualitzat";
+
+    const distancePct = ((underlying - strike) / underlying) * 100;
+    document.getElementById("cspDistance").textContent =
+        distancePct.toFixed(2) + " % per sota del preu";
+
+    // EM institucional
+    const emData = calcularEM_CSP(strike, premium, delta, preuAcceptable);
+    let emEmoji = "🔴";
+    if (emData.EM >= 0.5) emEmoji = "🟢";
+    else if (emData.EM >= 0) emEmoji = "🟡";
+
+    document.getElementById("semafor_em_csp").textContent =
+        emEmoji + " EM CSP: " + emData.EM.toFixed(3);
+
+    document.getElementById("resultat_em_csp").textContent = JSON.stringify({
+        strike,
+        premium,
+        delta,
+        preuAcceptable,
+        POP: emData.POP.toFixed(3),
+        L: emData.L.toFixed(3),
+        EM: emData.EM.toFixed(3)
+    }, null, 2);
+
+    // EM qualitativa
+    let emLabel = "Esperança dubtosa / baixa";
+    if (emData.EM >= 0.5 && distancePct >= 8 && delta <= 0.15 && skewQuality === "good") {
+        emLabel = "Esperança positiva alta (institucional)";
+    } else if (emData.EM >= 0 && distancePct >= 5 && delta <= 0.20 && skewQuality !== "bad") {
+        emLabel = "Esperança positiva moderada";
+    }
+    document.getElementById("cspEM").textContent = emLabel;
+
+    // EFICIÈNCIA DE LA PRIMA
+    let efficiencyText = "";
+    let efficiencyTags = [];
+
+    if (grossYieldPct >= 3) {
+        efficiencyText = "Prima molt eficient respecte al marge cash‑secured.";
+        efficiencyTags.push({ label: "Prima eficient", color: "tag-green" });
+    } else if (grossYieldPct >= 2) {
+        efficiencyText = "Prima acceptable però no extraordinària.";
+        efficiencyTags.push({ label: "Prima acceptable", color: "tag-yellow" });
+    } else {
+        efficiencyText = "Prima feble per al risc assumit.";
+        efficiencyTags.push({ label: "Prima feble", color: "tag-red" });
+    }
+    document.getElementById("cspEfficiencyText").textContent = efficiencyText;
+    setTags("cspEfficiencyTags", efficiencyTags);
+
+    // SKEW I VOLATILITAT
+    let skewText = "";
+    let skewTags = [];
+    const skewDiff = (ivATM && ivOTM) ? (ivOTM - ivATM) : null;
+
+    if (skewQuality === "good" && skewDiff !== null && skewDiff >= 3) {
+        skewText = "Skew positiu i sa: IV OTM superior a ATM, bona prima per CSP.";
+        skewTags.push({ label: "Skew positiu", color: "tag-green" });
+    } else if (skewQuality === "neutral") {
+        skewText = "Skew neutre: prima normal, sense avantatge clar.";
+        skewTags.push({ label: "Skew neutre", color: "tag-yellow" });
+    } else {
+        skewText = "Skew pla o invers: estructura poc atractiva per CSP contracíclic.";
+        skewTags.push({ label: "Skew problemàtic", color: "tag-red" });
+    }
+    document.getElementById("cspSkewText").textContent = skewText;
+    setTags("cspSkewTags", skewTags);
+
+    // RISC I EXPOSICIÓ
+    let riskText = "";
+    let riskTags = [];
+
+    if (accountRiskPct <= 5 && layering === "small") {
+        riskText = "Exposició testimonial i pes baix sobre el compte: risc controlat.";
+        riskTags.push({ label: "Pes baix", color: "tag-green" });
+    } else if (accountRiskPct <= 10 && layering !== "large") {
+        riskText = "Exposició moderada: acceptable però cal disciplina.";
+        riskTags.push({ label: "Risc moderat", color: "tag-yellow" });
+    } else {
+        riskText = "Pes elevat sobre el compte o capa massa gran per un CSP contracíclic.";
+        riskTags.push({ label: "Risc elevat", color: "tag-red" });
+    }
+
+    if (macroRisk === "high") {
+        riskTags.push({ label: "Risc macro alt", color: "tag-red" });
+    } else if (macroRisk === "medium") {
+        riskTags.push({ label: "Risc macro mitjà", color: "tag-yellow" });
+    }
+
+    document.getElementById("cspRiskText").textContent = riskText;
+    setTags("cspRiskTags", riskTags);
+
+    // PLAYBOOK CONTRACÍCLIC
+    let playbookText = "";
+    let playbookTags = [];
+
+    if (entryMode === "pullback" && distancePct >= 8 && delta <= 0.15) {
+        playbookText = "Coherent amb playbook contracíclic: entrada en caiguda, strike llunyà, delta baixa.";
+        playbookTags.push({ label: "Contracíclic pur", color: "tag-green" });
+    } else if (entryMode === "pullback") {
+        playbookText = "Intenció contracíclica, però la distància o el delta no són òptims.";
+        playbookTags.push({ label: "Contracíclic parcial", color: "tag-yellow" });
+    } else {
+        playbookText = "Entrada no estrictament contracíclica: més proper a venda de vol normal.";
+        playbookTags.push({ label: "No contracíclic", color: "tag-red" });
+    }
+
+    document.getElementById("cspPlaybookText").textContent = playbookText;
+    setTags("cspPlaybookTags", playbookTags);
+
+    // SEMÀFOR GLOBAL + GO / NO‑GO
+    const semGreen = document.getElementById("cspSemGreen");
+    const semYellow = document.getElementById("cspSemYellow");
+    const semRed = document.getElementById("cspSemRed");
+    semGreen.className = "light";
+    semYellow.className = "light";
+    semRed.className = "light";
+
+    const goNoGo = document.getElementById("cspGoNoGo");
+    goNoGo.className = "go-no-go neutral";
+
+    let scoreGreen = 0, scoreYellow = 0, scoreRed = 0;
+
+    [efficiencyTags, skewTags, riskTags, playbookTags].forEach(group => {
+        group.forEach(t => {
+            if (t.color === "tag-green") scoreGreen++;
+            if (t.color === "tag-yellow") scoreYellow++;
+            if (t.color === "tag-red") scoreRed++;
+        });
+    });
+
+    if (scoreRed === 0 && scoreYellow <= 3 && scoreGreen >= 3 && emData.EM >= 0) {
+        semGreen.className = "light green";
+        goNoGo.className = "go-no-go go";
+        goNoGo.textContent = "GO: CSP contracíclic eficient, coherent i amb risc controlat segons el teu playbook.";
+    } else if (scoreRed >= 2 || (scoreRed >= 1 && scoreYellow >= 3) || emData.EM < 0) {
+        semRed.className = "light red";
+        goNoGo.className = "go-no-go no-go";
+        goNoGo.textContent = "NO‑GO: massa flags vermells/grocs o EM negativa per considerar aquest CSP com a trade institucional.";
+    } else {
+        semYellow.className = "light yellow";
+        goNoGo.className = "go-no-go neutral";
+        goNoGo.textContent = "Zona grisa: CSP acceptable però amb matisos. Requereix criteri discrecional abans de fer GO.";
+    }
+}
+
+function netejarCSP() {
+    const ids = [
+        "cspTicker","cspUnderlyingPrice","cspAccountSize",
+        "cspExpiryDTE","cspStrike","cspPremium","cspDelta",
+        "cspIVATM","cspIVOTM","cspPreuAcceptable"
+    ];
+    ids.forEach(id => document.getElementById(id).value = "");
+
+    document.getElementById("cspMacroRisk").value = "low";
+    document.getElementById("cspSkewQuality").value = "good";
+    document.getElementById("cspEntryMode").value = "pullback";
+    document.getElementById("cspLayering").value = "small";
+
+    document.getElementById("cspMargin").textContent = "—";
+    document.getElementById("cspAccountRisk").textContent = "—";
+    document.getElementById("cspYield").textContent = "—";
+    document.getElementById("cspAnnualYield").textContent = "—";
+    document.getElementById("cspDistance").textContent = "—";
+    document.getElementById("cspEM").textContent = "—";
+
+    document.getElementById("cspEfficiencyText").textContent = "—";
+    document.getElementById("cspSkewText").textContent = "—";
+    document.getElementById("cspRiskText").textContent = "—";
+    document.getElementById("cspPlaybookText").textContent = "—";
+
+    setTags("cspEfficiencyTags", []);
+    setTags("cspSkewTags", []);
+    setTags("cspRiskTags", []);
+    setTags("cspPlaybookTags", []);
+
+    document.getElementById("semafor_em_csp").textContent = "EM CSP: pendent";
+    document.getElementById("resultat_em_csp").textContent = "";
+
+    const semGreen = document.getElementById("cspSemGreen");
+    const semYellow = document.getElementById("cspSemYellow");
+    const semRed = document.getElementById("cspSemRed");
+    semGreen.className = "light";
+    semYellow.className = "light";
+    semRed.className = "light";
+
+    const goNoGo = document.getElementById("cspGoNoGo");
+    goNoGo.className = "go-no-go neutral";
+    goNoGo.textContent = "GO / NO‑GO: pendent d’avaluació";
+}
+
+function exportarCSPJSON() {
+    const data = {
+        actiu: document.getElementById("cspTicker").value,
+        underlying: parseNumber("cspUnderlyingPrice"),
+        accountSize: parseNumber("cspAccountSize"),
+        dte: parseNumber("cspExpiryDTE"),
+        strike: parseNumber("cspStrike"),
+        premium: parseNumber("cspPremium"),
+        delta: parseNumber("cspDelta"),
+        ivATM: parseNumber("cspIVATM"),
+        ivOTM: parseNumber("cspIVOTM"),
+        preuAcceptable: parseNumber("cspPreuAcceptable"),
+        macroRisk: document.getElementById("cspMacroRisk").value,
+        skewQuality: document.getElementById("cspSkewQuality").value,
+        entryMode: document.getElementById("cspEntryMode").value,
+        layering: document.getElementById("cspLayering").value,
+        lectura: {
+            marge: document.getElementById("cspMargin").textContent,
+            pesCompte: document.getElementById("cspAccountRisk").textContent,
+            rendiment: document.getElementById("cspYield").textContent,
+            rendimentAnual: document.getElementById("cspAnnualYield").textContent,
+            distancia: document.getElementById("cspDistance").textContent,
+            emQualitativa: document.getElementById("cspEM").textContent,
+            eficiencia: document.getElementById("cspEfficiencyText").textContent,
+            skew: document.getElementById("cspSkewText").textContent,
+            risc: document.getElementById("cspRiskText").textContent,
+            playbook: document.getElementById("cspPlaybookText").textContent,
+            emDetall: document.getElementById("resultat_em_csp").textContent,
+            goNoGo: document.getElementById("cspGoNoGo").textContent
+        },
+        timestamp: new Date().toISOString()
+    };
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `csp_${data.actiu}_${data.timestamp}.json`;
+    a.click();
+
+    URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
