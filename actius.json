@@ -45,5 +45,10 @@
   { "ticker": "XLF-IRONCONDOR55/58", "nom": "XLF Iron Condor 55/58", "capa": "Options", "underlying": "XLF", "strike": 55, "expiry": "2026-07-24" },
   { "ticker": "XLP-IRONCONDOR83/87", "nom": "XLP Iron Condor 83/87", "capa": "Options", "underlying": "XLP", "strike": 83, "expiry": "2026-07-24" },
   { "ticker": "AIQ-CSP55", "nom": "AIQ Cash Secured Put 55", "capa": "Options", "underlying": "AIQ", "strike": 55, "expiry": "2026-08-21" },
-  { "ticker": "BUG-CSP38", "nom": "BUG Cash Secured Put 38", "capa": "Options", "underlying": "BUG", "strike": 38, "expiry": "2026-08-21" }  
+  { "ticker": "BUG-CSP38", "nom": "BUG Cash Secured Put 38", "capa": "Options", "underlying": "BUG", "strike": 38, "expiry": "2026-08-21" },  
+  { "ticker": "KO-COVEREDCALL84", "nom": "KO Covered Call 84", "capa": "Options", "underlying": "KO", "strike": 84, "expiry": "2026-07-31" },
+  { "ticker": "WTRG-COVEREDCALL40", "nom": "WTRG Covered Call 40", "capa": "Options", "underlying": "WTRG", "strike": 40, "expiry": "2026-08-21" },
+  { "ticker": "NEE-CSP85", "nom": "NEE Cash Secured Put 85", "capa": "Options", "underlying": "NEE", "strike": 85, "expiry": "2026-07-31" },
+  { "ticker": "XLE-IRONCONDOR55.5/61.5", "nom": "XLE Iron Condor 55.5/61.5", "capa": "Options", "underlying": "XLE", "strike": 55.5, "expiry": "2026-07-31" },
+  { "ticker": "KMI-COVEREDCALL33.5", "nom": "KMI Covered Call 33.5", "capa": "Options", "underlying": "KMI", "strike": 33.5, "expiry": "2026-07-31" }
 ]
