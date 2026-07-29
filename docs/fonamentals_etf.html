@@ -234,6 +234,12 @@
                     </div>
                 </div>
 
+                <h3>Opcions (IV)</h3>
+                <div>
+                    <label for="opcions">Opcions (JSON)</label>
+                    <textarea id="opcions" rows="4" placeholder='[{"type":"call","strike":58,"iv":41.6,"underlying":58.63}, ...]'></textarea>
+                </div>
+                
                 <h3>Liquiditat</h3>
                 <div class="form-row-2">
                     <div>
@@ -245,6 +251,12 @@
                         <input id="avgVolume" type="number" step="1" placeholder="35066908">
                     </div>
                 </div>
+
+                <h3>Històric (20 dies)</h3>
+                <div>
+                    <label for="historial">Dades històriques (JSON o CSV simple)</label>
+                    <textarea id="historial" rows="4" placeholder='[{"date":"2026-07-29","volume":34014756}, ...]'></textarea>
+                </div>                
 
                 <h3>Context</h3>
                 <div class="form-row-2">
@@ -345,6 +357,47 @@ function setTags(containerId, tags) {
     });
 }
 
+function volumMetrics(historial) {
+    const vols = historial.map(d => d.volume);
+
+    const last20 = vols.slice(0, 20);
+    const avg20 = last20.reduce((a, b) => a + b, 0) / last20.length;
+
+    const maxV = Math.max(...last20);
+    const minV = Math.min(...last20);
+
+    const trend = last20[0] < last20[last20.length - 1]
+        ? "creixent"
+        : last20[0] > last20[last20.length - 1]
+        ? "decreixent"
+        : "estable";
+
+    return { avg20, maxV, minV, trend };
+}
+
+function calcularIV30(opcions) {
+    const atm = opcions.filter(o => Math.abs(o.strike - o.underlying) <= 1);
+
+    if (atm.length === 0) return null;
+
+    const ivs = atm.map(o => o.iv);
+    const avgIV = ivs.reduce((a, b) => a + b, 0) / ivs.length;
+
+    return avgIV;
+}
+
+function calcularSkew(opcions) {
+    const calls = opcions.filter(o => o.type === "call").map(o => o.iv);
+    const puts = opcions.filter(o => o.type === "put").map(o => o.iv);
+
+    if (calls.length === 0 || puts.length === 0) return null;
+
+    const avgCall = calls.reduce((a, b) => a + b, 0) / calls.length;
+    const avgPut = puts.reduce((a, b) => a + b, 0) / puts.length;
+
+    return avgCall - avgPut;
+}
+    
 function avaluarETF() {
     const ticker = document.getElementById("ticker").value.trim();
     const sector = document.getElementById("sector").value.trim();
@@ -417,6 +470,35 @@ function avaluarETF() {
     setTags("valuationTags", valuationTags);
     document.getElementById("valuationText").textContent = valuationText;
 
+    // Volatilitat implícita (IV)
+    let opcionsRaw = document.getElementById("opcions")?.value?.trim();
+    if (opcionsRaw) {
+        try {
+            const opcions = JSON.parse(opcionsRaw);
+    
+            const iv30 = calcularIV30(opcions);
+            const skew = calcularSkew(opcions);
+    
+            if (iv30 !== null) {
+                if (iv30 < 20) valuationTags.push({ label: `IV30 baix (${iv30.toFixed(1)}%)`, color: "tag-green" });
+                else if (iv30 < 30) valuationTags.push({ label: `IV30 moderat (${iv30.toFixed(1)}%)`, color: "tag-yellow" });
+                else valuationTags.push({ label: `IV30 alt (${iv30.toFixed(1)}%)`, color: "tag-red" });
+            }
+    
+            if (skew !== null) {
+                if (skew > 5) valuationTags.push({ label: "Skew calls>puts", color: "tag-yellow" });
+                else if (skew < -5) valuationTags.push({ label: "Skew puts>calls", color: "tag-yellow" });
+                else valuationTags.push({ label: "Skew neutral", color: "tag-green" });
+            }
+    
+            setTags("valuationTags", valuationTags);
+            document.getElementById("valuationText").textContent = "Valuation + IV";
+    
+        } catch (e) {
+            valuationTags.push({ label: "IV invàlid", color: "tag-red" });
+        }
+    }
+  
     // Liquiditat
     let balanceText = "Lectura de liquiditat basada en volum.";
     let balanceTags = [];
@@ -435,6 +517,29 @@ function avaluarETF() {
     setTags("balanceTags", balanceTags);
     document.getElementById("balanceText").textContent = balanceText;
 
+    // Volum històric (20 dies)
+    let historialRaw = document.getElementById("historial").value.trim();
+    if (historialRaw) {
+        try {
+            const historial = JSON.parse(historialRaw);
+            const vol = volumMetrics(historial);
+    
+            balanceTags.push({ label: `Avg20 ${(vol.avg20/1e6).toFixed(1)}M`, color: "tag-green" });
+            balanceTags.push({ label: `Max ${(vol.maxV/1e6).toFixed(1)}M`, color: "tag-green" });
+            balanceTags.push({ label: `Min ${(vol.minV/1e6).toFixed(1)}M`, color: "tag-yellow" });
+    
+            if (vol.trend === "creixent") balanceTags.push({ label: "Volum creixent", color: "tag-green" });
+            else if (vol.trend === "estable") balanceTags.push({ label: "Volum estable", color: "tag-yellow" });
+            else balanceTags.push({ label: "Volum decreixent", color: "tag-red" });
+    
+            document.getElementById("balanceText").textContent = "Liquiditat + volum històric.";
+            setTags("balanceTags", balanceTags);
+    
+        } catch (e) {
+            balanceTags.push({ label: "Històric invàlid", color: "tag-red" });
+        }
+    }
+ 
     // Context
     let warningText = "";
     let warningTags = [];
