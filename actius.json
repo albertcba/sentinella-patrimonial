@@ -52,7 +52,7 @@
   { "ticker": "XLK-IRONCONDOR158/186", "nom": "XLK Iron Condor 158/186", "capa": "Options", "underlying": "XLK", "strike": 158, "expiry": "2026-08-21" },
   { "ticker": "XLK-COVEREDCALL186", "nom": "XLK Covered Call 186", "capa": "Options", "underlying": "XLK", "strike": 186, "expiry": "2026-08-21" },  
   { "ticker": "XLY-IRONCONDOR105/119", "nom": "XLY Iron Condor 105/119", "capa": "Options", "underlying": "XLY", "strike": 105, "expiry": "2026-08-21" },
-  { "ticker": "XLY-COVEREDCALL119", "nom": "XLY Covered Call 119", "capa": "Options", "underlying": "XLY", "strike": 1195, "expiry": "2026-08-21" },  
+  { "ticker": "XLY-COVEREDCALL119", "nom": "XLY Covered Call 119", "capa": "Options", "underlying": "XLY", "strike": 119, "expiry": "2026-08-21" },  
   { "ticker": "XLP-IRONCONDOR84.5/90", "nom": "XLP Iron Condor 84.5/90", "capa": "Options", "underlying": "XLP", "strike": 84.5, "expiry": "2026-08-07" },
   { "ticker": "XLP-COVEREDCALL90", "nom": "XLP Covered Call 90", "capa": "Options", "underlying": "XLP", "strike": 90, "expiry": "2026-08-07" },  
   { "ticker": "XLU-IRONCONDOR44/48", "nom": "XLU Iron Condor 44/48", "capa": "Options", "underlying": "XLU", "strike": 44, "expiry": "2026-08-07" },
