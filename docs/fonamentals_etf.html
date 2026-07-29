@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <title>Sentinella Patrimonial — Fonamentals ETF GO/NO‑GO</title>
+<style>
+    body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #0f172a;
+        color: #e5e7eb;
+        margin: 0;
+        padding: 0;
+    }
+    header {
+        padding: 16px 24px;
+        background: #020617;
+        border-bottom: 1px solid #1f2937;
+    }
+    header h1 {
+        margin: 0;
+        font-size: 20px;
+    }
+    header p {
+        margin: 4px 0 0;
+        font-size: 13px;
+        color: #9ca3af;
+    }
+    main {
+        padding: 24px;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+    .grid {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 20px;
+    }
+    .panel {
+        background: #020617;
+        border: 1px solid #1f2937;
+        border-radius: 8px;
+        padding: 16px 18px;
+        margin-bottom: 18px;
+    }
+    .panel h2 {
+        margin: 0 0 8px;
+        font-size: 16px;
+    }
+    .panel h3 {
+        margin: 12px 0 6px;
+        font-size: 14px;
+        color: #9ca3af;
+    }
+    .panel small {
+        color: #6b7280;
+    }
+    .form-row, .form-row-2 {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 8px;
+    }
+    .form-row {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    .form-row-2 {
+        grid-template-columns: 1fr 1fr;
+    }
+    label {
+        font-size: 12px;
+        color: #9ca3af;
+        display: block;
+        margin-bottom: 2px;
+    }
+    input, select {
+        width: 100%;
+        padding: 6px 8px;
+        border-radius: 4px;
+        border: 1px solid #374151;
+        background: #020617;
+        color: #e5e7eb;
+        font-size: 13px;
+    }
+    input:focus, select:focus {
+        outline: none;
+        border-color: #3b82f6;
+    }
+    .inline-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 8px;
+    }
+    .inline-row > div {
+        flex: 1;
+    }
+    button {
+        padding: 8px 14px;
+        border-radius: 6px;
+        border: none;
+        font-size: 13px;
+        cursor: pointer;
+    }
+    .btn-primary {
+        background: #3b82f6;
+        color: white;
+    }
+    .btn-secondary {
+        background: #111827;
+        color: #e5e7eb;
+        border: 1px solid #374151;
+    }
+    .outputs {
+        font-size: 13px;
+    }
+    .outputs p {
+        margin: 4px 0;
+    }
+    .tag {
+        display: inline-block;
+        padding: 2px 6px;
+        border-radius: 999px;
+        font-size: 11px;
+        margin-right: 4px;
+    }
+    .tag-green { background: #064e3b; color: #a7f3d0; }
+    .tag-yellow { background: #78350f; color: #fde68a; }
+    .tag-red { background: #7f1d1d; color: #fecaca; }
+
+    .semaphore {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+    }
+    .light {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #1f2937;
+        border: 1px solid #374151;
+    }
+    .light.green { background: #22c55e; }
+    .light.yellow { background: #eab308; }
+    .light.red { background: #ef4444; }
+
+    .go-no-go {
+        margin-top: 10px;
+        padding: 8px 10px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 13px;
+    }
+    .go { background: #022c22; color: #6ee7b7; border: 1px solid #16a34a; }
+    .no-go { background: #450a0a; color: #fecaca; border: 1px solid #b91c1c; }
+    .neutral { background: #111827; color: #e5e7eb; border: 1px solid #4b5563; }
+
+    .section-note {
+        font-size: 11px;
+        color: #6b7280;
+        margin-bottom: 6px;
+    }
+</style>
+</head>
+
+<body>
+<header>
+    <h1>Sentinella Patrimonial — Fonamentals ETF GO/NO‑GO</h1>
+    <p>Lectura institucional per ETFs (XLE, XLV, XLF, XLU...).</p>
+</header>
+
+<main>
+    <div class="grid">
+
+        <!-- FORMULARI -->
+        <section>
+            <div class="panel">
+                <h2>1. Dades de l’ETF (Yahoo Finance)</h2>
+                <p class="section-note">Introdueix les dades principals de l’ETF.</p>
+
+                <div class="inline-row">
+                    <div>
+                        <label for="ticker">Ticker</label>
+                        <input id="ticker" type="text" placeholder="XLE, XLV, XLF...">
+                    </div>
+                    <div>
+                        <label for="sector">Sector</label>
+                        <input id="sector" type="text" placeholder="Energy, Healthcare...">
+                    </div>
+                    <div>
+                        <label for="netAssets">Net Assets (B)</label>
+                        <input id="netAssets" type="number" step="0.01" placeholder="p.ex. 35.72">
+                    </div>
+                </div>
+
+                <h3>Valuation i rendiment</h3>
+                <div class="form-row">
+                    <div>
+                        <label for="pe">PE Ratio (TTM)</label>
+                        <input id="pe" type="number" step="0.01" placeholder="21.79">
+                    </div>
+                    <div>
+                        <label for="yield">Dividend Yield (%)</label>
+                        <input id="yield" type="number" step="0.01" placeholder="2.85">
+                    </div>
+                    <div>
+                        <label for="expenseRatio">Expense Ratio (%)</label>
+                        <input id="expenseRatio" type="number" step="0.01" placeholder="0.08">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <label for="ytdReturn">YTD Return (%)</label>
+                        <input id="ytdReturn" type="number" step="0.01" placeholder="32.31">
+                    </div>
+                    <div>
+                        <label for="oneYearReturn">1Y Return (%)</label>
+                        <input id="oneYearReturn" type="number" step="0.01" placeholder="38.15">
+                    </div>
+                    <div>
+                        <label for="threeYearReturn">3Y Return (%)</label>
+                        <input id="threeYearReturn" type="number" step="0.01" placeholder="14.48">
+                    </div>
+                </div>
+
+                <h3>Risc</h3>
+                <div class="form-row-2">
+                    <div>
+                        <label for="beta">Beta (5Y Monthly)</label>
+                        <input id="beta" type="number" step="0.01" placeholder="-0.02">
+                    </div>
+                    <div>
+                        <label for="stdDev">Standard Deviation (3Y)</label>
+                        <input id="stdDev" type="number" step="0.01" placeholder="19.27">
+                    </div>
+                </div>
+
+                <h3>Liquiditat</h3>
+                <div class="form-row-2">
+                    <div>
+                        <label for="volume">Volume</label>
+                        <input id="volume" type="number" step="1" placeholder="34014756">
+                    </div>
+                    <div>
+                        <label for="avgVolume">Avg Volume</label>
+                        <input id="avgVolume" type="number" step="1" placeholder="35066908">
+                    </div>
+                </div>
+
+                <h3>Context</h3>
+                <div class="form-row-2">
+                    <div>
+                        <label for="sectorStability">Estabilitat sectorial</label>
+                        <select id="sectorStability">
+                            <option value="stable">Estable</option>
+                            <option value="mixed">Mixta</option>
+                            <option value="unstable">Inestable</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="macroRisk">Risc macro</label>
+                        <select id="macroRisk">
+                            <option value="low">Baix</option>
+                            <option value="medium">Mitjà</option>
+                            <option value="high">Alt</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div>
+                        <label for="useFor">Ús previst</label>
+                        <select id="useFor">
+                            <option value="any">Qualsevol (BSP / CC / Calendar)</option>
+                            <option value="income">Només income (CC)</option>
+                            <option value="calendars">Només Calendars</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="inline-row" style="margin-top: 12px;">
+                    <button class="btn-primary" type="button" onclick="avaluarETF()">Avaluar ETF</button>
+                    <button class="btn-secondary" type="button" onclick="netejarFormulari()">Netejar</button>
+                    <button class="btn-secondary" type="button" onclick="exportarJSON()">Exportar JSON</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- RESULTATS -->
+        <section>
+            <div class="panel">
+                <h2>2. Lectura institucional</h2>
+                <p class="section-note">Resultats basats en les dades introduïdes.</p>
+
+                <div class="outputs">
+                    <p><strong>Resum ràpid:</strong> <span id="summary">—</span></p>
+
+                    <h3>Qualitat estructural</h3>
+                    <p id="businessText">—</p>
+                    <div id="businessTags"></div>
+
+                    <h3>Valuation</h3>
+                    <p id="valuationText">—</p>
+                    <div id="valuationTags"></div>
+
+                    <h3>Liquiditat</h3>
+                    <p id="balanceText">—</p>
+                    <div id="balanceTags"></div>
+
+                    <h3>Context</h3>
+                    <p id="warningText">—</p>
+                    <div id="warningTags"></div>
+
+                    <div class="semaphore">
+                        <span>Semàfor global:</span>
+                        <div class="light" id="semGreen"></div>
+                        <div class="light" id="semYellow"></div>
+                        <div class="light" id="semRed"></div>
+                    </div>
+
+                    <div id="goNoGo" class="go-no-go neutral" style="margin-top: 12px;">
+                        GO / NO‑GO: pendent d’avaluació
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</main>
+
+<script>
+function parseNumber(id) {
+    const v = document.getElementById(id).value;
+    const n = parseFloat(v);
+    return isNaN(n) ? null : n;
+}
+
+function setTags(containerId, tags) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = "";
+    tags.forEach(t => {
+        const span = document.createElement("span");
+        span.className = "tag " + t.color;
+        span.textContent = t.label;
+        container.appendChild(span);
+    });
+}
+
+function avaluarETF() {
+    const ticker = document.getElementById("ticker").value.trim();
+    const sector = document.getElementById("sector").value.trim();
+    const netAssets = parseNumber("netAssets");
+
+    const pe = parseNumber("pe");
+    const yieldPct = parseNumber("yield");
+    const expenseRatio = parseNumber("expenseRatio");
+
+    const ytdReturn = parseNumber("ytdReturn");
+    const oneYearReturn = parseNumber("oneYearReturn");
+    const threeYearReturn = parseNumber("threeYearReturn");
+
+    const beta = parseNumber("beta");
+    const stdDev = parseNumber("stdDev");
+
+    const volume = parseNumber("volume");
+    const avgVolume = parseNumber("avgVolume");
+
+    const sectorStability = document.getElementById("sectorStability").value;
+    const macroRisk = document.getElementById("macroRisk").value;
+    const useFor = document.getElementById("useFor").value;
+
+    // Resum
+    let summary = "";
+    if (!ticker) {
+        summary = "Falta el ticker per contextualitzar la lectura.";
+    } else {
+        summary = `ETF ${ticker} (${sector || "sector desconegut"}) amb Net Assets ~${netAssets ? netAssets.toFixed(1) + "B" : "N/D"}.`;
+    }
+    document.getElementById("summary").textContent = summary;
+
+    // Qualitat estructural
+    let businessText = "";
+    let businessTags = [];
+
+    if (netAssets === null || expenseRatio === null) {
+        businessText = "Falten dades de Net Assets o Expense Ratio.";
+        businessTags.push({ label: "Dades incompletes", color: "tag-yellow" });
+    } else {
+        if (netAssets >= 10) businessTags.push({ label: "Dimensions institucionals (>10B)", color: "tag-green" });
+        else if (netAssets >= 3) businessTags.push({ label: "ETF mitjà", color: "tag-yellow" });
+        else businessTags.push({ label: "ETF petit (<3B)", color: "tag-red" });
+
+        if (expenseRatio <= 0.10) businessTags.push({ label: "Expense Ratio baix", color: "tag-green" });
+        else if (expenseRatio <= 0.30) businessTags.push({ label: "Expense Ratio moderat", color: "tag-yellow" });
+        else businessTags.push({ label: "Expense Ratio alt", color: "tag-red" });
+
+        businessText = "Lectura institucional basada en mida i costos.";
+    }
+    setTags("businessTags", businessTags);
+    document.getElementById("businessText").textContent = businessText;
+
+    // Valuation
+    let valuationText = "";
+    let valuationTags = [];
+
+    if (pe !== null) {
+        if (pe <= 18) valuationTags.push({ label: "PE atractiu", color: "tag-green" });
+        else if (pe <= 23) valuationTags.push({ label: "PE neutral", color: "tag-yellow" });
+        else valuationTags.push({ label: "PE alt", color: "tag-red" });
+    }
+
+    if (yieldPct !== null) {
+        if (yieldPct >= 2 && yieldPct <= 5) valuationTags.push({ label: "Yield raonable", color: "tag-green" });
+        else if (yieldPct > 5) valuationTags.push({ label: "Yield tens", color: "tag-yellow" });
+    }
+
+    valuationText = "Valuation basat en PE i Yield.";
+    setTags("valuationTags", valuationTags);
+    document.getElementById("valuationText").textContent = valuationText;
+
+    // Liquiditat
+    let balanceText = "Lectura de liquiditat basada en volum.";
+    let balanceTags = [];
+
+    if (volume !== null && avgVolume !== null) {
+        if (volume >= 10000000) balanceTags.push({ label: "Volum alt", color: "tag-green" });
+        else if (volume >= 3000000) balanceTags.push({ label: "Volum moderat", color: "tag-yellow" });
+        else balanceTags.push({ label: "Volum baix", color: "tag-red" });
+
+        if (avgVolume >= 10000000) balanceTags.push({ label: "Liquiditat estable", color: "tag-green" });
+        else balanceTags.push({ label: "Liquiditat variable", color: "tag-yellow" });
+    } else {
+        balanceTags.push({ label: "Dades incompletes", color: "tag-yellow" });
+    }
+
+    setTags("balanceTags", balanceTags);
+    document.getElementById("balanceText").textContent = balanceText;
+
+    // Context
+    let warningText = "";
+    let warningTags = [];
+
+    // Sector stability
+    if (sectorStability === "unstable") {
+        warningTags.push({ label: "Sector inestable", color: "tag-red" });
+    } else if (sectorStability === "mixed") {
+        warningTags.push({ label: "Sector mixt", color: "tag-yellow" });
+    } else {
+        warningTags.push({ label: "Sector estable", color: "tag-green" });
+    }
+
+    // Macro risk
+    if (macroRisk === "high") {
+        warningTags.push({ label: "Risc macro alt", color: "tag-red" });
+    } else if (macroRisk === "medium") {
+        warningTags.push({ label: "Risc macro mitjà", color: "tag-yellow" });
+    } else {
+        warningTags.push({ label: "Risc macro baix", color: "tag-green" });
+    }
+
+    warningText = "Context sectorial i macroeconòmic.";
+    setTags("warningTags", warningTags);
+    document.getElementById("warningText").textContent = warningText;
+
+    // SEMÀFOR GLOBAL
+    const semGreen = document.getElementById("semGreen");
+    const semYellow = document.getElementById("semYellow");
+    const semRed = document.getElementById("semRed");
+
+    semGreen.className = "light";
+    semYellow.className = "light";
+    semRed.className = "light";
+
+    const goNoGo = document.getElementById("goNoGo");
+    goNoGo.className = "go-no-go neutral";
+
+    let scoreGreen = 0, scoreYellow = 0, scoreRed = 0;
+
+    [businessTags, valuationTags, balanceTags, warningTags].forEach(group => {
+        group.forEach(t => {
+            if (t.color === "tag-green") scoreGreen++;
+            if (t.color === "tag-yellow") scoreYellow++;
+            if (t.color === "tag-red") scoreRed++;
+        });
+    });
+
+    // Heurística GO/NO-GO per ETFs
+    if (scoreRed === 0 && scoreYellow <= 3 && scoreGreen >= 4) {
+        semGreen.className = "light green";
+        goNoGo.className = "go-no-go go";
+        goNoGo.textContent = "GO: ETF sòlid per operativa institucional (BSP / CC / Calendars).";
+    } else if (scoreRed >= 3 || (scoreRed >= 2 && scoreYellow >= 3)) {
+        semRed.className = "light red";
+        goNoGo.className = "go-no-go no-go";
+        goNoGo.textContent = "NO‑GO: massa flags vermells/grocs. ETF fràgil per opcions.";
+    } else {
+        semYellow.className = "light yellow";
+        goNoGo.className = "go-no-go neutral";
+        goNoGo.textContent = "Zona grisa: ETF mixt. Només Calendar o posicions petites.";
+    }
+}
+
+// Netejar formulari
+function netejarFormulari() {
+    const ids = [
+        "ticker","sector","netAssets",
+        "pe","yield","expenseRatio",
+        "ytdReturn","oneYearReturn","threeYearReturn",
+        "beta","stdDev","volume","avgVolume"
+    ];
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+    });
+
+    document.getElementById("sectorStability").value = "stable";
+    document.getElementById("macroRisk").value = "low";
+    document.getElementById("useFor").value = "any";
+
+    document.getElementById("summary").textContent = "—";
+    document.getElementById("businessText").textContent = "—";
+    document.getElementById("valuationText").textContent = "—";
+    document.getElementById("balanceText").textContent = "—";
+    document.getElementById("warningText").textContent = "—";
+
+    setTags("businessTags", []);
+    setTags("valuationTags", []);
+    setTags("balanceTags", []);
+    setTags("warningTags", []);
+
+    const semGreen = document.getElementById("semGreen");
+    const semYellow = document.getElementById("semYellow");
+    const semRed = document.getElementById("semRed");
+
+    semGreen.className = "light";
+    semYellow.className = "light";
+    semRed.className = "light";
+
+    const goNoGo = document.getElementById("goNoGo");
+    goNoGo.className = "go-no-go neutral";
+    goNoGo.textContent = "GO / NO‑GO: pendent d’avaluació";
+}
+
+// Exportar JSON
+function exportarJSON() {
+    const data = {
+        ticker: document.getElementById("ticker").value,
+        sector: document.getElementById("sector").value,
+        netAssetsB: parseNumber("netAssets"),
+
+        valuation: {
+            pe: parseNumber("pe"),
+            yield: parseNumber("yield"),
+            expenseRatio: parseNumber("expenseRatio"),
+            ytdReturn: parseNumber("ytdReturn"),
+            oneYearReturn: parseNumber("oneYearReturn"),
+            threeYearReturn: parseNumber("threeYearReturn")
+        },
+
+        risk: {
+            beta: parseNumber("beta"),
+            stdDev: parseNumber("stdDev")
+        },
+
+        liquidity: {
+            volume: parseNumber("volume"),
+            avgVolume: parseNumber("avgVolume")
+        },
+
+        context: {
+            sectorStability: document.getElementById("sectorStability").value,
+            macroRisk: document.getElementById("macroRisk").value,
+            useFor: document.getElementById("useFor").value
+        },
+
+        lectura: {
+            summary: document.getElementById("summary").textContent,
+            business: document.getElementById("businessText").textContent,
+            valuation: document.getElementById("valuationText").textContent,
+            balance: document.getElementById("balanceText").textContent,
+            warnings: document.getElementById("warningText").textContent,
+            goNoGo: document.getElementById("goNoGo").textContent
+        },
+
+        timestamp: new Date().toISOString()
+    };
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `fonamentals_etf_${data.ticker || "etf"}_${data.timestamp}.json`;
+    a.click();
+
+    URL.revokeObjectURL(url);
+}
+</script>
+
+
+</body>
+</html>
