@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <title>Sentinella Patrimonial — CSP SPY institucional</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #0a0a0a;
+            color: #e5e5e5;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            padding: 12px 20px;
+            background: #050505;
+            border-bottom: 1px solid #1c1c1c;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 18px;
+        }
+        header p {
+            margin: 4px 0 0;
+            font-size: 12px;
+            color: #9ca3af;
+        }
+        main {
+            padding: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 18px;
+        }
+        .panel {
+            background: #111111;
+            border: 1px solid #1c1c1c;
+            border-radius: 6px;
+            padding: 14px 16px;
+            margin-bottom: 14px;
+        }
+        .panel h2 {
+            margin: 0 0 6px;
+            font-size: 15px;
+        }
+        .panel h3 {
+            margin: 10px 0 4px;
+            font-size: 13px;
+            color: #9ca3af;
+        }
+        .panel small {
+            color: #6b7280;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .inline-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .inline-row > div {
+            flex: 1;
+        }
+        label {
+            font-size: 11px;
+            color: #9ca3af;
+            display: block;
+            margin-bottom: 2px;
+        }
+        input, select {
+            width: 100%;
+            padding: 5px 7px;
+            border-radius: 4px;
+            border: 1px solid #27272a;
+            background: #0f0f0f;
+            color: #e5e5e5;
+            font-size: 12px;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        button {
+            padding: 7px 12px;
+            border-radius: 5px;
+            border: none;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: #3b82f6;
+            color: #f9fafb;
+        }
+        .btn-secondary {
+            background: #18181b;
+            color: #e5e5e5;
+            border: 1px solid #27272a;
+        }
+        .outputs {
+            font-size: 12px;
+        }
+        .outputs p {
+            margin: 3px 0;
+        }
+        .tag {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            margin-right: 4px;
+            background: #1f2937;
+            color: #e5e5e5;
+        }
+        .tag-green { background: #064e3b; color: #a7f3d0; }
+        .tag-yellow { background: #78350f; color: #fde68a; }
+        .tag-red { background: #7f1d1d; color: #fecaca; }
+
+        .semaphore {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .light {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #1f1f1f;
+            border: 1px solid #27272a;
+        }
+        .light.green { background: #16a34a; }
+        .light.yellow { background: #eab308; }
+        .light.red { background: #ef4444; }
+
+        .go-no-go {
+            margin-top: 8px;
+            padding: 7px 9px;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        .go { background: #022c22; color: #6ee7b7; border: 1px solid #16a34a; }
+        .no-go { background: #450a0a; color: #fecaca; border: 1px solid #b91c1c; }
+        .neutral { background: #111827; color: #e5e5e5; border: 1px solid #4b5563; }
+
+        .section-note {
+            font-size: 10px;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+        pre {
+            font-size: 10px;
+            background: #0f0f0f;
+            border: 1px solid #1c1c1c;
+            border-radius: 5px;
+            padding: 7px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <h1>Sentinella Patrimonial — CSP SPY institucional</h1>
+    <p>Formulari desk per validar microestructura, EM, volatilitat i risc d’un Cash‑Secured Put en SPY.</p>
+</header>
+
+<main>
+    <div class="grid">
+        <!-- ESQUERRA: FORMULARI -->
+        <section>
+            <div class="panel">
+                <h2>1. Dades del CSP en SPY</h2>
+                <p class="section-note">Introdueix el que veus a la cadena d’opcions de SPY per aquest PUT concret.</p>
+
+                <div class="inline-row">
+                    <div>
+                        <label for="spyUnderlyingPrice">Preu SPY actual</label>
+                        <input id="spyUnderlyingPrice" type="number" step="0.01" placeholder="p.ex. 590.25">
+                    </div>
+                    <div>
+                        <label for="spyAccountSize">Mida compte (aprox.)</label>
+                        <input id="spyAccountSize" type="number" step="1000" placeholder="p.ex. 75000">
+                    </div>
+                    <div>
+                        <label for="spyExpiryDTE">Venciment (DTE)</label>
+                        <input id="spyExpiryDTE" type="number" placeholder="p.ex. 30">
+                    </div>
+                </div>
+
+                <h3>Paràmetres del PUT SPY</h3>
+                <div class="form-row">
+                    <div>
+                        <label for="spyStrike">Strike del PUT</label>
+                        <input id="spyStrike" type="number" step="1" placeholder="p.ex. 560">
+                    </div>
+                    <div>
+                        <label for="spyBid">Bid</label>
+                        <input id="spyBid" type="number" step="0.01" placeholder="p.ex. 2.40">
+                    </div>
+                    <div>
+                        <label for="spyAsk">Ask</label>
+                        <input id="spyAsk" type="number" step="0.01" placeholder="p.ex. 2.55">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <label for="spyDelta">Delta</label>
+                        <input id="spyDelta" type="number" step="0.01" placeholder="p.ex. 0.12">
+                    </div>
+                    <div>
+                        <label for="spyGamma">Gamma</label>
+                        <input id="spyGamma" type="number" step="0.0001" placeholder="p.ex. 0.0012">
+                    </div>
+                    <div>
+                        <label for="spyVega">Vega</label>
+                        <input id="spyVega" type="number" step="0.01" placeholder="p.ex. 0.85">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <label for="spyTheta">Theta</label>
+                        <input id="spyTheta" type="number" step="0.01" placeholder="p.ex. -0.12">
+                    </div>
+                    <div>
+                        <label for="spyIVATM">IV ATM (%)</label>
+                        <input id="spyIVATM" type="number" step="0.1" placeholder="p.ex. 18.5">
+                    </div>
+                    <div>
+                        <label for="spyIVStrike">IV strike (%)</label>
+                        <input id="spyIVStrike" type="number" step="0.1" placeholder="p.ex. 20.2">
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div>
+                        <label for="spyIVRank">IV Rank</label>
+                        <input id="spyIVRank" type="number" step="1" placeholder="p.ex. 35">
+                    </div>
+                    <div>
+                        <label for="spyIVPercentile">IV Percentile</label>
+                        <input id="spyIVPercentile" type="number" step="1" placeholder="p.ex. 60">
+                    </div>
+                </div>
+
+                <h3>Microestructura i volum</h3>
+                <div class="form-row-2">
+                    <div>
+                        <label for="spyVolume">Volum contracte (opcional)</label>
+                        <input id="spyVolume" type="number" step="1" placeholder="p.ex. 1250">
+                    </div>
+                    <div>
+                        <label for="spyOI">Open Interest (opcional)</label>
+                        <input id="spyOI" type="number" step="1" placeholder="p.ex. 9800">
+                    </div>
+                </div>
+
+                <h3>EM i preu acceptable</h3>
+                <div class="form-row-2">
+                    <div>
+                        <label for="spyPreuAcceptable">Preu acceptable d’assignació</label>
+                        <input id="spyPreuAcceptable" type="number" step="1" placeholder="p.ex. 555">
+                    </div>
+                    <div>
+                        <small>EM: POP ≈ 1 − delta, L = strike − preu acceptable.</small>
+                    </div>
+                </div>
+
+                <div class="inline-row" style="margin-top: 10px;">
+                    <button class="btn-primary" type="button" onclick="avaluarSPYCSP()">Avaluar CSP SPY</button>
+                    <button class="btn-secondary" type="button" onclick="netejarSPYCSP()">Netejar</button>
+                    <button class="btn-secondary" type="button" onclick="exportarSPYCSPJSON()">Exportar JSON</button>
+                </div>
+
+                <h3>Detall EM</h3>
+                <div class="outputs">
+                    <p id="semafor_em_spy">EM CSP SPY: pendent</p>
+                    <pre id="resultat_em_spy"></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- DRETA: LECTURA INSTITUCIONAL -->
+        <section>
+            <div class="panel">
+                <h2>2. Lectura institucional CSP SPY</h2>
+                <p class="section-note">Lectura de consistència institucional. No és recomanació, és filtre GO / NO‑GO.</p>
+
+                <div class="outputs" id="spyOutputs">
+                    <p><strong>Marge cash‑secured:</strong> <span id="spyMargin">—</span></p>
+                    <p><strong>Pes sobre el compte:</strong> <span id="spyAccountRisk">—</span></p>
+                    <p><strong>Rendiment brut (% sobre marge):</strong> <span id="spyYield">—</span></p>
+                    <p><strong>Rendiment anualitzat (aprox.):</strong> <span id="spyAnnualYield">—</span></p>
+                    <p><strong>Distància a strike (%):</strong> <span id="spyDistance">—</span></p>
+                    <p><strong>Esperança EM qualitativa:</strong> <span id="spyEM">—</span></p>
+
+                    <h3>Microestructura SPY</h3>
+                    <p id="spyMicroText">—</p>
+                    <div id="spyMicroTags"></div>
+
+                    <h3>Volatilitat i IV Rank</h3>
+                    <p id="spyVolText">—</p>
+                    <div id="spyVolTags"></div>
+
+                    <h3>Risc de posició</h3>
+                    <p id="spyRiskText">—</p>
+                    <div id="spyRiskTags"></div>
+
+                    <h3>Capital i càrrega</h3>
+                    <p id="spyCapitalText">—</p>
+                    <div id="spyCapitalTags"></div>
+
+                    <div class="semaphore">
+                        <span>Semàfor global:</span>
+                        <div class="light" id="spySemGreen"></div>
+                        <div class="light" id="spySemYellow"></div>
+                        <div class="light" id="spySemRed"></div>
+                    </div>
+
+                    <div id="spyGoNoGo" class="go-no-go neutral" style="margin-top: 10px;">
+                        GO / NO‑GO: pendent d’avaluació
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script>
+function parseNumber(id) {
+    const v = document.getElementById(id).value;
+    const n = parseFloat(v);
+    return isNaN(n) ? null : n;
+}
+
+function setTags(containerId, tags) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = "";
+    tags.forEach(t => {
+        const span = document.createElement("span");
+        span.className = "tag " + t.color;
+        span.textContent = t.label;
+        container.appendChild(span);
+    });
+}
+
+function calcularEM_SPY(strike, premium, delta, preuAcceptable) {
+    const POP = 1 - Math.abs(delta);
+    const L = strike - preuAcceptable;
+    const EM = POP * premium - (1 - POP) * L;
+    return { POP, L, EM };
+}
+
+function avaluarSPYCSP() {
+    const underlying = parseNumber("spyUnderlyingPrice");
+    const accountSize = parseNumber("spyAccountSize");
+    const dte = parseNumber("spyExpiryDTE");
+    const strike = parseNumber("spyStrike");
+    const bid = parseNumber("spyBid");
+    const ask = parseNumber("spyAsk");
+    const delta = parseNumber("spyDelta");
+    const gamma = parseNumber("spyGamma");
+    const vega = parseNumber("spyVega");
+    const theta = parseNumber("spyTheta");
+    const ivATM = parseNumber("spyIVATM");
+    const ivStrike = parseNumber("spyIVStrike");
+    const ivRank = parseNumber("spyIVRank");
+    const ivPercentile = parseNumber("spyIVPercentile");
+    const preuAcceptable = parseNumber("spyPreuAcceptable");
+    const volume = parseNumber("spyVolume");
+    const oi = parseNumber("spyOI");
+
+    if (!underlying || !accountSize || !dte || !strike || !bid || !ask || !delta || !preuAcceptable) {
+        alert("Falten dades bàsiques del CSP SPY (preu, compte, DTE, strike, bid/ask, delta, preu acceptable).");
+        return;
+    }
+
+    const premium = (bid + ask) / 2;
+
+    // MARGE I PES SOBRE COMPTE
+    const margin = strike * 100;
+    const accountRiskPct = (margin / accountSize) * 100;
+
+    document.getElementById("spyMargin").textContent = margin.toFixed(0) + " $ (equivalent)";
+    document.getElementById("spyAccountRisk").textContent = accountRiskPct.toFixed(1) + " % del compte";
+
+    // RENDIMENT I DISTÀNCIA
+    const grossCredit = premium * 100;
+    const grossYieldPct = (grossCredit / margin) * 100;
+    const annualYieldPct = grossYieldPct * (365 / dte);
+
+    document.getElementById("spyYield").textContent = grossYieldPct.toFixed(2) + " %";
+    document.getElementById("spyAnnualYield").textContent = annualYieldPct.toFixed(2) + " % anualitzat";
+
+    const distancePct = ((underlying - strike) / underlying) * 100;
+    document.getElementById("spyDistance").textContent =
+        distancePct.toFixed(2) + " % per sota del preu";
+
+    // EM institucional
+    const emData = calcularEM_SPY(strike, premium, delta, preuAcceptable);
+    let emEmoji = "🔴";
+    if (emData.EM >= 0.5) emEmoji = "🟢";
+    else if (emData.EM >= 0) emEmoji = "🟡";
+
+    document.getElementById("semafor_em_spy").textContent =
+        emEmoji + " EM CSP SPY: " + emData.EM.toFixed(3);
+
+    document.getElementById("resultat_em_spy").textContent = JSON.stringify({
+        strike,
+        premium,
+        delta,
+        preuAcceptable,
+        POP: emData.POP.toFixed(3),
+        L: emData.L.toFixed(3),
+        EM: emData.EM.toFixed(3)
+    }, null, 2);
+
+    // EM qualitativa
+    let emLabel = "Esperança dubtosa / baixa";
+    if (emData.EM >= 0.5 && distancePct >= 4 && delta <= 0.15) {
+        emLabel = "Esperança positiva institucional (SPY).";
+    } else if (emData.EM >= 0 && distancePct >= 3 && delta <= 0.20) {
+        emLabel = "Esperança positiva moderada.";
+    }
+    document.getElementById("spyEM").textContent = emLabel;
+
+    // MICROESTRUCTURA
+    let microText = "";
+    let microTags = [];
+    const spread = ask - bid;
+
+    if (spread < 0.10) {
+        microText = "Spread estret i microestructura sa per SPY.";
+        microTags.push({ label: "Spread estret", color: "tag-green" });
+    } else if (spread <= 0.20) {
+        microText = "Spread acceptable però no òptim.";
+        microTags.push({ label: "Spread acceptable", color: "tag-yellow" });
+    } else {
+        microText = "Spread ampli: microestructura poc institucional per aquest strike.";
+        microTags.push({ label: "Spread ampli", color: "tag-red" });
+    }
+
+    if (volume && volume < 200) {
+        microTags.push({ label: "Volum baix", color: "tag-red" });
+    } else if (volume && volume < 500) {
+        microTags.push({ label: "Volum moderat", color: "tag-yellow" });
+    } else if (volume) {
+        microTags.push({ label: "Volum sa", color: "tag-green" });
+    }
+
+    if (oi && oi < 1000) {
+        microTags.push({ label: "OI baix", color: "tag-yellow" });
+    } else if (oi && oi >= 1000) {
+        microTags.push({ label: "OI institucional", color: "tag-green" });
+    }
+
+    document.getElementById("spyMicroText").textContent = microText;
+    setTags("spyMicroTags", microTags);
+
+    // VOLATILITAT I IV RANK
+    let volText = "";
+    let volTags = [];
+
+    if (ivRank !== null && ivRank > 30) {
+        volText = "IV Rank alta: primes interessants per CSP en SPY.";
+        volTags.push({ label: "IV Rank alta", color: "tag-green" });
+    } else if (ivRank !== null && ivRank >= 15) {
+        volText = "IV Rank moderada: prima acceptable.";
+        volTags.push({ label: "IV Rank moderada", color: "tag-yellow" });
+    } else {
+        volText = "IV Rank baixa: venda de vol poc atractiva.";
+        volTags.push({ label: "IV Rank baixa", color: "tag-red" });
+    }
+
+    if (ivATM !== null && ivStrike !== null) {
+        const skewDiff = ivStrike - ivATM;
+        if (skewDiff >= 2) {
+            volTags.push({ label: "Skew positiu", color: "tag-green" });
+        } else if (skewDiff >= 0) {
+            volTags.push({ label: "Skew neutre", color: "tag-yellow" });
+        } else {
+            volTags.push({ label: "Skew invers", color: "tag-red" });
+        }
+    }
+
+    document.getElementById("spyVolText").textContent = volText;
+    setTags("spyVolTags", volTags);
+
+    // RISC DE POSICIÓ
+    let riskText = "";
+    let riskTags = [];
+
+    if (delta <= 0.10) {
+        riskText = "Delta institucional baixa: risc de posició controlat.";
+        riskTags.push({ label: "Delta baixa", color: "tag-green" });
+    } else if (delta <= 0.15) {
+        riskText = "Delta moderada: acceptable però cal disciplina.";
+        riskTags.push({ label: "Delta moderada", color: "tag-yellow" });
+    } else {
+        riskText = "Delta alta per CSP institucional en SPY.";
+        riskTags.push({ label: "Delta alta", color: "tag-red" });
+    }
+
+    if (gamma !== null && gamma > 0.005) {
+        riskTags.push({ label: "Gamma elevada", color: "tag-red" });
+    }
+
+    document.getElementById("spyRiskText").textContent = riskText;
+    setTags("spyRiskTags", riskTags);
+
+    // CAPITAL I CÀRREGA
+    let capitalText = "";
+    let capitalTags = [];
+
+    if (accountRiskPct <= 5) {
+        capitalText = "Pes baix sobre el compte: càrrega institucionalment còmoda.";
+        capitalTags.push({ label: "Pes baix", color: "tag-green" });
+    } else if (accountRiskPct <= 10) {
+        capitalText = "Pes moderat: acceptable però cal control de concentració.";
+        capitalTags.push({ label: "Pes moderat", color: "tag-yellow" });
+    } else {
+        capitalText = "Pes elevat sobre el compte: risc de concentració alt.";
+        capitalTags.push({ label: "Pes elevat", color: "tag-red" });
+    }
+
+    document.getElementById("spyCapitalText").textContent = capitalText;
+    setTags("spyCapitalTags", capitalTags);
+
+    // SEMÀFOR GLOBAL + GO / NO‑GO
+    const semGreen = document.getElementById("spySemGreen");
+    const semYellow = document.getElementById("spySemYellow");
+    const semRed = document.getElementById("spySemRed");
+    semGreen.className = "light";
+    semYellow.className = "light";
+    semRed.className = "light";
+
+    const goNoGo = document.getElementById("spyGoNoGo");
+    goNoGo.className = "go-no-go neutral";
+
+    let scoreGreen = 0, scoreYellow = 0, scoreRed = 0;
+
+    [microTags, volTags, riskTags, capitalTags].forEach(group => {
+        group.forEach(t => {
+            if (t.color === "tag-green") scoreGreen++;
+            if (t.color === "tag-yellow") scoreYellow++;
+            if (t.color === "tag-red") scoreRed++;
+        });
+    });
+
+    if (scoreRed === 0 && scoreYellow <= 3 && scoreGreen >= 3 && emData.EM >= 0) {
+        semGreen.className = "light green";
+        goNoGo.className = "go-no-go go";
+        goNoGo.textContent = "GO institucional: CSP SPY coherent, microestructura sana i EM no negativa.";
+    } else if (scoreRed >= 2 || emData.EM < 0) {
+        semRed.className = "light red";
+        goNoGo.className = "go-no-go no-go";
+        goNoGo.textContent = "NO‑GO institucional: flags vermells en risc/microestructura o EM negativa.";
+    } else {
+        semYellow.className = "light yellow";
+        goNoGo.className = "go-no-go neutral";
+        goNoGo.textContent = "Zona grisa: CSP SPY acceptable però amb matisos. Requereix criteri discrecional.";
+    }
+}
+
+function netejarSPYCSP() {
+    const ids = [
+        "spyUnderlyingPrice","spyAccountSize","spyExpiryDTE",
+        "spyStrike","spyBid","spyAsk","spyDelta","spyGamma",
+        "spyVega","spyTheta","spyIVATM","spyIVStrike",
+        "spyIVRank","spyIVPercentile","spyPreuAcceptable",
+        "spyVolume","spyOI"
+    ];
+    ids.forEach(id => document.getElementById(id).value = "");
+
+    document.getElementById("spyMargin").textContent = "—";
+    document.getElementById("spyAccountRisk").textContent = "—";
+    document.getElementById("spyYield").textContent = "—";
+    document.getElementById("spyAnnualYield").textContent = "—";
+    document.getElementById("spyDistance").textContent = "—";
+    document.getElementById("spyEM").textContent = "—";
+
+    document.getElementById("spyMicroText").textContent = "—";
+    document.getElementById("spyVolText").textContent = "—";
+    document.getElementById("spyRiskText").textContent = "—";
+    document.getElementById("spyCapitalText").textContent = "—";
+
+    setTags("spyMicroTags", []);
+    setTags("spyVolTags", []);
+    setTags("spyRiskTags", []);
+    setTags("spyCapitalTags", []);
+
+    document.getElementById("semafor_em_spy").textContent = "EM CSP SPY: pendent";
+    document.getElementById("resultat_em_spy").textContent = "";
+
+    const semGreen = document.getElementById("spySemGreen");
+    const semYellow = document.getElementById("spySemYellow");
+    const semRed = document.getElementById("spySemRed");
+    semGreen.className = "light";
+    semYellow.className = "light";
+    semRed.className = "light";
+
+    const goNoGo = document.getElementById("spyGoNoGo");
+    goNoGo.className = "go-no-go neutral";
+    goNoGo.textContent = "GO / NO‑GO: pendent d’avaluació";
+}
+
+function exportarSPYCSPJSON() {
+    const data = {
+        underlying: parseNumber("spyUnderlyingPrice"),
+        accountSize: parseNumber("spyAccountSize"),
+        dte: parseNumber("spyExpiryDTE"),
+        strike: parseNumber("spyStrike"),
+        bid: parseNumber("spyBid"),
+        ask: parseNumber("spyAsk"),
+        delta: parseNumber("spyDelta"),
+        gamma: parseNumber("spyGamma"),
+        vega: parseNumber("spyVega"),
+        theta: parseNumber("spyTheta"),
+        ivATM: parseNumber("spyIVATM"),
+        ivStrike: parseNumber("spyIVStrike"),
+        ivRank: parseNumber("spyIVRank"),
+        ivPercentile: parseNumber("spyIVPercentile"),
+        preuAcceptable: parseNumber("spyPreuAcceptable"),
+        volume: parseNumber("spyVolume"),
+        oi: parseNumber("spyOI"),
+        lectura: {
+            marge: document.getElementById("spyMargin").textContent,
+            pesCompte: document.getElementById("spyAccountRisk").textContent,
+            rendiment: document.getElementById("spyYield").textContent,
+            rendimentAnual: document.getElementById("spyAnnualYield").textContent,
+            distancia: document.getElementById("spyDistance").textContent,
+            emQualitativa: document.getElementById("spyEM").textContent,
+            micro: document.getElementById("spyMicroText").textContent,
+            volatilitat: document.getElementById("spyVolText").textContent,
+            risc: document.getElementById("spyRiskText").textContent,
+            capital: document.getElementById("spyCapitalText").textContent,
+            emDetall: document.getElementById("resultat_em_spy").textContent,
+            goNoGo: document.getElementById("spyGoNoGo").textContent
+        },
+        timestamp: new Date().toISOString()
+    };
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `csp_spy_${data.timestamp}.json`;
+    a.click();
+
+    URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
