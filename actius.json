@@ -6,7 +6,8 @@
   { "ticker": "IUUS.L", "nom": "iShares S&P 500 Utilities (IUUS)", "capa": "Macro Hard Assets" },
   { "ticker": "AGAP.L", "nom": "WT Agriculture (AGAP)", "capa": "Macro Hard Assets" },
   { "ticker": "INFR.L", "nom": "iShares Global Infrastructure", "capa": "Macro Hard Assets" },
-  { "ticker": "URNM.L", "nom": "Sprott Uranium Miners (URNM)", "capa": "Macro Hard Assets" },
+  { "ticker": "URNM.L", "nom": "Sprott Uranium Miners UCITS (URNM.L)", "capa": "Macro Hard Assets" },
+  { "ticker": "URNM", "nom": "Sprott Uranium Miners (URNM)", "capa": "Macro Hard Assets" },
   { "ticker": "SSLV.L", "nom": "Invesco Physical Silver (SSLV)", "capa": "Macro Hard Assets" },
   { "ticker": "SILJ", "nom": "Amplify Junior Silver Miners", "capa": "Macro Hard Assets" },
   { "ticker": "WCOA.L", "nom": "WisdomTree Enhanced Commodity", "capa": "Macro Hard Assets" },
@@ -41,14 +42,8 @@
   { "ticker": "SU", "nom": "Schneider Electric (SU)", "capa": "Single Stock Sentinella" },
   { "ticker": "WTRG", "nom": "Essential Utilities (WTRG)", "capa": "Single Stock Sentinella" },   
   { "ticker": "AIQ-CSP55", "nom": "AIQ Cash Secured Put 55", "capa": "Options", "underlying": "AIQ", "strike": 55, "expiry": "2026-08-21" },
-  { "ticker": "BUG-CSP38", "nom": "BUG Cash Secured Put 38", "capa": "Options", "underlying": "BUG", "strike": 38, "expiry": "2026-08-21" },  
-  { "ticker": "KO-COVEREDCALL84", "nom": "KO Covered Call 84", "capa": "Options", "underlying": "KO", "strike": 84, "expiry": "2026-07-31" },
+  { "ticker": "BUG-CSP38", "nom": "BUG Cash Secured Put 38", "capa": "Options", "underlying": "BUG", "strike": 38, "expiry": "2026-08-21" },
   { "ticker": "WTRG-COVEREDCALL40", "nom": "WTRG Covered Call 40", "capa": "Options", "underlying": "WTRG", "strike": 40, "expiry": "2026-08-21" },
-  { "ticker": "NEE-CSP85", "nom": "NEE Cash Secured Put 85", "capa": "Options", "underlying": "NEE", "strike": 85, "expiry": "2026-07-31" },
-  { "ticker": "XLE-IRONCONDOR55.5/61.5", "nom": "XLE Iron Condor 55.5/61.5", "capa": "Options", "underlying": "XLE", "strike": 55.5, "expiry": "2026-07-31" },
-  { "ticker": "KMI-COVEREDCALL33.5", "nom": "KMI Covered Call 33.5", "capa": "Options", "underlying": "KMI", "strike": 33.5, "expiry": "2026-07-31" },
-  { "ticker": "XLV-IRONCONDOR156/165", "nom": "XLV Iron Condor 156/165", "capa": "Options", "underlying": "XLV", "strike": 156, "expiry": "2026-07-31" },
-  { "ticker": "XLV-COVEREDCALL65", "nom": "XLV Covered Call 165", "capa": "Options", "underlying": "XLV", "strike": 165, "expiry": "2026-07-31" },
   { "ticker": "XLK-IRONCONDOR158/186", "nom": "XLK Iron Condor 158/186", "capa": "Options", "underlying": "XLK", "strike": 158, "expiry": "2026-08-21" },
   { "ticker": "XLK-COVEREDCALL186", "nom": "XLK Covered Call 186", "capa": "Options", "underlying": "XLK", "strike": 186, "expiry": "2026-08-21" },  
   { "ticker": "XLY-IRONCONDOR105/119", "nom": "XLY Iron Condor 105/119", "capa": "Options", "underlying": "XLY", "strike": 105, "expiry": "2026-08-21" },
@@ -69,5 +64,6 @@
   { "ticker": "XLF-IRONCONDOR55/59", "nom": "XLF Iron Condor 55/59", "capa": "Options", "underlying": "XLF", "strike": 55, "expiry": "2026-08-14" },
   { "ticker": "XLF-COVEREDCALL59", "nom": "XLF Covered Call 59", "capa": "Options", "underlying": "XLF", "strike": 59, "expiry": "2026-08-14" },
   { "ticker": "PAVE-CSP53", "nom": "PAVE Cash Secured Put 53", "capa": "Options", "underlying": "PAVE", "strike": 53, "expiry": "2026-08-21" },
-  { "ticker": "META-SYNTHETHIC530", "nom": "META Synthetic 530", "capa": "Options", "underlying": "META", "strike": 530, "expiry": "2026-09-04" }  
+  { "ticker": "META-SYNTHETHIC530", "nom": "META Synthetic 530", "capa": "Options", "underlying": "META", "strike": 530, "expiry": "2026-09-04" },
+  { "ticker": "XLK-CSP158", "nom": "XLK Cash Secured Put 158", "capa": "Options", "underlying": "XLK", "strike": 158, "expiry": "2026-08-07" }
 ]
