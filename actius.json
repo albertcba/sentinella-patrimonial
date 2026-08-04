@@ -64,6 +64,6 @@
   { "ticker": "XLF-IRONCONDOR55/59", "nom": "XLF Iron Condor 55/59", "capa": "Options", "underlying": "XLF", "strike": 55, "expiry": "2026-08-14" },
   { "ticker": "XLF-COVEREDCALL59", "nom": "XLF Covered Call 59", "capa": "Options", "underlying": "XLF", "strike": 59, "expiry": "2026-08-14" },
   { "ticker": "PAVE-CSP53", "nom": "PAVE Cash Secured Put 53", "capa": "Options", "underlying": "PAVE", "strike": 53, "expiry": "2026-08-21" },
-  { "ticker": "META-SYNTHETHIC530", "nom": "META Synthetic 530", "capa": "Options", "underlying": "META", "strike": 530, "expiry": "2026-09-04" },
-  { "ticker": "XLK-CSP158", "nom": "XLK Cash Secured Put 158", "capa": "Options", "underlying": "XLK", "strike": 158, "expiry": "2026-08-07" }
+  { "ticker": "XLK-CSP158", "nom": "XLK Cash Secured Put 158", "capa": "Options", "underlying": "XLK", "strike": 158, "expiry": "2026-08-07" },
+  { "ticker": "ASML-SYNTHETHIC1730", "nom": "ASML Synthetic 1730", "capa": "Options", "underlying": "ASML", "strike": 1730, "expiry": "2026-09-11" }
 ]
