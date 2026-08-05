@@ -59,11 +59,11 @@
   { "ticker": "XLI-CALENDARSPREAD176/176", "nom": "XLI Calendar Spread 176/176", "capa": "Options", "underlying": "XLI", "strike": 176, "expiry": "2026-08-14" },
   { "ticker": "XLB-CALENDARSPREAD51/51", "nom": "XLB Calendar Spread 51/51", "capa": "Options", "underlying": "XLB", "strike": 51, "expiry": "2026-09-04" },
   { "ticker": "XLRE-CALENDARSPREAD46/46", "nom": "XLK Calendar Spread 46/46", "capa": "Options", "underlying": "XLRE", "strike": 46, "expiry": "2026-09-18" },
-  { "ticker": "SPY-IRONCONDOR712/753", "nom": "SPY Iron Condor 712/753", "capa": "Options", "underlying": "SPY", "strike": 712, "expiry": "2026-08-04" },
-  { "ticker": "SPY-COVEREDCALL753", "nom": "SPY Covered Call 753", "capa": "Options", "underlying": "SPY", "strike": 753, "expiry": "2026-08-04" },
   { "ticker": "XLF-IRONCONDOR55/59", "nom": "XLF Iron Condor 55/59", "capa": "Options", "underlying": "XLF", "strike": 55, "expiry": "2026-08-14" },
   { "ticker": "XLF-COVEREDCALL59", "nom": "XLF Covered Call 59", "capa": "Options", "underlying": "XLF", "strike": 59, "expiry": "2026-08-14" },
   { "ticker": "PAVE-CSP53", "nom": "PAVE Cash Secured Put 53", "capa": "Options", "underlying": "PAVE", "strike": 53, "expiry": "2026-08-21" },
   { "ticker": "XLK-CSP158", "nom": "XLK Cash Secured Put 158", "capa": "Options", "underlying": "XLK", "strike": 158, "expiry": "2026-08-07" },
-  { "ticker": "ASML-SYNTHETHIC1730", "nom": "ASML Synthetic 1730", "capa": "Options", "underlying": "ASML", "strike": 1730, "expiry": "2026-09-11" }
+  { "ticker": "ASML-SYNTHETHIC1730", "nom": "ASML Synthetic 1730", "capa": "Options", "underlying": "ASML", "strike": 1730, "expiry": "2026-09-11" },
+  { "ticker": "XLF-BWB59", "nom": "ASML BWB 59", "capa": "Options", "underlying": "XLF", "strike": 59, "expiry": "2026-08-14" },
+  { "ticker": "XLF-COVEREDCALL59", "nom": "XLF Covered Call 59", "capa": "Options", "underlying": "XLF", "strike": 59, "expiry": "2026-08-14" }
 ]
