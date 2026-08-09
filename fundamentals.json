@@ -139,15 +139,29 @@
     "variacio_pct": null,
     "nota": "Actualitzaci\u00f3 parcial basada en Yahoo Spark (no inclou fonamentals complets)"
   },
-  "MCD": {
-    "nom": "McDonald's Corp",
+  "META": {
+    "nom": "Meta Platforms, Inc.",
     "roic": 15.0,
     "marge_operatiu": 45.0,
     "fcf_yield": 3.0,
-    "per_actual": 23.0,
+    "per_actual": 22.32,
     "per_hist_mitja": 25.0,
     "deute_net_ebitda": 3.0,
-    "dividend_yield": 2.4,
+    "dividend_yield": 2.1,
+    "actualitzat": "2026-08-07",
+    "preu_actual": null,
+    "variacio_pct": null,
+    "nota": "Actualitzaci\u00f3 parcial basada en Yahoo Spark (no inclou fonamentals complets)"
+  },
+  "ASML": {
+    "nom": "ASML Holding N.V.",
+    "roic": 15.0,
+    "marge_operatiu": 45.0,
+    "fcf_yield": 3.0,
+    "per_actual": 22.32,
+    "per_hist_mitja": 25.0,
+    "deute_net_ebitda": 3.0,
+    "dividend_yield": 2.1,
     "actualitzat": "2026-08-07",
     "preu_actual": null,
     "variacio_pct": null,
