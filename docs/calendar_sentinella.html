@@ -413,11 +413,6 @@ function avaluarCalendar() {
     const accountRisk = (accountSize && netCost)
         ? (netCost * 100 / accountSize)
         : null;
-    const decisionBox = document.getElementById("decisionOutput");
-    if (decisionBox) {
-        decisionBox.textContent = decisionText;
-        decisionBox.className = "tag " + decisionColor;
-    }
 
     document.getElementById("netCost").textContent   = netCost ? netCost.toFixed(2) + " $ (dèbit)" : "—";
     document.getElementById("exposure").textContent  = exposure ? exposure.toFixed(0) + " $" : "—";
@@ -690,6 +685,7 @@ function avaluarCalendar() {
         decisionBox.textContent = decisionText;
         decisionBox.className = "tag " + decisionColor;
     }
+    
 }
 
 function netejarFormulari() {
