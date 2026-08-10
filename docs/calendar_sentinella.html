@@ -352,6 +352,9 @@
                     <div id="goNoGo" class="go-no-go neutral" style="margin-top: 12px;">
                         GO / NO‑GO: pendent d’avaluació
                     </div>
+
+                    <div id="decisionOutput" class="tag tag-yellow">Decisió operativa: pendent</div>
+     
                 </div>
             </div>
         </section>
@@ -612,6 +615,73 @@ function avaluarCalendar() {
     const goBox = document.getElementById("goNoGo");
     goBox.className = "go-no-go " + goNoGoClass;
     goBox.textContent = goNoGoText;
+
+    // === DECISIÓ OPERATIVA DEL CALENDAR ===
+
+    // 1. Distància del subjacient al strike curt
+    const atr = parseNumber("atrValue"); // si no existeix, pots afegir un input ATR
+    let priceDecision = "continuar";
+
+    if (underlyingPrice !== null && shortStrike !== null && atr !== null) {
+        const distance = underlyingPrice - shortStrike;
+
+        if (distance > atr) {
+            priceDecision = "tancar";
+        } else if (distance > atr * 0.5) {
+            priceDecision = "convertir";
+        } else {
+            priceDecision = "continuar";
+        }
+    }
+
+    // 2. Ajust per IV skew
+    let decision = priceDecision;
+
+    if (ivSkew !== null) {
+        if (ivSkew < 0 && decision !== "tancar") {
+            decision = "tancar";
+        } else if (ivSkew > 3 && decision === "continuar") {
+            decision = "convertir";
+        }
+    }
+
+    // 3. Ajust per theta net
+    if (thetaNet !== null) {
+        if (thetaNet < 0 && decision !== "tancar") {
+            decision = "tancar";
+        }
+    }
+
+    // 4. Ajust per DTE ratio
+    if (dteRatio !== null) {
+        if (dteRatio < 1.5) {
+            decision = "tancar";
+        } else if (dteRatio > 2.5 && decision === "continuar") {
+            decision = "convertir";
+        }
+    }
+
+    // 5. Sortida final
+    let decisionText = "";
+    let decisionColor = "";
+
+    if (decision === "tancar") {
+        decisionText = "Decisió operativa: TANCAR — el calendar ha perdut la tesi.";
+        decisionColor = "tag-red";
+    } else if (decision === "convertir") {
+        decisionText = "Decisió operativa: CONVERTIR — millor transformar el llarg en vertical.";
+        decisionColor = "tag-yellow";
+    } else {
+        decisionText = "Decisió operativa: CONTINUAR — el calendar manté la tesi.";
+        decisionColor = "tag-green";
+    }
+
+    // 6. Mostrar la decisió al formulari
+    const decisionBox = document.getElementById("decisionOutput");
+    if (decisionBox) {
+        decisionBox.textContent = decisionText;
+        decisionBox.className = "tag " + decisionColor;
+    }
 }
 
 function netejarFormulari() {
