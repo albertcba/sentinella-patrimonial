@@ -305,8 +305,11 @@
                             <option value="high">Alt</option>
                         </select>
                     </div>
+                    <div>
+                         <label for="atrValue">ATR (aprox.)</label>
+                        <input type="number" id="atrValue" step="0.01" placeholder="2.0">                       
+                    </div>                        
                 </div>
-
                 <div class="inline-row" style="margin-top: 12px;">
                     <button class="btn-primary" type="button" onclick="avaluarCalendar()">Avaluar Calendar</button>
                     <button class="btn-secondary" type="button" onclick="netejarFormulari()">Netejar</button>
@@ -410,6 +413,11 @@ function avaluarCalendar() {
     const accountRisk = (accountSize && netCost)
         ? (netCost * 100 / accountSize)
         : null;
+    const decisionBox = document.getElementById("decisionOutput");
+    if (decisionBox) {
+        decisionBox.textContent = decisionText;
+        decisionBox.className = "tag " + decisionColor;
+    }
 
     document.getElementById("netCost").textContent   = netCost ? netCost.toFixed(2) + " $ (dèbit)" : "—";
     document.getElementById("exposure").textContent  = exposure ? exposure.toFixed(0) + " $" : "—";
