@@ -60,12 +60,12 @@
   { "ticker": "XLF-IRONCONDOR55/59", "nom": "XLF Iron Condor 55/59", "capa": "Options", "underlying": "XLF", "strike": 55, "expiry": "2026-08-14" },
   { "ticker": "XLF-COVEREDCALL59", "nom": "XLF Covered Call 59", "capa": "Options", "underlying": "XLF", "strike": 59, "expiry": "2026-08-14" },
   { "ticker": "PAVE-CSP53", "nom": "PAVE Cash Secured Put 53", "capa": "Options", "underlying": "PAVE", "strike": 53, "expiry": "2026-08-21" },
-  { "ticker": "ASML-SYNTHETHIC1730", "nom": "ASML Synthetic 1730", "capa": "Options", "underlying": "ASML", "strike": 1730, "expiry": "2026-09-11" },
   { "ticker": "XLF-BWB59", "nom": "XLF BWB 59", "capa": "Options", "underlying": "XLF", "strike": 59, "expiry": "2026-08-14" },
   { "ticker": "XLF-COVEREDCALL59", "nom": "XLF Covered Call 59", "capa": "Options", "underlying": "XLF", "strike": 59, "expiry": "2026-08-14" },
   { "ticker": "XLP-BWB85", "nom": "XLP BWB 85", "capa": "Options", "underlying": "XLP", "strike": 85, "expiry": "2026-08-14" },
   { "ticker": "XLP-COVEREDCALL85", "nom": "XLP Covered Call 85", "capa": "Options", "underlying": "XLP", "strike": 85, "expiry": "2026-08-14" },
   { "ticker": "XLE-BWB58", "nom": "XLE BWB 58", "capa": "Options", "underlying": "XLE", "strike": 58, "expiry": "2026-08-14" },
   { "ticker": "XLE-COVEREDCALL58", "nom": "XLE Covered Call 58", "capa": "Options", "underlying": "XLE", "strike": 58, "expiry": "2026-08-14" },
-  { "ticker": "BRK-B-BSP495", "nom": "BRK-B Bull Put Spread 495", "capa": "Options", "underlying": "BRK-B", "strike": 495, "expiry": "2026-09-18" } 
+  { "ticker": "BRK-B-BSP495", "nom": "BRK-B Bull Put Spread 495", "capa": "Options", "underlying": "BRK-B", "strike": 495, "expiry": "2026-09-18" },
+  { "ticker": "ASML-RISKREVERSAL1645", "nom": "ASML Risk Reversal 1645", "capa": "Options", "underlying": "ASML", "strike": 1645, "expiry": "2026-09-11" }
 ]
