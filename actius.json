@@ -67,5 +67,5 @@
   { "ticker": "XLP-COVEREDCALL85", "nom": "XLP Covered Call 85", "capa": "Options", "underlying": "XLP", "strike": 85, "expiry": "2026-08-14" },
   { "ticker": "XLE-BWB58", "nom": "XLE BWB 58", "capa": "Options", "underlying": "XLE", "strike": 58, "expiry": "2026-08-14" },
   { "ticker": "XLE-COVEREDCALL58", "nom": "XLE Covered Call 58", "capa": "Options", "underlying": "XLE", "strike": 58, "expiry": "2026-08-14" },
-  { "ticker": "BRK.B-BSP495", "nom": "BRK.B Bull Put Spread 495", "capa": "Options", "underlying": "BRK.B", "strike": 495, "expiry": "2026-09-18" } 
+  { "ticker": "BRK-B-BSP495", "nom": "BRK-B Bull Put Spread 495", "capa": "Options", "underlying": "BRK-B", "strike": 495, "expiry": "2026-09-18" } 
 ]
