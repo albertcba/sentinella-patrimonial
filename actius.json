@@ -67,5 +67,6 @@
   { "ticker": "XLE-BWB58", "nom": "XLE BWB 58", "capa": "Options", "underlying": "XLE", "strike": 58, "expiry": "2026-08-14" },
   { "ticker": "XLE-COVEREDCALL58", "nom": "XLE Covered Call 58", "capa": "Options", "underlying": "XLE", "strike": 58, "expiry": "2026-08-14" },
   { "ticker": "BRK-B-BSP495", "nom": "BRK-B Bull Put Spread 495", "capa": "Options", "underlying": "BRK-B", "strike": 495, "expiry": "2026-09-18" },
-  { "ticker": "ASML-RISKREVERSAL1645", "nom": "ASML Risk Reversal 1645", "capa": "Options", "underlying": "ASML", "strike": 1645, "expiry": "2026-09-11" }
+  { "ticker": "ASML-RISKREVERSAL1645", "nom": "ASML Risk Reversal 1645", "capa": "Options", "underlying": "ASML", "strike": 1645, "expiry": "2026-09-11" },
+  { "ticker": "XLK-RISKREVERSAL182.5", "nom": "XLK Risk Reversal 182.5", "capa": "Options", "underlying": "XLK", "strike": 182.5, "expiry": "2026-09-11" }
 ]
