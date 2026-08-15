@@ -49,7 +49,7 @@
   { "ticker": "XLK-IRONCONDOR158/186", "nom": "XLK Iron Condor 158/186", "capa": "Options", "underlying": "XLK", "strike": 158, "expiry": "2026-08-21" },
   { "ticker": "XLK-COVEREDCALL186", "nom": "XLK Covered Call 186", "capa": "Options", "underlying": "XLK", "strike": 186, "expiry": "2026-08-21" },  
   { "ticker": "XLY-IRONCONDOR105/119", "nom": "XLY Iron Condor 105/119", "capa": "Options", "underlying": "XLY", "strike": 105, "expiry": "2026-08-21" },
-  { "ticker": "XLY-COVEREDCALL119", "nom": "XLY Covered Call 119", "capa": "Options", "underlying": "XLY", "strike": 119, "expiry": "2026-08-21" },  ,  
+  { "ticker": "XLY-COVEREDCALL119", "nom": "XLY Covered Call 119", "capa": "Options", "underlying": "XLY", "strike": 119, "expiry": "2026-08-21" },
   { "ticker": "XLK-CALENDARSPREAD171/171", "nom": "XLK Calendar Spread 171/171", "capa": "Options", "underlying": "XLK", "strike": 171, "expiry": "2026-08-21" },
   { "ticker": "XLY-CALENDARSPREAD112/112", "nom": "XLY Calendar Spread 112/112", "capa": "Options", "underlying": "XLY", "strike": 112, "expiry": "2026-08-21" },
   { "ticker": "XLI-CALENDARSPREAD176/176", "nom": "XLI Calendar Spread 176/176", "capa": "Options", "underlying": "XLI", "strike": 176, "expiry": "2026-08-14" },
