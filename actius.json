@@ -58,7 +58,6 @@
   { "ticker": "PAVE-CSP53", "nom": "PAVE Cash Secured Put 53", "capa": "Options", "underlying": "PAVE", "strike": 53, "expiry": "2026-08-21" },
   { "ticker": "BRK-B-BSP495", "nom": "BRK-B Bull Put Spread 495", "capa": "Options", "underlying": "BRK-B", "strike": 495, "expiry": "2026-09-18" },
   { "ticker": "ASML-RISKREVERSAL1645", "nom": "ASML Risk Reversal 1645", "capa": "Options", "underlying": "ASML", "strike": 1645, "expiry": "2026-09-11" },
-  { "ticker": "XLK-RISKREVERSAL182.5", "nom": "XLK Risk Reversal 182.5", "capa": "Options", "underlying": "XLK", "strike": 182.5, "expiry": "2026-09-11" },
   { "ticker": "GRID-SYNTHETIC170", "nom": "GRID Synthetic 170", "capa": "Options", "underlying": "GRID", "strike": 170, "expiry": "2026-12-18" },
   { "ticker": "KMI-COVEREDCALL33", "nom": "KMI Covered Call 33", "capa": "Options", "underlying": "KMI", "strike": 33, "expiry": "2026-08-21" }
 ]
