@@ -61,5 +61,5 @@
   { "ticker": "KMI-COVEREDCALL33", "nom": "KMI Covered Call 33", "capa": "Options", "underlying": "KMI", "strike": 33, "expiry": "2026-08-21" },
   { "ticker": "XLE-BWB63.5/65/70", "nom": "XLE BWB 63.5/65/70", "capa": "Options", "underlying": "XLE", "strike": 67, "expiry": "2026-09-11" },
   { "ticker": "XLE-COVEREDCALL65", "nom": "XLE Covered Call 65", "capa": "Options", "underlying": "XLE", "strike": 65, "expiry": "2026-09-11" },
-  { "ticker": "XLY-RISKREVERSAL117.5", "nom": "XLY Risk Reversal 117.5", "capa": "Options", "underlying": "XLY", "strike": 117.5, "expiry": ""2026-08-21"" },
+  { "ticker": "XLY-RISKREVERSAL117.5", "nom": "XLY Risk Reversal 117.5", "capa": "Options", "underlying": "XLY", "strike": 117.5, "expiry": "2026-08-21" }
 ]
