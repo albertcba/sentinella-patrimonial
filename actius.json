@@ -52,7 +52,6 @@
   { "ticker": "XLY-COVEREDCALL119", "nom": "XLY Covered Call 119", "capa": "Options", "underlying": "XLY", "strike": 119, "expiry": "2026-08-21" },
   { "ticker": "XLK-CALENDARSPREAD171/171", "nom": "XLK Calendar Spread 171/171", "capa": "Options", "underlying": "XLK", "strike": 171, "expiry": "2026-08-21" },
   { "ticker": "XLY-CALENDARSPREAD112/112", "nom": "XLY Calendar Spread 112/112", "capa": "Options", "underlying": "XLY", "strike": 112, "expiry": "2026-08-21" },
-  { "ticker": "XLI-CALENDARSPREAD176/176", "nom": "XLI Calendar Spread 176/176", "capa": "Options", "underlying": "XLI", "strike": 176, "expiry": "2026-08-14" },
   { "ticker": "XLB-CALENDARSPREAD51/51", "nom": "XLB Calendar Spread 51/51", "capa": "Options", "underlying": "XLB", "strike": 51, "expiry": "2026-09-04" },
   { "ticker": "XLRE-CALENDARSPREAD46/46", "nom": "XLK Calendar Spread 46/46", "capa": "Options", "underlying": "XLRE", "strike": 46, "expiry": "2026-09-18" },
   { "ticker": "BRK-B-BSP495", "nom": "BRK-B Bull Put Spread 495", "capa": "Options", "underlying": "BRK-B", "strike": 495, "expiry": "2026-09-18" },
@@ -61,5 +60,7 @@
   { "ticker": "KMI-COVEREDCALL33", "nom": "KMI Covered Call 33", "capa": "Options", "underlying": "KMI", "strike": 33, "expiry": "2026-08-21" },
   { "ticker": "XLE-BWB63.5/65/70", "nom": "XLE BWB 63.5/65/70", "capa": "Options", "underlying": "XLE", "strike": 67, "expiry": "2026-09-11" },
   { "ticker": "XLE-COVEREDCALL65", "nom": "XLE Covered Call 65", "capa": "Options", "underlying": "XLE", "strike": 65, "expiry": "2026-09-11" },
-  { "ticker": "XLY-RISKREVERSAL117.5", "nom": "XLY Risk Reversal 117.5", "capa": "Options", "underlying": "XLY", "strike": 117.5, "expiry": "2026-08-21" }
+  { "ticker": "XLY-RISKREVERSAL117.5", "nom": "XLY Risk Reversal 117.5", "capa": "Options", "underlying": "XLY", "strike": 117.5, "expiry": "2026-09-18" },
+  { "ticker": "COPX-CSP77", "nom": "COPX Bull Put Spread 77", "capa": "Options", "underlying": "COPX", "strike": 77, "expiry": "2026-09-25" },
+  { "ticker": "REMX-RISKREVERSAL70", "nom": "REMX Risk Reversal 70", "capa": "Options", "underlying": "REMX", "strike": 70, "expiry": "2026-09-18" }
 ]
