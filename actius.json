@@ -45,6 +45,7 @@
   { "ticker": "ASML", "nom": "ASML HOLDING NV-NY REG SHS (ASML)", "capa": "Single Stock Sentinella" },
   { "ticker": "CMI", "nom": "CMI Cummins Inc. (CMI)", "capa": "Single Stock Sentinella" },
   { "ticker": "TT", "nom": "TT Trane Technologies plc (TT)", "capa": "Single Stock Sentinella" },
+  { "ticker": "AVGO", "nom": "Broadcom Inc. (AVGO)", "capa": "Single Stock Sentinella" },  
   { "ticker": "XLB-CALENDARSPREAD51/51", "nom": "XLB Calendar Spread 51/51", "capa": "Options", "underlying": "XLB", "strike": 51, "expiry": "2026-09-04" },
   { "ticker": "XLRE-CALENDARSPREAD46/46", "nom": "XLK Calendar Spread 46/46", "capa": "Options", "underlying": "XLRE", "strike": 46, "expiry": "2026-09-18" },
   { "ticker": "BRK-B-BSP495", "nom": "BRK-B Bull Put Spread 495", "capa": "Options", "underlying": "BRK-B", "strike": 495, "expiry": "2026-09-18" },
@@ -54,5 +55,11 @@
   { "ticker": "XLE-COVEREDCALL65", "nom": "XLE Covered Call 65", "capa": "Options", "underlying": "XLE", "strike": 65, "expiry": "2026-09-11" },
   { "ticker": "XLY-RISKREVERSAL117.5", "nom": "XLY Risk Reversal 117.5", "capa": "Options", "underlying": "XLY", "strike": 117.5, "expiry": "2026-09-18" },
   { "ticker": "COPX-CSP77", "nom": "COPX Bull Put Spread 77", "capa": "Options", "underlying": "COPX", "strike": 77, "expiry": "2026-09-25" },
-  { "ticker": "REMX-RISKREVERSAL70", "nom": "REMX Risk Reversal 70", "capa": "Options", "underlying": "REMX", "strike": 70, "expiry": "2026-09-18" }
+  { "ticker": "REMX-RISKREVERSAL70", "nom": "REMX Risk Reversal 70", "capa": "Options", "underlying": "REMX", "strike": 70, "expiry": "2026-09-18" },
+  { "ticker": "IBIT-BWB44.5/48/60", "nom": "IBIT BWB 44.5/48/60", "capa": "Options", "underlying": "IBIT", "strike": 50, "expiry": "2026-09-25" },
+  { "ticker": "IBIT-COVEREDCALL48", "nom": "IBIT Covered Call 48", "capa": "Options", "underlying": "IBIT", "strike": 48, "expiry": "2026-09-25" },
+  { "ticker": "KMI-COVEREDCALL33", "nom": "KMI Covered Call 33", "capa": "Options", "underlying": "KMI", "strike": 48, "expiry": "2026-10-16" },
+  { "ticker": "WTRG-CSP40", "nom": "COPX Bull Put Spread 40", "capa": "Options", "underlying": "WTRG", "strike": 40, "expiry": "2026-12-18" },
+  { "ticker": "AIQ-CSP58", "nom": "AIQ Bull Put Spread 58", "capa": "Options", "underlying": "AIQ", "strike": 58, "expiry": "2026-10-16" },
+  { "ticker": "BUG-CSP38", "nom": "AIQ Bull Put Spread 38", "capa": "Options", "underlying": "BUG", "strike": 38, "expiry": "2026-10-16" }
 ]
