@@ -61,5 +61,5 @@
   { "ticker": "KMI-COVEREDCALL33", "nom": "KMI Covered Call 33", "capa": "Options", "underlying": "KMI", "strike": 48, "expiry": "2026-10-16" },
   { "ticker": "WTRG-CSP40", "nom": "COPX Bull Put Spread 40", "capa": "Options", "underlying": "WTRG", "strike": 40, "expiry": "2026-12-18" },
   { "ticker": "AIQ-CSP58", "nom": "AIQ Bull Put Spread 58", "capa": "Options", "underlying": "AIQ", "strike": 58, "expiry": "2026-10-16" },
-  { "ticker": "BUG-CSP38", "nom": "AIQ Bull Put Spread 38", "capa": "Options", "underlying": "BUG", "strike": 38, "expiry": "2026-10-16" }
+  { "ticker": "BUG-CSP38", "nom": "BUG Bull Put Spread 38", "capa": "Options", "underlying": "BUG", "strike": 38, "expiry": "2026-10-16" }
 ]
