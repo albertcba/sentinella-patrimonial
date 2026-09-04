@@ -49,7 +49,7 @@
   { "ticker": "MU", "nom": "Micron Technology, Inc. (MU)", "capa": "Single Stock Sentinella" },
   { "ticker": "WDC", "nom": "Western Digital Corporation (WDC)", "capa": "Single Stock Sentinella" },
   { "ticker": "XLB-LONGPUT51", "nom": "XLB Long Put 51", "capa": "Options", "underlying": "XLB", "strike": 51, "expiry": "2026-09-18" },
-  { "ticker": "XLB-COVEREDCALL52", "nom": "XLB Covered Call 52", "capa": "Options", "underlying": "XLB", "strike": 52, "expiry": "2026-09-18" },
+  { "ticker": "XLB-CSP52", "nom": "XLB Bull Put Spread 52", "capa": "Options", "underlying": "XLB", "strike": 52, "expiry": "2026-09-18" },
   { "ticker": "XLRE-REVERSECONVERSION46/46", "nom": "XLRE Reverse Conversion 46/46", "capa": "Options", "underlying": "XLRE", "strike": 46, "expiry": "2026-11-20" },
   { "ticker": "XLRE-COVEREDCALL45", "nom": "XLRE Covered Call 45", "capa": "Options", "underlying": "XLRE", "strike": 45, "expiry": "2026-11-20" },
   { "ticker": "BRK-B-BSP495", "nom": "BRK-B Bull Put Spread 495", "capa": "Options", "underlying": "BRK-B", "strike": 495, "expiry": "2026-09-18" },
