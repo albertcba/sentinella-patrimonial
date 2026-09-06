@@ -78,8 +78,10 @@ def main():
         enviar_missatge("⚠️ No s'han pogut obtenir dades per cap actiu.")
         return
 
-    pujades = sorted(resultats, key=lambda x: x["var"], reverse=True)[:5]
-    caigudes = sorted(resultats, key=lambda x: x["var"])[:5]
+    N = min(10, len(resultats))
+
+    pujades = sorted(resultats, key=lambda x: x["var"], reverse=True)[:N]
+    caigudes = sorted(resultats, key=lambda x: x["var"])[:N]
 
     missatge = "📊 *Resum diari — Tancament EUA*\n"
     missatge += f"Data: {datetime.utcnow().strftime('%Y-%m-%d')}\n\n"
