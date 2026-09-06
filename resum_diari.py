@@ -94,6 +94,40 @@ def main():
     for r in caigudes:
         missatge += f"{r['nom']} ({r['capa']}): {r['var']:.2f}% — {r['preu']}\n"
 
+    # ───────────────────────────────────────────────
+    #   OPCIONS AMB EXPIRACIÓ < 10 DIES
+    # ───────────────────────────────────────────────
+
+    avisos_expiry = []
+    avui = datetime.utcnow().date()
+
+    for actiu in ACTIUS:
+        if actiu.get("capa") == "Options" and "expiry" in actiu:
+            try:
+                expiry_date = datetime.strptime(actiu["expiry"], "%Y-%m-%d").date()
+                dies_restants = (expiry_date - avui).days
+
+                if dies_restants <= 10:
+                    avisos_expiry.append({
+                        "nom": actiu["nom"],
+                        "underlying": actiu.get("underlying", ""),
+                        "strike": actiu.get("strike", ""),
+                        "expiry": actiu["expiry"],
+                        "dies": dies_restants
+                    })
+            except Exception as e:
+                print(f"⚠️ Error processant expiry per {actiu['nom']}: {e}")
+
+
+    if avisos_expiry:
+        missatge += "\n⏳ *Opcions amb expiració imminent (<10 dies)*\n"
+        for a in avisos_expiry:
+            missatge += (
+                f"{a['nom']} — {a['underlying']} "
+                f"Strike {a['strike']} — Expira {a['expiry']} "
+                f"({a['dies']} dies)\n"
+            )
+    
     enviar_missatge(missatge)
 
 
