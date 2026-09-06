@@ -22,7 +22,7 @@ def enviar_missatge(text):
 #   FONAMENTALS — SINGLE STOCK SENTINELLA
 # ---------------------------------------------------------
 
-with open("fundamentals.json") as f:
+with open("actius.json") as f:
     ACTIUS = json.load(f)
 
 # ───────────────────────────────────────────────
