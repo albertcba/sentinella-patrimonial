@@ -54,7 +54,7 @@
   { "ticker": "XLRE-COVEREDCALL45", "nom": "XLRE Covered Call 45", "capa": "Options", "underlying": "XLRE", "strike": 45, "expiry": "2026-11-20", "type": "CALL" },
   { "ticker": "BRK-B-BSP495", "nom": "BRK-B Bull Put Spread 495", "capa": "Options", "underlying": "BRK-B", "strike": 495, "expiry": "2026-09-18", "type": "PUT" },
   { "ticker": "ASML-RISKREVERSAL1645", "nom": "ASML Risk Reversal 1645", "capa": "Options", "underlying": "ASML", "strike": 1645, "expiry": "2026-09-11" },
-  { "ticker": "ASML-COVEREDCALL1747.5", "nom": "ASML Covered Call 65", "capa": "Options", "underlying": "ASML", "strike": 1747.5, "expiry": "2026-09-11", "type": "CALL" },
+  { "ticker": "ASML-COVEREDCALL1747.5", "nom": "ASML Covered Call 1747.5", "capa": "Options", "underlying": "ASML", "strike": 1747.5, "expiry": "2026-09-11", "type": "CALL" },
   { "ticker": "GRID-SYNTHETIC170", "nom": "GRID Synthetic 170", "capa": "Options", "underlying": "GRID", "strike": 170, "expiry": "2026-12-18" },
   { "ticker": "XLY-RISKREVERSAL117.5", "nom": "XLY Risk Reversal 117.5", "capa": "Options", "underlying": "XLY", "strike": 117.5, "expiry": "2026-09-18" },
   { "ticker": "COPX-CSP77", "nom": "COPX Bull Put Spread 77", "capa": "Options", "underlying": "COPX", "strike": 77, "expiry": "2026-09-25", "type": "PUT" },  
