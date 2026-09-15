@@ -64,7 +64,9 @@
   { "ticker": "BAC-BWB60/62.5/67.5", "nom": "BAC BWB 60/62.5/67.5", "capa": "Options", "underlying": "BAC", "strike": 64, "expiry": "2026-10-16" },
   { "ticker": "BAC-COVEREDCALL62.5", "nom": "BAC Covered Call 62.5", "capa": "Options", "underlying": "BAC", "strike": 62.5, "expiry": "2026-10-16", "type": "CALL" },
   { "ticker": "DRAM-RISKREVERSAL51", "nom": "DRAM Risk Reversal 51", "capa": "Options", "underlying": "DRAM", "strike": 51, "expiry": "2027-01-15" },
-  { "ticker": "XLK-CALENDAR179", "nom": "XLK Calendar 179", "capa": "Options", "underlying": "XLK", "strike": 179, "expiry": "2026-10-23" },
+  { "ticker": "XLK-CALENDAR179", "nom": "XLK Calendar 179", "capa": "Options", "underlying": "XLK", "strike": 179, "expiry": "2026-10-23", "type": "PUT" },
   { "ticker": "AVGO-RISKREVERSAL330", "nom": "AVGO Risk Reversal 330", "capa": "Options", "underlying": "AVGO", "strike": 330, "expiry": "2026-10-23", "type": "PUT" },
-  { "ticker": "AVGO-CSP350", "nom": "AVGO Bull Put Spread 350", "capa": "Options", "underlying": "AVGO", "strike": 350, "expiry": "2026-10-23", "type": "PUT" }
+  { "ticker": "AVGO-CSP350", "nom": "AVGO Bull Put Spread 350", "capa": "Options", "underlying": "AVGO", "strike": 350, "expiry": "2026-10-23", "type": "PUT" },
+  { "ticker": "META-CALENDAR680", "nom": "META Calendar 680", "capa": "Options", "underlying": "META", "strike": 680, "expiry": "2026-12-18", "type": "CALL" },
+  { "ticker": "VRT-CALENDAR260", "nom": "VRT Calendar 260", "capa": "Options", "underlying": "VRT", "strike": 260, "expiry": "2026-12-18", "type": "CALL" }  
 ]
