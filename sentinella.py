@@ -687,7 +687,7 @@ def processar_actiu(actiu):
 
         # ALERTES (pots diferenciar PUT vs CALL si vols)
         if tipus == "PUT":
-            if prima > 2.50 or preu_subjacent < strike:
+            if preu_subjacent < strike:
                 enviar_missatge(
                     f"⚠️ ALERTA PUT {subjacent} {strike}\n"
                     f"Prima: {prima:.2f}\n"
@@ -697,7 +697,7 @@ def processar_actiu(actiu):
                     f"Semàfor: {semafor}"
                 )
         elif tipus == "CALL":
-            if dist > 0 and prima > 0.5:
+            if preu_subjacent > strike:
                 enviar_missatge(
                     f"⚠️ ALERTA CALL {subjacent} {strike}\n"
                     f"Prima: {prima:.2f}\n"
