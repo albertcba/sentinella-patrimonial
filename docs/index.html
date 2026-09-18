@@ -765,14 +765,11 @@
             <td class="mono ${classeVariacio}">${a.variacio}%</td>
             <td class="mono">${a.hora}</td>
             <td class="mono">${a.semafor_macro || ""}</td>
-          `;
-
-          // Single Stock Sentinella (ara mateix: ULVR, NXE futurament més)
-          const singleTickers = ["ULVR.L", "NXE", "JNJ", "SJM", "ABBN.SW", "BEPC", "BWXT", "LEU", "SU", "WTRG", "MCD"];          
+          `;       
           
-          if (a.capa === "Macro Hard Assets" || a.ticker === "NXE" || a.ticker === "LEU" || a.ticker === "BWXT" || a.ticker === "SU") {
+          if (a.capa === "Macro Hard Assets" || a.ticker === "NXE" || a.ticker === "LEU" || a.ticker === "BWXT" || a.ticker === "SU" || a.ticker === "WTRG" || a.ticker === "CMI" || a.ticker === "TT" || a.ticker === "VRT") {
             tbMacro.appendChild(tr);
-          } else if (singleTickers.includes(a.ticker)) {
+          } else if (a.capa === "Single Stock Sentinella") {
             tbSingle.appendChild(tr);            
           } else if (a.capa === "Core equity premium") {
             tbCore.appendChild(tr);
