@@ -684,8 +684,9 @@ def processar_actiu(actiu):
     if actiu["capa"] == "Options":
         subjacent = actiu["underlying"]
         strike = actiu["strike"]
-        expiry = actiu["expiry"]
         tipus = actiu.get("type")
+        if tipus != "CALENDAR":
+            expiry = actiu["expiry"]
 
         # 1) PUT sintètic (com fins ara)
         try:
