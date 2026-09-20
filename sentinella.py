@@ -732,25 +732,26 @@ def processar_actiu(actiu):
             marge = marge_cash_secured(strike)
             semafor = semafor_put(preu_subjacent, prima, dte, dist)
 
-        DADES_ACTIUS.append({
-            "ticker": actiu["ticker"],          # mantenim el ticker de l’estratègia
-            "nom": actiu["nom"],
-            "capa": actiu["capa"],
-            "strike": strike,
-            "expiry": expiry,
-            "preu": prima,
-            "variacio": 0,
-            "preu_subjacent": preu_subjacent,
-            "prima": prima,
-            "dte": dte,
-            "distancia": dist,
-            "marge": marge,
-            "vol_hist": vol_hist,
-            "oi": None,
-            "vol": None,
-            "semafor": semafor,
-            "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
-        })
+        if tipus != "CALENDAR":        
+            DADES_ACTIUS.append({
+                "ticker": actiu["ticker"],          # mantenim el ticker de l’estratègia
+                "nom": actiu["nom"],
+                "capa": actiu["capa"],
+                "strike": strike,
+                "expiry": expiry,
+                "preu": prima,
+                "variacio": 0,
+                "preu_subjacent": preu_subjacent,
+                "prima": prima,
+                "dte": dte,
+                "distancia": dist,
+                "marge": marge,
+                "vol_hist": vol_hist,
+                "oi": None,
+                "vol": None,
+                "semafor": semafor,
+                "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+            })
 
         # ALERTES (pots diferenciar PUT vs CALL si vols)
         if tipus == "PUT":
