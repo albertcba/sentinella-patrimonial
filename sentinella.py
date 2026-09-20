@@ -789,7 +789,7 @@ def processar_actiu(actiu):
             })
             
             #if metrics["roi"] <= -25: 
-            if metrics["roi"] <= 0:                
+            if metrics["roi"] <= -5:                
                 enviar_missatge(
                     f"⚠️ CALENDAR {subjacent} {strike}\n"
                     f"Valor: {metrics['calendar_value']:.2f}\n"
@@ -799,7 +799,7 @@ def processar_actiu(actiu):
                 )       
 
             #if metrics["roi"] >= 50:
-            if metrics["roi"] >= 0:                
+            if metrics["roi"] >= 10:                
                 enviar_missatge(
                     f"✅ CALENDAR {subjacent} {strike}\n"
                     f"Valor: {metrics['calendar_value']:.2f}\n"
