@@ -667,9 +667,11 @@ def processar_actiu(actiu):
         subjacent = actiu["underlying"]
         strike = actiu["strike"]
         tipus = actiu.get("type")
-        if tipus != "CALENDAR":
+        if tipus == "CALENDAR":
+            expiry = actiu["expiry_short"]
+        else:
             expiry = actiu["expiry"]
-
+            
         # 1) PUT sintètic (com fins ara)
         try:
             put = obtenir_put_synthetic(subjacent, strike, expiry)
@@ -713,27 +715,26 @@ def processar_actiu(actiu):
             dist = distancia_assignacio(preu_subjacent, strike)
             marge = marge_cash_secured(strike)
             semafor = semafor_put(preu_subjacent, prima, dte, dist)
-
-        if tipus != "CALENDAR":        
-            DADES_ACTIUS.append({
-                "ticker": actiu["ticker"],          # mantenim el ticker de l’estratègia
-                "nom": actiu["nom"],
-                "capa": actiu["capa"],
-                "strike": strike,
-                "expiry": expiry,
-                "preu": prima,
-                "variacio": 0,
-                "preu_subjacent": preu_subjacent,
-                "prima": prima,
-                "dte": dte,
-                "distancia": dist,
-                "marge": marge,
-                "vol_hist": vol_hist,
-                "oi": None,
-                "vol": None,
-                "semafor": semafor,
-                "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
-            })
+     
+        DADES_ACTIUS.append({
+            "ticker": actiu["ticker"],          # mantenim el ticker de l’estratègia
+            "nom": actiu["nom"],
+            "capa": actiu["capa"],
+            "strike": strike,
+            "expiry": expiry,
+            "preu": prima,
+            "variacio": 0,
+            "preu_subjacent": preu_subjacent,
+            "prima": prima,
+            "dte": dte,
+            "distancia": dist,
+            "marge": marge,
+            "vol_hist": vol_hist,
+            "oi": None,
+            "vol": None,
+            "semafor": semafor,
+            "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+        })
 
         # ALERTES (pots diferenciar PUT vs CALL si vols)
         if tipus == "PUT":
