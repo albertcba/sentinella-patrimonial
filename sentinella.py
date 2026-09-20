@@ -806,19 +806,19 @@ def processar_actiu(actiu):
             if metrics["roi"] <= -25: 
                 enviar_missatge(
                     f"⚠️ CALENDAR {subjacent} {strike}\n"
-                    f"Valor: {metrics['calendar_value'\]:.2f}\n"
-                    f"ROI: {metrics['roi'\]:.1f}%\n"
-                    f"IV Curta: {metrics['iv_short'\]:.1f}%\n"
-                    f"IV Llarga: {metrics['iv_long'\]:.1f}%"
+                    f"Valor: {metrics['calendar_value']:.2f}\n"
+                    f"ROI: {metrics['roi']:.1f}%\n"
+                    f"IV Curta: {metrics['iv_short']:.1f}%\n"
+                    f"IV Llarga: {metrics['iv_long']:.1f}%"
                 )       
 
             if metrics["roi"] >= 50:
                 enviar_missatge(
                     f"✅ CALENDAR {subjacent} {strike}\n"
-                    f"Valor: {metrics['calendar_value'\]:.2f}\n"
-                    f"ROI: +{metrics['roi'\]:.1f}%\n"
-                    f"IV Curta: {metrics['iv_short'\]:.1f}%\n"
-                    f"IV Llarga: {metrics['iv_long'\]:.1f}%"
+                    f"Valor: {metrics['calendar_value']:.2f}\n"
+                    f"ROI: +{metrics['roi']:.1f}%\n"
+                    f"IV Curta: {metrics['iv_short']:.1f}%\n"
+                    f"IV Llarga: {metrics['iv_long']:.1f}%"
                 )                
 
         return
