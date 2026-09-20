@@ -271,24 +271,6 @@ def enviar_missatge(text):
 with open("actius.json") as f:
     ACTIUS = json.load(f)
 
-
-def inferir_tipus_opcio(actiu):
-    t = actiu["ticker"].upper()
-    if "CALL" in t:
-        return "CALL"
-    if "CSP" in t or "BULLPUT" in t:
-        return "PUT"
-    if "CALENDAR" in t:
-        return "CALENDAR"
-    return None
-
-# enriquir actius d'opcions amb type
-for a in ACTIUS:
-    if a.get("capa") == "Options":
-        a["type"] = inferir_tipus_opcio(a)
-
-
-
 ULTIMA_ALERTA = None
 
 # ---------------------------------------------------------
