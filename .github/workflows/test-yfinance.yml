@@ -22,4 +22,4 @@ jobs:
 
       - name: Run test
         run: |
-          python yfinance.py
+          python test_yfinance.py
