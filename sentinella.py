@@ -4,6 +4,7 @@ from datetime import datetime
 import os
 import json
 import math
+import yfinance as yf
 
 DADES_ACTIUS = []
 
@@ -588,6 +589,71 @@ def llindar_variacio(actiu):
     return -4.0
 
 
+def obtenir_calendar_metrics(
+    underlying,
+    strike,
+    expiry_short,
+    expiry_long,
+    cost
+):
+
+    t = yf.Ticker(underlying)
+
+    dec = t.option_chain(expiry_short)
+    jan = t.option_chain(expiry_long)
+
+    call_dec = dec.calls[
+        dec.calls["strike"] == strike
+    ]
+
+    call_jan = jan.calls[
+        jan.calls["strike"] == strike
+    ]
+
+    if len(call_dec) == 0 or len(call_jan) == 0:
+        return None
+
+    dec_row = call_dec.iloc[0]
+    jan_row = call_jan.iloc[0]
+
+    mid_dec = (
+        dec_row["bid"] +
+        dec_row["ask"]
+    ) / 2
+
+    mid_jan = (
+        jan_row["bid"] +
+        jan_row["ask"]
+    ) / 2
+
+    calendar_value = (
+        mid_jan -
+        mid_dec
+    )
+
+    roi = (
+        (calendar_value - cost)
+        / cost
+        * 100
+    )
+
+    return {
+        "calendar_value": round(calendar_value, 2),
+        "roi": round(roi, 1),
+
+        "iv_short": round(
+            dec_row["impliedVolatility"] * 100,
+            2
+        ),
+
+        "iv_long": round(
+            jan_row["impliedVolatility"] * 100,
+            2
+        )
+    }
+
+
+
 def processar_actiu(actiu):
     global ULTIMA_ALERTA
 
@@ -636,7 +702,7 @@ def processar_actiu(actiu):
         dies_fins_venciment = dte
         T = dies_fins_venciment / 365.0
         r = 0.04  # mateix tipus que uses al Black–Scholes
-
+        
         if tipus == "PUT":
             # --- PUT / CSP / BullPut (igual que abans) ---
             prima = put["lastPrice"]
@@ -706,6 +772,54 @@ def processar_actiu(actiu):
                     f"Distància sobre strike: {dist}\n"
                     f"Semàfor: {semafor}"
                 )
+
+
+        if tipus == "CALENDAR":   
+            metrics = obtenir_calendar_metrics(
+                underlying=subjacent,
+                strike=strike,
+                expiry_short=actiu["expiry_short"],
+                expiry_long=actiu["expiry_long"],
+                cost=actiu["cost"]
+            )   
+            if metrics is None:
+                txt = (
+                    f"⚠️ Error obtenint calendar "
+                    f"{subjacent} {strike}"
+                )
+                print(txt)
+                enviar_missatge(txt)
+                return
+                
+            DADES_ACTIUS.append({
+                "ticker": actiu["ticker"],
+                "nom": actiu["nom"],
+                "capa": actiu["capa"],
+                "strike": strike,
+                "calendar_value": metrics["calendar_value"],
+                "roi": metrics["roi"],
+                "iv_short": metrics["iv_short"],
+                "iv_long": metrics["iv_long"],
+                "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+            })
+            
+            if metrics["roi"] <= -25: 
+                enviar_missatge(
+                    f"⚠️ CALENDAR {subjacent} {strike}\n"
+                    f"Valor: {metrics['calendar_value'\]:.2f}\n"
+                    f"ROI: {metrics['roi'\]:.1f}%\n"
+                    f"IV Curta: {metrics['iv_short'\]:.1f}%\n"
+                    f"IV Llarga: {metrics['iv_long'\]:.1f}%"
+                )       
+
+            if metrics["roi"] >= 50:
+                enviar_missatge(
+                    f"✅ CALENDAR {subjacent} {strike}\n"
+                    f"Valor: {metrics['calendar_value'\]:.2f}\n"
+                    f"ROI: +{metrics['roi'\]:.1f}%\n"
+                    f"IV Curta: {metrics['iv_short'\]:.1f}%\n"
+                    f"IV Llarga: {metrics['iv_long'\]:.1f}%"
+                )                
 
         return
 
