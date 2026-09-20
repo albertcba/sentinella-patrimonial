@@ -70,5 +70,7 @@
   { "ticker": "META-COVEREDCALL700", "nom": "META Covered Call 700", "capa": "Options", "underlying": "META", "strike": 700, "expiry": "2026-12-18", "type": "CALL" }, 
   { "ticker": "VRT-CALENDAR260", "nom": "VRT Calendar 260", "capa": "Options", "underlying": "VRT", "strike": 260, "expiry": "2026-12-18", "type": "CALL" },
   { "ticker": "VRT-CSP247", "nom": "VRT Covered Secured Put 247", "capa": "Options", "underlying": "VRT", "strike": 247, "expiry": "2026-12-18", "type": "PUT" },
-  { "ticker": "VRT-COVEREDCALL267", "nom": "VRT Covered Call 267", "capa": "Options", "underlying": "VRT", "strike": 267, "expiry": "2026-12-18", "type": "CALL" } 
+  { "ticker": "VRT-COVEREDCALL267", "nom": "VRT Covered Call 267", "capa": "Options", "underlying": "VRT", "strike": 267, "expiry": "2026-12-18", "type": "CALL" },
+  { "ticker": "META-CALENDAR680", "nom": "META Calendar 680", "capa": "Options", "underlying": "META", "strike": 680, "expiry_short": "2026-12-18", "expiry_long": "2027-01-15", "type": "CALENDAR", "cost": 7.85 },
+  { "ticker": "VRT-CALENDAR260", "nom": "VRT Calendar 260", "capa": "Options", "underlying": "VRT", "strike": 260, "expiry_short": "2026-12-18", "expiry_long": "2027-01-15", "type": "CALENDAR", "cost": 4.13 }
 ]
