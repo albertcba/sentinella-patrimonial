@@ -788,7 +788,8 @@ def processar_actiu(actiu):
                 "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
             })
             
-            if metrics["roi"] <= -25: 
+            #if metrics["roi"] <= -25: 
+            if metrics["roi"] <= 0:                
                 enviar_missatge(
                     f"⚠️ CALENDAR {subjacent} {strike}\n"
                     f"Valor: {metrics['calendar_value']:.2f}\n"
@@ -797,7 +798,8 @@ def processar_actiu(actiu):
                     f"IV Llarga: {metrics['iv_long']:.1f}%"
                 )       
 
-            if metrics["roi"] >= 50:
+            #if metrics["roi"] >= 50:
+            if metrics["roi"] >= 0:                
                 enviar_missatge(
                     f"✅ CALENDAR {subjacent} {strike}\n"
                     f"Valor: {metrics['calendar_value']:.2f}\n"
