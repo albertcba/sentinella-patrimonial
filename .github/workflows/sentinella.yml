@@ -27,6 +27,10 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
+      - name: Install dependencies
+        run: |
+          pip install yfinance
+
       - name: Validar actius.json
         run: |
           python - << 'EOF'
