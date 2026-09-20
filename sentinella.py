@@ -658,9 +658,9 @@ def processar_actiu(actiu):
     global ULTIMA_ALERTA
 
     # 1) Saltar actius si el mercat està tancat
-    if not es_cripto(actiu['ticker']) and not mercat_obert():
-        print(f"Saltant {actiu['ticker']} (mercat tancat)")
-        return
+    # if not es_cripto(actiu['ticker']) and not mercat_obert():
+    #    print(f"Saltant {actiu['ticker']} (mercat tancat)")
+    #    return
 
     # Determinar subjacent real
     if actiu["capa"] == "Options":
