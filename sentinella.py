@@ -739,6 +739,27 @@ def processar_actiu(actiu):
                     f"Semàfor: {semafor}"
                 )
 
+        if tipus != "CALENDAR":
+            DADES_ACTIUS.append({
+                    "ticker": actiu["ticker"],          # mantenim el ticker de l’estratègia
+                    "nom": actiu["nom"],
+                    "capa": actiu["capa"],
+                    "strike": strike,
+                    "expiry": expiry,
+                    "preu": prima,
+                    "variacio": 0,
+                    "preu_subjacent": preu_subjacent,
+                    "prima": prima,
+                    "dte": dte,
+                    "distancia": dist,
+                    "marge": marge,
+                    "vol_hist": vol_hist,
+                    "oi": None,
+                    "vol": None,
+                    "semafor": semafor,
+                    "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+            })  
+
 
         if tipus == "CALENDAR":   
             metrics = obtenir_calendar_metrics(
@@ -775,35 +796,33 @@ def processar_actiu(actiu):
                     f"ROI: +{metrics['roi']:.1f}%\n"
                     f"IV Curta: {metrics['iv_short']:.1f}%\n"
                     f"IV Llarga: {metrics['iv_long']:.1f}%"
-                )                
-
+                )
 
             DADES_ACTIUS.append({
-                "ticker": actiu["ticker"],          # mantenim el ticker de l’estratègia
-                "nom": actiu["nom"],
-                "capa": actiu["capa"],
-                "strike": strike,
-                "expiry": expiry,
-                "preu": prima,
-                "variacio": 0,
-                "preu_subjacent": preu_subjacent,
-                "prima": prima,
-                "dte": dte,
-                "distancia": dist,
-                "marge": marge,
-                "vol_hist": vol_hist,
-                "oi": None,
-                "vol": None,
-                "semafor": semafor,
-                "calendar_value": metrics["calendar_value"],
-                "roi": metrics["roi"],
-                "iv_short": metrics["iv_short"],
-                "iv_long": metrics["iv_long"],            
-                "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
-            })        
-
+                    "ticker": actiu["ticker"],          # mantenim el ticker de l’estratègia
+                    "nom": actiu["nom"],
+                    "capa": actiu["capa"],
+                    "strike": strike,
+                    "expiry": expiry,
+                    "preu": prima,
+                    "variacio": 0,
+                    "preu_subjacent": preu_subjacent,
+                    "prima": prima,
+                    "dte": dte,
+                    "distancia": dist,
+                    "marge": marge,
+                    "vol_hist": vol_hist,
+                    "oi": None,
+                    "vol": None,
+                    "semafor": semafor,
+                    "calendar_value": metrics["calendar_value"],
+                    "roi": metrics["roi"],
+                    "iv_short": metrics["iv_short"],
+                    "iv_long": metrics["iv_long"],            
+                    "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+            })          
         
-        return
+    return
 
  
     # 3) Fonamentals (si existeixen)
