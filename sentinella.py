@@ -778,29 +778,29 @@ def processar_actiu(actiu):
                 )                
 
 
-        DADES_ACTIUS.append({
-            "ticker": actiu["ticker"],          # mantenim el ticker de l’estratègia
-            "nom": actiu["nom"],
-            "capa": actiu["capa"],
-            "strike": strike,
-            "expiry": expiry,
-            "preu": prima,
-            "variacio": 0,
-            "preu_subjacent": preu_subjacent,
-            "prima": prima,
-            "dte": dte,
-            "distancia": dist,
-            "marge": marge,
-            "vol_hist": vol_hist,
-            "oi": None,
-            "vol": None,
-            "semafor": semafor,
-            "calendar_value": metrics["calendar_value"],
-            "roi": metrics["roi"],
-            "iv_short": metrics["iv_short"],
-            "iv_long": metrics["iv_long"],            
-            "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
-        })        
+            DADES_ACTIUS.append({
+                "ticker": actiu["ticker"],          # mantenim el ticker de l’estratègia
+                "nom": actiu["nom"],
+                "capa": actiu["capa"],
+                "strike": strike,
+                "expiry": expiry,
+                "preu": prima,
+                "variacio": 0,
+                "preu_subjacent": preu_subjacent,
+                "prima": prima,
+                "dte": dte,
+                "distancia": dist,
+                "marge": marge,
+                "vol_hist": vol_hist,
+                "oi": None,
+                "vol": None,
+                "semafor": semafor,
+                "calendar_value": metrics["calendar_value"],
+                "roi": metrics["roi"],
+                "iv_short": metrics["iv_short"],
+                "iv_long": metrics["iv_long"],            
+                "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+            })        
 
         
         return
