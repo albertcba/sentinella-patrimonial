@@ -820,7 +820,7 @@ def processar_actiu(actiu):
                     "iv_short": metrics["iv_short"],
                     "iv_long": metrics["iv_long"],
                     "dist_pct": round(((preu_subjacent - strike) / strike * 100), 1),
-                    "iv_spread": round(metrics["iv_short"] - metrics["iv_long"],
+                    "iv_spread": round(metrics["iv_short"] - metrics["iv_long"]),
                     "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
             })          
         
