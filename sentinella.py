@@ -716,25 +716,6 @@ def processar_actiu(actiu):
             marge = marge_cash_secured(strike)
             semafor = semafor_put(preu_subjacent, prima, dte, dist)
      
-        DADES_ACTIUS.append({
-            "ticker": actiu["ticker"],          # mantenim el ticker de l’estratègia
-            "nom": actiu["nom"],
-            "capa": actiu["capa"],
-            "strike": strike,
-            "expiry": expiry,
-            "preu": prima,
-            "variacio": 0,
-            "preu_subjacent": preu_subjacent,
-            "prima": prima,
-            "dte": dte,
-            "distancia": dist,
-            "marge": marge,
-            "vol_hist": vol_hist,
-            "oi": None,
-            "vol": None,
-            "semafor": semafor,
-            "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
-        })
 
         # ALERTES (pots diferenciar PUT vs CALL si vols)
         if tipus == "PUT":
@@ -775,18 +756,6 @@ def processar_actiu(actiu):
                 print(txt)
                 enviar_missatge(txt)
                 return
-                
-            DADES_ACTIUS.append({
-                "ticker": actiu["ticker"],
-                "nom": actiu["nom"],
-                "capa": actiu["capa"],
-                "strike": strike,
-                "calendar_value": metrics["calendar_value"],
-                "roi": metrics["roi"],
-                "iv_short": metrics["iv_short"],
-                "iv_long": metrics["iv_long"],
-                "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
-            })
             
             #if metrics["roi"] <= -25: 
             if metrics["roi"] <= -5:                
@@ -808,6 +777,32 @@ def processar_actiu(actiu):
                     f"IV Llarga: {metrics['iv_long']:.1f}%"
                 )                
 
+
+        DADES_ACTIUS.append({
+            "ticker": actiu["ticker"],          # mantenim el ticker de l’estratègia
+            "nom": actiu["nom"],
+            "capa": actiu["capa"],
+            "strike": strike,
+            "expiry": expiry,
+            "preu": prima,
+            "variacio": 0,
+            "preu_subjacent": preu_subjacent,
+            "prima": prima,
+            "dte": dte,
+            "distancia": dist,
+            "marge": marge,
+            "vol_hist": vol_hist,
+            "oi": None,
+            "vol": None,
+            "semafor": semafor,
+            "calendar_value": metrics["calendar_value"],
+            "roi": metrics["roi"],
+            "iv_short": metrics["iv_short"],
+            "iv_long": metrics["iv_long"],            
+            "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+        })        
+
+        
         return
 
  
