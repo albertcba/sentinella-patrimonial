@@ -797,7 +797,7 @@ def processar_actiu(actiu):
                     f"IV Curta: {metrics['iv_short']:.1f}%\n"
                     f"IV Llarga: {metrics['iv_long']:.1f}%"
                 )
-
+            
             DADES_ACTIUS.append({
                     "ticker": actiu["ticker"],          # mantenim el ticker de l’estratègia
                     "nom": actiu["nom"],
@@ -809,7 +809,7 @@ def processar_actiu(actiu):
                     "preu_subjacent": preu_subjacent,
                     "prima": prima,
                     "dte": dte,
-                    "distancia": dist,
+                    "distancia": preu_subjacent - strike,
                     "marge": marge,
                     "vol_hist": vol_hist,
                     "oi": None,
@@ -818,7 +818,9 @@ def processar_actiu(actiu):
                     "calendar_value": metrics["calendar_value"],
                     "roi": metrics["roi"],
                     "iv_short": metrics["iv_short"],
-                    "iv_long": metrics["iv_long"],            
+                    "iv_long": metrics["iv_long"],
+                    "dist_pct": round(((preu_subjacent - strike) / strike * 100), 1),
+                    "iv_spread": round(metrics["iv_short"] - metrics["iv_long"],
                     "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
             })          
         
