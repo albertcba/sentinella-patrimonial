@@ -373,6 +373,29 @@
         </div>
       </div>
 
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Calendar Spreads</div>
+          <div class="pill">CALENDAR</div>
+        </div>
+        
+        <div class="list" style="overflow-x:auto;">
+          <table class="actius-table">
+            <thead>
+              <tr>
+                <th>Ticker</th>
+                <th>Strike</th>
+                <th>Valor</th>
+                <th>ROI</th>
+                <th>IV Short</th>
+                <th>IV Long</th>
+              </tr>
+            </thead>
+            <tbody id="taula-calendar"></tbody>
+          </table>
+        </div>
+      </div>
+    
       <!-- TARGETA TAULA D'ACTIUS -->
       <div class="card">
         <div class="card-header">
@@ -809,6 +832,36 @@
         
           tbCSP.appendChild(tr);
         });
+
+        // --- CALENDAR SPREADS ---
+        const tbCalendar = document.getElementById("taula-calendar");
+        if (tbCalendar) {
+          tbCalendar.innerHTML = "";
+          dades.actius
+            .filter(a => a.calendar_value !== undefined)
+            .forEach(c => {
+              
+              const roiClass =
+                c.roi > 0 ? "variacio-green" :
+                c.roi < 0 ? "variacio-red" :
+                "variacio-yellow";
+              
+              const tr = document.createElement("tr");
+              
+                tr.innerHTML = `
+                  <td class="mono">${c.ticker}</td>
+                  <td class="mono">${c.strike}</td>
+                  <td class="mono">${c.calendar_value}</td>
+                  <td class="mono ${roiClass}">
+                    ${c.roi}%
+                  </td>
+                  <td class="mono">${c.iv_short}</td>
+                  <td class="mono">${c.iv_long}</td>
+                `;
+                
+                tbCalendar.appendChild(tr);
+            });
+        }
         
         // --- TARGETES FONAMENTALS GENERIQUES ---
         const grid = document.querySelector(".grid");
