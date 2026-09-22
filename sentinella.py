@@ -739,26 +739,6 @@ def processar_actiu(actiu):
                     f"Semàfor: {semafor}"
                 )
 
-        if tipus != "CALENDAR":
-            DADES_ACTIUS.append({
-                    "ticker": actiu["ticker"],          # mantenim el ticker de l’estratègia
-                    "nom": actiu["nom"],
-                    "capa": actiu["capa"],
-                    "strike": strike,
-                    "expiry": expiry,
-                    "preu": prima,
-                    "variacio": 0,
-                    "preu_subjacent": preu_subjacent,
-                    "prima": prima,
-                    "dte": dte,
-                    "distancia": dist,
-                    "marge": marge,
-                    "vol_hist": vol_hist,
-                    "oi": None,
-                    "vol": None,
-                    "semafor": semafor,
-                    "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
-            })  
 
 
         if tipus == "CALENDAR":   
@@ -823,7 +803,27 @@ def processar_actiu(actiu):
                     "iv_spread": round(metrics["iv_short"] - metrics["iv_long"]),
                     "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
             })          
-        
+        else:
+            DADES_ACTIUS.append({
+                    "ticker": actiu["ticker"],          # mantenim el ticker de l’estratègia
+                    "nom": actiu["nom"],
+                    "capa": actiu["capa"],
+                    "strike": strike,
+                    "expiry": expiry,
+                    "preu": prima,
+                    "variacio": 0,
+                    "preu_subjacent": preu_subjacent,
+                    "prima": prima,
+                    "dte": dte,
+                    "distancia": dist,
+                    "marge": marge,
+                    "vol_hist": vol_hist,
+                    "oi": None,
+                    "vol": None,
+                    "semafor": semafor,
+                    "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+            })              
+            
     #return
 
  
