@@ -824,46 +824,46 @@ def processar_actiu(actiu):
                     "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
             })              
     
-    return
+    else:
 
  
-    # 3) Fonamentals (si existeixen)
-    fundamentals = FUNDAMENTALS_SINGLE_STOCK.get(ticker)
-
-    # 4) Rolling window de 7 preus (AUTOMÀTIC I ANTIFRÀGIL)
-    preus_7d = actiu.get("preus_7d", [])   # recuperar si existeix
-    preus_7d.append(preu)                 # afegir preu actual
-    preus_7d = preus_7d[-7:]              # mantenir només els últims 7
-
-    # 5) Afegir l'actiu processat al JSON final
-    DADES_ACTIUS.append({
-        "ticker": ticker,
-        "nom": actiu["nom"],
-        "capa": actiu["capa"],
-        "preu": preu,
-        "variacio": round(variacio, 2),
-        "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),
-        "semafor_macro": semafor_macro_actiu(actiu, MACRO),
-        "fundamentals": fundamentals,
-        "preus_7d": preus_7d
-    })
-
-    # 6) Alertes
-    llindar = llindar_variacio(actiu)
-
-    if variacio <= llindar:
-        missatge = format_missatge(actiu, preu, variacio)
-        enviar_missatge(missatge)
-
-        ULTIMA_ALERTA = {
-            "actiu": actiu["nom"],
+        # 3) Fonamentals (si existeixen)
+        fundamentals = FUNDAMENTALS_SINGLE_STOCK.get(ticker)
+    
+        # 4) Rolling window de 7 preus (AUTOMÀTIC I ANTIFRÀGIL)
+        preus_7d = actiu.get("preus_7d", [])   # recuperar si existeix
+        preus_7d.append(preu)                 # afegir preu actual
+        preus_7d = preus_7d[-7:]              # mantenir només els últims 7
+    
+        # 5) Afegir l'actiu processat al JSON final
+        DADES_ACTIUS.append({
             "ticker": ticker,
+            "nom": actiu["nom"],
             "capa": actiu["capa"],
-            "variacio": round(variacio, 2),
             "preu": preu,
-            "hora": datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC'),
-            "playbook": "revisar possibles entrades / acumulació"
-        }
+            "variacio": round(variacio, 2),
+            "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),
+            "semafor_macro": semafor_macro_actiu(actiu, MACRO),
+            "fundamentals": fundamentals,
+            "preus_7d": preus_7d
+        })
+    
+        # 6) Alertes
+        llindar = llindar_variacio(actiu)
+    
+        if variacio <= llindar:
+            missatge = format_missatge(actiu, preu, variacio)
+            enviar_missatge(missatge)
+    
+            ULTIMA_ALERTA = {
+                "actiu": actiu["nom"],
+                "ticker": ticker,
+                "capa": actiu["capa"],
+                "variacio": round(variacio, 2),
+                "preu": preu,
+                "hora": datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC'),
+                "playbook": "revisar possibles entrades / acumulació"
+            }
 
 
 def main():
