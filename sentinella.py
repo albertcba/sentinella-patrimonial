@@ -823,8 +823,8 @@ def processar_actiu(actiu):
                     "semafor": semafor,
                     "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
             })              
-            
-    #return
+    
+    return
 
  
     # 3) Fonamentals (si existeixen)
