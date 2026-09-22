@@ -824,7 +824,7 @@ def processar_actiu(actiu):
                     "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
             })          
         
-    return
+    #return
 
  
     # 3) Fonamentals (si existeixen)
