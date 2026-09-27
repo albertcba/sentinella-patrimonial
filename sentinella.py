@@ -636,15 +636,14 @@ def obtenir_calendar_metrics(
 
 
 def guardar_historic_calendar(registre):
-    """
-    Desa una observació d'un calendar a un fitxer NDJSON.
-    Cada línia és un JSON independent.
-    """
 
-    fitxer = "calendar_history.jsonl"
+    fitxer = "data/calendar_history.jsonl"
 
-    with open(fitxer, "a", encoding="utf-8") as f:
-        f.write(json.dumps(registre) + "\n")
+    try:
+        with open(fitxer, "a", encoding="utf-8") as f:
+            f.write(json.dumps(registre) + "\n")
+    except Exception as e:
+        print(f"Error guardant històric calendar: {e}")
 
 
 def processar_actiu(actiu):
