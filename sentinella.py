@@ -637,7 +637,7 @@ def obtenir_calendar_metrics(
 
 def guardar_historic_calendar(registre):
 
-    fitxer = "data/calendar_history.jsonl"
+    fitxer = "docs/calendar_history.jsonl"
 
     try:
         with open(fitxer, "a", encoding="utf-8") as f:
