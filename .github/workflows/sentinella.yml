@@ -6,9 +6,11 @@ on:
     - cron: "*/30 * * * *"
 
 jobs:
-
-  run-sentinella:
+  run-and-update:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
 
     env:
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
@@ -25,98 +27,51 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install requests
+        run: pip install requests yfinance
 
-      - name: Install dependencies
-        run: |
-          pip install yfinance
-
-      - name: Validar actius.json
+      - name: Validar fitxers JSON
         run: |
           python - << 'EOF'
           import json, sys
-          try:
-            with open("actius.json") as f:
-              json.load(f)
-            print("✔ actius.json vàlid")
-          except Exception as e:
-            print("❌ ERROR: actius.json no és vàlid")
-            print(e)
-            sys.exit(1)
+          fitxers = ["actius.json", "fundamentals.json", "sensibilitat_macro.json"]
+          for fitxer in fitxers:
+              try:
+                  with open(fitxer) as f:
+                      json.load(f)
+                  print(f"✔ {fitxer} vàlid")
+              except Exception as e:
+                  print(f"❌ ERROR: {fitxer} no és vàlid\n{e}")
+                  sys.exit(1)
           EOF
 
-      - name: Validar fundamentals.json
+      - name: Executar sentinella i generar fitxers
         run: |
-          python - << 'EOF'
-          import json, sys
-          try:
-            with open("fundamentals.json") as f:
-              json.load(f)
-            print("✔ fundamentals.json vàlid")
-          except Exception as e:
-            print("❌ ERROR: fundamentals.json no és vàlid")
-            print(e)
-            sys.exit(1)
-          EOF
-
-      - name: Validar sensibilitat_macro.json
-        run: |
-          python - << 'EOF'
-          import json, sys
-          try:
-            with open("sensibilitat_macro.json") as f:
-              json.load(f)
-            print("✔ sensibilitat_macro.json vàlid")
-          except Exception as e:
-            print("❌ ERROR: sensibilitat_macro.json no és vàlid")
-            print(e)
-            sys.exit(1)
-          EOF
-
-      - name: Executar sentinella i generar alerta.json
-        run: |
+          # Assegurem que existeix la carpeta abans d'executar el script
+          mkdir -p docs
+          
+          # Generem l'alerta (el script també modificarà docs/calendar_history.jsonl)
           python sentinella.py | tail -n 1 > alerta.json
+          
           echo "JSON generat:"
           cat alerta.json
+          
+          # Copiem l'alerta al dashboard directament en el mateix entorn
+          cp alerta.json docs/data.json
 
-      - name: Upload alerta.json
-        uses: actions/upload-artifact@v4
-        with:
-          name: alerta
-          path: alerta.json
-
-  update-dashboard:
-    needs: run-sentinella
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Download alerta.json
-        uses: actions/download-artifact@v4
-        with:
-          name: alerta
-          path: alerta
-
-      - name: Actualitzar dashboard
-        run: cp alerta/alerta.json docs/data.json
-
-      - name: Commit & Push
+      - name: Commit & Push dels canvis (Dashboard i Històric)
         run: |
           git config user.name "Sentinella Bot"
           git config user.email "bot@github.com"
-      
+          
+          # Afegim tots els fitxers de la carpeta docs modificats/creats
           git add docs/
-      
-          git commit -m "Actualització automàtica Sentinella" || echo "Sense canvis"
-      
+          
+          # Fem el commit només si hi ha canvis reals
+          git diff-index --quiet HEAD || git commit -m "Actualització automàtica Sentinella [skip ci]"
+          
           git push
 
       - name: Verificar històric
         run: |
           ls -lah docs/
-          tail -5 docs/calendar_history.jsonl || true          
+          tail -5 docs/calendar_history.jsonl || true
