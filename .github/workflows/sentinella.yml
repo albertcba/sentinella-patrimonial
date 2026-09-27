@@ -85,6 +85,21 @@ jobs:
           name: alerta
           path: alerta.json
 
+      - name: Verificar fitxers
+        run: |
+          ls -lah docs/
+          tail -5 docs/calendar_history.jsonl || true
+
+      - name: Commit calendar history
+        run: |
+          git config user.name "Sentinella Bot"
+          git config user.email "bot@github.com"
+
+          git add docs/calendar_history.jsonl
+
+          git commit -m "Update calendar history" || echo "Sense canvis"
+
+          git push
 
   update-dashboard:
     needs: run-sentinella
