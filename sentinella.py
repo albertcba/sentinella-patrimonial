@@ -635,6 +635,17 @@ def obtenir_calendar_metrics(
     }
 
 
+def guardar_historic_calendar(registre):
+    """
+    Desa una observació d'un calendar a un fitxer NDJSON.
+    Cada línia és un JSON independent.
+    """
+
+    fitxer = "calendar_history.jsonl"
+
+    with open(fitxer, "a", encoding="utf-8") as f:
+        f.write(json.dumps(registre) + "\n")
+
 
 def processar_actiu(actiu):
     global ULTIMA_ALERTA
@@ -777,6 +788,65 @@ def processar_actiu(actiu):
                     f"IV Curta: {metrics['iv_short']:.1f}%\n"
                     f"IV Llarga: {metrics['iv_long']:.1f}%"
                 )
+
+            calendar_id = (
+                f"{subjacent}_"
+                f"{strike}_"
+                f"{actiu['expiry_short']}_"
+                f"{actiu['expiry_long']}"
+            )
+
+            registre_historic = {
+                "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),
+            
+                "calendar_id": calendar_id,
+            
+                "ticker": subjacent,
+            
+                "strike": strike,
+            
+                "expiry_short": actiu["expiry_short"],
+            
+                "expiry_long": actiu["expiry_long"],
+            
+                "spot": round(preu_subjacent, 2),
+            
+                "calendar_value": metrics["calendar_value"],
+            
+                "roi": metrics["roi"],
+            
+                "iv_short": metrics["iv_short"],
+            
+                "iv_long": metrics["iv_long"],
+            
+                "iv_spread": round(
+                    metrics["iv_short"] -
+                    metrics["iv_long"],
+                    2
+                ),
+            
+                "dist_pct": round(
+                    (
+                        (preu_subjacent - strike)
+                        / strike
+                    ) * 100,
+                    2
+                ),
+                
+                "cost": actiu["cost"],
+
+                "profit_dollars":
+                round(
+                    metrics["calendar_value"] -
+                    actiu["cost"],
+                    2
+                )                
+                
+            }
+
+            guardar_historic_calendar(
+                registre_historic
+            )
             
             DADES_ACTIUS.append({
                     "ticker": actiu["ticker"],          # mantenim el ticker de l’estratègia
