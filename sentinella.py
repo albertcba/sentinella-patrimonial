@@ -846,6 +846,10 @@ def processar_actiu(actiu):
             guardar_historic_calendar(
                 registre_historic
             )
+
+            print(
+            f"Historic guardat: {calendar_id}"
+            )
             
             DADES_ACTIUS.append({
                     "ticker": actiu["ticker"],          # mantenim el ticker de l’estratègia
