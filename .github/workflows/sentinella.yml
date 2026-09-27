@@ -110,6 +110,14 @@ jobs:
         run: |
           git config user.name "Sentinella Bot"
           git config user.email "bot@github.com"
-          git add docs/data.json
-          git commit -m "Actualització automàtica del dashboard" || echo "Sense canvis"
+      
+          git add docs/
+      
+          git commit -m "Actualització automàtica Sentinella" || echo "Sense canvis"
+      
           git push
+
+      - name: Verificar històric
+        run: |
+          ls -lah docs/
+          tail -5 docs/calendar_history.jsonl || true          
