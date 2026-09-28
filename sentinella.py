@@ -587,6 +587,8 @@ def llindar_variacio(actiu):
     return -4.0
 
 
+
+
 def obtenir_calendar_metrics(
     underlying,
     strike,
@@ -594,7 +596,6 @@ def obtenir_calendar_metrics(
     expiry_long,
     cost
 ):
-
     t = yf.Ticker(underlying)
 
     dec = t.option_chain(expiry_short)
@@ -635,21 +636,31 @@ def obtenir_calendar_metrics(
         * 100
     )
 
+    # 🛠️ NOVES MÈTRIQUES
+    # 1. Calcular els dies restants fins al venciment de la curta (DTE)
+    avui = datetime.utcnow().date()
+    data_venciment_curta = datetime.strptime(expiry_short, "%Y-%m-%d").date()
+    dte_short = (data_venciment_curta - avui).days
+
+    # 2. Extreure IVs pures (decimals) per calcular l'eficiència Vega sense arrodoniments previs
+    iv_s = dec_row["impliedVolatility"]
+    iv_l = jan_row["impliedVolatility"]
+    
+    # Evitem divisió per zero per seguretat si no hi hagués dades de IV
+    vega_efficiency = round(iv_s / iv_l, 3) if iv_l > 0 else 0.0
+
     return {
         "calendar_value": round(calendar_value, 2),
         "roi": round(roi, 1),
 
-        "iv_short": round(
-            dec_row["impliedVolatility"] * 100,
-            2
-        ),
-
-        "iv_long": round(
-            jan_row["impliedVolatility"] * 100,
-            2
-        )
+        "iv_short": round(iv_s * 100, 2),
+        "iv_long": round(iv_l * 100, 2),
+        
+        # Afegim les noves mètriques al diccionari de sortida
+        "dte_short": dte_short,
+        "vega_efficiency": vega_efficiency
     }
-
+    
 
 def guardar_historic_calendar(registre):
 
@@ -666,7 +677,7 @@ def processar_actiu(actiu):
     global ULTIMA_ALERTA
 
     # 1) Saltar actius si el mercat està tancat
-    if not es_cripto(actiu['ticker']) and not mercat_obert():
+    if not es_cripto(actiu['ticker']) and mercat_obert():
        print(f"Saltant {actiu['ticker']} (mercat tancat)")
        return
 
@@ -859,7 +870,7 @@ def processar_actiu(actiu):
                 
             }
 
-            if mercat_obert_USA():
+            if not mercat_obert_USA():
                 guardar_historic_calendar(
                 registre_historic
                 )
