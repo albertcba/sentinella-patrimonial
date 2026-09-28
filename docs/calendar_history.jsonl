@@ -1,1 +1,3 @@
 
+{"timestamp": "2026-09-28 23:56 UTC", "calendar_id": "META_680_2026-12-18_2027-01-15", "ticker": "META", "strike": 680, "expiry_short": "2026-12-18", "expiry_long": "2027-01-15", "spot": 715.62, "calendar_value": 8.62, "roi": 9.9, "iv_short": 44.05, "iv_long": 43.47, "dte_short": 81, "vega_efficiency": 1.013, "iv_spread": 0.58, "dist_pct": 5.24, "cost": 7.85, "profit_dollars": 0.77}
+{"timestamp": "2026-09-28 23:56 UTC", "calendar_id": "VRT_260_2026-12-18_2027-01-15", "ticker": "VRT", "strike": 260, "expiry_short": "2026-12-18", "expiry_long": "2027-01-15", "spot": 244.04, "calendar_value": 3.73, "roi": -9.8, "iv_short": 61.21, "iv_long": 59.83, "dte_short": 81, "vega_efficiency": 1.023, "iv_spread": 1.38, "dist_pct": -6.14, "cost": 4.13, "profit_dollars": -0.4}
