@@ -241,6 +241,22 @@ def mercat_obert():
     # Horari català: 06:00–24:00
     return 6 <= hora_local < 24
 
+def mercat_obert_USA():
+    ara_utc = datetime.utcnow()
+    ara_local = datetime.now()  # detecta CET/CEST automàticament
+    offset = (ara_local - ara_utc).seconds // 3600  # +1 o +2
+
+    # Convertim hora catalana a UTC
+    hora_local = ara_local.hour
+    dia = ara_local.weekday()  # 0=dilluns, 6=diumenge
+
+    # Caps de setmana tancat
+    if dia >= 5:
+        return False
+
+    # Horari català: 15:00–22:00
+    return 15 <= hora_local < 22
+
 def calcular_dte(expiry):
     avui = datetime.utcnow().date()
     venc = datetime.strptime(expiry, "%Y-%m-%d").date()
@@ -843,13 +859,14 @@ def processar_actiu(actiu):
                 
             }
 
-            guardar_historic_calendar(
+            if mercat_obert_USA():
+                guardar_historic_calendar(
                 registre_historic
-            )
-
-            print(
-            f"Historic guardat: {calendar_id}"
-            )
+                )
+                
+                print(
+                f"Historic guardat: {calendar_id}"
+                )
             
             DADES_ACTIUS.append({
                     "ticker": actiu["ticker"],          # mantenim el ticker de l’estratègia
