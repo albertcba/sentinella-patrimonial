@@ -844,7 +844,12 @@ def processar_actiu(actiu):
                 "iv_short": metrics["iv_short"],
             
                 "iv_long": metrics["iv_long"],
-            
+
+                # 🆕 Afegeix aquestes dues línies aquí:
+                "dte_short": metrics["dte_short"],
+                
+                "vega_efficiency": metrics["vega_efficiency"],
+                
                 "iv_spread": round(
                     metrics["iv_short"] -
                     metrics["iv_long"],
