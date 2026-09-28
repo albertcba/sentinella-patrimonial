@@ -822,32 +822,30 @@ def processar_actiu(actiu):
                 f"{actiu['expiry_long']}"
             )
 
-            # A la part del teu script on crees el registre final:
-            registre_historic = {
-                "timestamp": timestamp_actual,
-                "calendar_id": f"{subjacent}_{strike}_{actiu['expiry_short']}_{actiu['expiry_long']}",
-                "ticker": subjacent,
-                "strike": strike,
-                "expiry_short": actiu["expiry_short"],
-                "expiry_long": actiu["expiry_long"],
-                "spot": spot_price,
-                
-                # Mètriques que venen de la funció:
-                "calendar_value": metrics["calendar_value"],
-                "roi": metrics["roi"],
-                "iv_short": metrics["iv_short"],
-                "iv_long": metrics["iv_long"],
-                
-                # 🆕 Afegeix aquestes dues línies aquí:
-                "dte_short": metrics["dte_short"],
-                "vega_efficiency": metrics["vega_efficiency"],
-                
-                # Mètriques calculades a fora:
-                "iv_spread": round(metrics["iv_short"] - metrics["iv_long"], 2),
-                "dist_pct": dist_pct,
-                "cost": actiu["cost"],
-                "profit_dollars": round(metrics["calendar_value"] - actiu["cost"], 2)
-            }
+            # 🛡️ ESCUT DE SEGURETAT: Si no hi ha dades o yfinance falla, ens saltem aquest registre
+            if metrics is None:
+                print(f"⚠️ Avís: No s'han pogut obtenir dades per a {subjacent} en aquest moment.")
+            else:
+                # Si és un diccionari vàlid, aleshores sí que generem el registre
+                registre_historic = {
+                    "timestamp": timestamp_actual,
+                    "calendar_id": f"{subjacent}_{strike}_{actiu['expiry_short']}_{actiu['expiry_long']}",
+                    "ticker": subjacent,
+                    "strike": strike,
+                    "expiry_short": actiu["expiry_short"],
+                    "expiry_long": actiu["expiry_long"],
+                    "spot": spot_price,
+                    "calendar_value": metrics["calendar_value"],
+                    "roi": metrics["roi"],
+                    "iv_short": metrics["iv_short"],
+                    "iv_long": metrics["iv_long"],
+                    "dte_short": metrics["dte_short"],
+                    "vega_efficiency": metrics["vega_efficiency"],
+                    "iv_spread": round(metrics["iv_short"] - metrics["iv_long"], 2),
+                    "dist_pct": dist_pct,
+                    "cost": actiu["cost"],
+                    "profit_dollars": round(metrics["calendar_value"] - actiu["cost"], 2)
+                }
 
 
             if not mercat_obert_USA():
