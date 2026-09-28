@@ -822,53 +822,33 @@ def processar_actiu(actiu):
                 f"{actiu['expiry_long']}"
             )
 
+            # A la part del teu script on crees el registre final:
             registre_historic = {
-                "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),
-            
-                "calendar_id": calendar_id,
-            
+                "timestamp": timestamp_actual,
+                "calendar_id": f"{subjacent}_{strike}_{actiu['expiry_short']}_{actiu['expiry_long']}",
                 "ticker": subjacent,
-            
                 "strike": strike,
-            
                 "expiry_short": actiu["expiry_short"],
-            
                 "expiry_long": actiu["expiry_long"],
-            
-                "spot": round(preu_subjacent, 2),
-            
+                "spot": spot_price,
+                
+                # Mètriques que venen de la funció:
                 "calendar_value": metrics["calendar_value"],
-            
                 "roi": metrics["roi"],
-            
                 "iv_short": metrics["iv_short"],
-            
                 "iv_long": metrics["iv_long"],
-            
-                "iv_spread": round(
-                    metrics["iv_short"] -
-                    metrics["iv_long"],
-                    2
-                ),
-            
-                "dist_pct": round(
-                    (
-                        (preu_subjacent - strike)
-                        / strike
-                    ) * 100,
-                    2
-                ),
                 
+                # 🆕 Afegeix aquestes dues línies aquí:
+                "dte_short": metrics["dte_short"],
+                "vega_efficiency": metrics["vega_efficiency"],
+                
+                # Mètriques calculades a fora:
+                "iv_spread": round(metrics["iv_short"] - metrics["iv_long"], 2),
+                "dist_pct": dist_pct,
                 "cost": actiu["cost"],
-
-                "profit_dollars":
-                round(
-                    metrics["calendar_value"] -
-                    actiu["cost"],
-                    2
-                )                
-                
+                "profit_dollars": round(metrics["calendar_value"] - actiu["cost"], 2)
             }
+
 
             if not mercat_obert_USA():
                 guardar_historic_calendar(
