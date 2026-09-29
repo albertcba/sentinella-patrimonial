@@ -995,9 +995,12 @@
         
         const dades = linies.map(l => { try { return JSON.parse(l); } catch(e) { return null; } })
             .filter(r => {
-                return r !== null && 
-                       r.calendar_value !== 0 && 
-                       String(r.ticker).trim() === String(ticker).trim() && 
+                if (r === null || r.calendar_value === 0) return false;
+                
+                // Netejem el ticker per si porta afegit "-CALENDAR..."
+                const tickerNet = String(ticker).split('-')[0].trim(); 
+                
+                return String(r.ticker).trim() === tickerNet && 
                        Number(r.strike) === Number(strike);
             })
             .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
