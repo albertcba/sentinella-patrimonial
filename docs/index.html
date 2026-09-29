@@ -878,6 +878,10 @@
                 "variacio-yellow";
               
               const tr = document.createElement("tr");
+
+                // 1. Afegim el clic i el cursor de la mà a tota la fila sencera
+                tr.style.cursor = "pointer";
+                tr.setAttribute("onclick", `obrirGrafic('${c.ticker}', ${c.strike})`);
               
                 tr.innerHTML = `
                   <td class="mono">${c.ticker}</td>
@@ -890,7 +894,6 @@
                   <td class="mono">${c.iv_long}</td>
                   <td class="mono">${c.dist_pct}</td>
                   <td class="mono">${c.iv_spread}</td>
-                  <td class="mono" onclick="obrirGrafic(${c.ticker}, ${c.strike})" style="cursor: pointer;"></td>
                 `;
                 
                 tbCalendar.appendChild(tr);
