@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="ca">
+<!-- Enllaç a Chart.js (inclou-lo a dalt de tot de l'HTML) -->
+<script src="https://jsdelivr.net"></script>
 <head>
   <meta charset="UTF-8">
   <title>Sentinella Patrimonial</title>
@@ -197,6 +199,33 @@
     margin: 3px 0;
   }
 
+  /* Fons del modal que tapa la pantalla */
+  .modal-ocult {
+      display: none; 
+      position: fixed; 
+      z-index: 9999; 
+      left: 0; top: 0; width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.85); /* Fons fosc translúcid */
+      backdrop-filter: blur(4px); /* Efecte de difuminat elegant */
+  }
+  
+  /* La caixa blanca/negra del contingut */
+  .modal-contingut {
+      background-color: #121212;
+      border: 1px solid #2d2d2d;
+      margin: 10% auto; 
+      padding: 20px; 
+      width: 80%; 
+      max-width: 650px;
+      border-radius: 6px;
+  }
+  
+  /* El botó de tancar (X) */
+  .boto-tancar {
+      color: #888; float: right; font-size: 24px; font-weight: bold; cursor: pointer;
+  }
+  .boto-tancar:hover { color: #fff; }
+    
     
   </style>
 </head>
@@ -860,7 +889,8 @@
                   <td class="mono">${c.iv_short}</td>
                   <td class="mono">${c.iv_long}</td>
                   <td class="mono">${c.dist_pct}</td>
-                  <td class="mono">${c.iv_spread}</td>                  
+                  <td class="mono">${c.iv_spread}</td>
+                  <td class="mono" onclick="obrirGrafic(${c.ticker}, ${c.strike})" style="cursor: pointer;"></td>
                 `;
                 
                 tbCalendar.appendChild(tr);
@@ -945,7 +975,82 @@
 
     carregarDades();
     setInterval(carregarDades, 30000); // refresc automàtic 30s
-  </script>
 
+    let instànciaGrafic = null; // Guarda el gràfic per poder destruir-lo i recrear-lo net
+    
+    // 1. Funció principal que obre el modal i genera la gràfica
+    async function obrirGrafic(ticker, strike) {
+        // Mostrem el modal invisible
+        const modal = document.getElementById('modalGrafic');
+        document.getElementById('modalTitol').innerText = `${ticker} · Strike ${strike} (Evolució ROI)`;
+        modal.style.display = "block";
+    
+        // Llegim i filtrem l'històric .jsonl
+        const resposta = await fetch('calendar_history.jsonl');
+        const textBrut = await resposta.text();
+        const linies = textBrut.split('\n').filter(l => l.trim() !== '');
+        
+        const dades = linies.map(l => { try { return JSON.parse(l); } catch(e) { return null; } })
+            .filter(r => r !== null && r.calendar_value !== 0 && r.ticker === ticker && r.strike === strike)
+            .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+    
+        // Preparem els punts del gràfic (Temps i ROI)
+        const etiquetesX = dades.map(r => new Date(r.timestamp).toLocaleDateString() + " " + new Date(r.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}));
+        const valorsY = dades.map(r => r.roi);
+    
+        // Si ja hi havia un gràfic obert d'abans, el destruïm netament
+        if (instànciaGrafic) { instànciaGrafic.destroy(); }
+    
+        // Dibuixem el nou gràfic de Chart.js adaptat al Dark Mode
+        const ctx = document.getElementById('meuGrafic').getContext('2d');
+        instànciaGrafic = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: etiquetesX,
+                datasets: [{
+                    label: 'ROI %',
+                    data: valorsY,
+                    borderColor: '#4caf50', // Verd per al rendiment
+                    borderWidth: 2,
+                    tension: 0.2,
+                    pointRadius: 2,
+                    backgroundColor: 'rgba(76, 175, 80, 0.05)',
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { grid: { color: '#222' }, ticks: { color: '#888', display: false } }, // Amaguem etiquetes de temps sota per no saturar
+                    y: { grid: { color: '#222' }, ticks: { color: '#888' } }
+                },
+                plugins: { legend: { display: false } } // Net, sense llegenda
+            }
+        });
+    }
+    
+    // 2. Funció per tancar el modal
+    function tancarModal() {
+        document.getElementById('modalGrafic').style.display = "none";
+    }
+    
+    // 3. Tancar si es fa clic a fora de la caixa fosc
+    window.onclick = function(event) {
+        const modal = document.getElementById('modalGrafic');
+        if (event.target == modal) { tancarModal(); }
+    }
+
+  </script>
+  <!-- El bloc del Modal (col·loca-ho al final del <body>) -->
+  <div id="modalGrafic" class="modal-ocult">
+      <div class="modal-contingut">
+          <span class="boto-tancar" onclick="tancarModal()">&times;</span>
+          <h3 id="modalTitol" style="margin-top:0; color:#fff;">Històric de Rendiment</h3>
+          <div style="position: relative; height:300px; width:100%;">
+              <canvas id="meuGrafic"></canvas>
+          </div>
+      </div>
+  </div>
 </body>
 </html>
