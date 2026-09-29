@@ -983,28 +983,42 @@
     
     // 1. Funció principal que obre el modal i genera la gràfica
     async function obrirGrafic(ticker, strike) {
-        // Mostrem el modal invisible
+        // Mostrem el modal
         const modal = document.getElementById('modalGrafic');
         document.getElementById('modalTitol').innerText = `${ticker} · Strike ${strike} (Evolució ROI)`;
         modal.style.display = "block";
     
-        // Llegim i filtrem l'històric .jsonl
+        // Llegim l'històric .jsonl
         const resposta = await fetch('calendar_history.jsonl');
         const textBrut = await resposta.text();
         const linies = textBrut.split('\n').filter(l => l.trim() !== '');
         
         const dades = linies.map(l => { try { return JSON.parse(l); } catch(e) { return null; } })
-            .filter(r => r !== null && r.calendar_value !== 0 && r.ticker === ticker && r.strike === strike)
+            .filter(r => {
+                return r !== null && 
+                       r.calendar_value !== 0 && 
+                       String(r.ticker).trim() === String(ticker).trim() && 
+                       Number(r.strike) === Number(strike);
+            })
             .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
     
-        // Preparem els punts del gràfic (Temps i ROI)
-        const etiquetesX = dades.map(r => new Date(r.timestamp).toLocaleDateString() + " " + new Date(r.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}));
+        // Si no hi ha dades, posem un avís a la consola per saber-ho
+        if (dades.length === 0) {
+            console.warn(`⚠️ Atenció: No s'han trobat registres per a ${ticker} amb Strike ${strike}`);
+            return;
+        }
+    
+        // Preparem els punts del gràfic
+        const etiquetesX = dades.map(r => {
+            const d = new Date(r.timestamp);
+            return `${d.getDate()}/${d.getMonth()+1} ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
+        });
         const valorsY = dades.map(r => r.roi);
     
-        // Si ja hi havia un gràfic obert d'abans, el destruïm netament
+        // Destruïm gràfic antic si existeix
         if (instànciaGrafic) { instànciaGrafic.destroy(); }
     
-        // Dibuixem el nou gràfic de Chart.js adaptat al Dark Mode
+        // Dibuixem el nou gràfic de Chart.js
         const ctx = document.getElementById('meuGrafic').getContext('2d');
         instànciaGrafic = new Chart(ctx, {
             type: 'line',
@@ -1013,10 +1027,10 @@
                 datasets: [{
                     label: 'ROI %',
                     data: valorsY,
-                    borderColor: '#4caf50', // Verd per al rendiment
+                    borderColor: '#4caf50', 
                     borderWidth: 2,
                     tension: 0.2,
-                    pointRadius: 2,
+                    pointRadius: 3, // Un pèl més gran perquè es vegin els punts del JSON
                     backgroundColor: 'rgba(76, 175, 80, 0.05)',
                     fill: true
                 }]
@@ -1025,10 +1039,16 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    x: { grid: { color: '#222' }, ticks: { color: '#888', display: false } }, // Amaguem etiquetes de temps sota per no saturar
-                    y: { grid: { color: '#222' }, ticks: { color: '#888' } }
+                    x: { 
+                        grid: { color: '#222' }, 
+                        ticks: { color: '#888', maxRotation: 45, minRotation: 45 } 
+                    }, 
+                    y: { 
+                        grid: { color: '#222' }, 
+                        ticks: { color: '#888' } 
+                    }
                 },
-                plugins: { legend: { display: false } } // Net, sense llegenda
+                plugins: { legend: { display: false } }
             }
         });
     }
