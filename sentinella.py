@@ -254,8 +254,8 @@ def mercat_obert_USA():
     if dia >= 5:
         return False
 
-    # Horari català: 15:00–22:00
-    return 15 <= hora_local < 22
+    # Horari català: 16:00–22:00
+    return 16 <= hora_local < 22
 
 def calcular_dte(expiry):
     avui = datetime.utcnow().date()
