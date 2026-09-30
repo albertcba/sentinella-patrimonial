@@ -1,6 +1,7 @@
 import requests
 import traceback
 from datetime import datetime
+from zoneinfo import ZoneInfo
 import os
 import json
 import math
@@ -242,20 +243,25 @@ def mercat_obert():
     return 6 <= hora_local < 24
 
 def mercat_obert_USA():
-    ara_utc = datetime.utcnow()
-    ara_local = datetime.now()  # detecta CET/CEST automàticament
-    offset = (ara_local - ara_utc).seconds // 3600  # +1 o +2
+    # Forcem a obtenir l'hora actual exacta de Nova York
+    tz_ny = ZoneInfo("America/New_York")
+    ara_ny = datetime.now(tz_ny)
+    
+    dia = ara_ny.weekday()  # 0=dilluns, 6=diumenge
+    hora = ara_ny.hour
+    minut = ara_ny.minute
 
-    # Convertim hora catalana a UTC
-    hora_local = ara_local.hour
-    dia = ara_local.weekday()  # 0=dilluns, 6=diumenge
-
-    # Caps de setmana tancat
+    # 1. Caps de setmana tancat
     if dia >= 5:
         return False
 
-    # Horari català: 16:00–22:00
-    return 16 <= hora_local < 22
+    # 2. Horari oficial de mercat regular (09:30 a 16:00 hora NY)
+    # Convertim tot a minuts del dia per fer una comparació neta
+    minuts_des_de_mitjanit = hora * 60 + minut
+    obertura = 9 * 60 + 30  # 09:30 -> 570 minuts
+    tancament = 16 * 60     # 16:00 -> 960 minuts
+
+    return obertura <= minuts_des_de_mitjanit < tancament
 
 def calcular_dte(expiry):
     avui = datetime.utcnow().date()
