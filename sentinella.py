@@ -708,33 +708,29 @@ def calcular_delta(tipus, preu_subjacent, strike, dte, iv_pure, r=0.045):
         return round(normal_cdf_approx(d1) - 1.0, 2)
     return 0.0
 
-def obtenir_metriques_pota_curta(underlying, strike, expiry, tipus):
-    """
-    Obté el preu del subjacent, calcula el DTE, extreu la IV pura de la cadena 
-    d'opcions i calcula la Delta teòrica per a una pota curta.
-    """
+
+def obtenir_metriques_pota_curta(underlying, strike, expiry, tipus, prima_entrada):
     t = yf.Ticker(underlying)
     
-    # 1. Obtenir el preu actual del subjacent (fem servir la info ràpida del ticker)
+    # 1. Obtenir el preu actual del subjacent
     try:
         preu_subjacent = t.fast_info['lastPrice']
     except Exception:
-        # Fallback si fast_info no està disponible
         hist = t.history(period="1d")
         if hist.empty:
             return None
         preu_subjacent = hist['Close'].iloc[-1]
 
-    # 2. Descarregar la cadena d'opcions de l'expiració setmanal
+    # 2. Descarregar la cadena d'opcions
     try:
         chain = t.option_chain(expiry)
     except Exception:
         return None
 
     # 3. Filtrar segons si és PUT o CALL
-    if tipus == "CALL" or tipus == "LONGCALLSTRANGLE" or tipus == "LEAPCALLCALENDAR":
+    if tipus in ["CALL", "LONGCALLSTRANGLE", "LEAPCALLCALENDAR"]:
         df_options = chain.calls
-    elif tipus == "PUT" or tipus == "LONGPUTSTRANGLE" or tipus == "LEAPPUTCALENDAR":
+    elif tipus in ["PUT", "LONGPUTSTRANGLE", "LEAPPUTCALENDAR"]:
         df_options = chain.puts
     else:
         return None
@@ -755,12 +751,44 @@ def obtenir_metriques_pota_curta(underlying, strike, expiry, tipus):
     # 5. Calcular Delta
     delta = calcular_delta(tipus, preu_subjacent, strike, dte, iv_pure)
 
+    # 6. Calcular valor extrínsec restant
+    valor_extrinsec = prima_mid
+    if tipus in ["CALL", "LONGCALLSTRANGLE", "LEAPCALLCALENDAR"] and preu_subjacent > strike:
+        valor_extrinsec = max(0.0, prima_mid - (preu_subjacent - strike))
+    elif tipus in ["PUT", "LONGPUTSTRANGLE", "LEAPPUTCALENDAR"] and preu_subjacent < strike:
+        valor_extrinsec = max(0.0, prima_mid - (strike - preu_subjacent))
+
+    # 7. 🛠️ NOUS CÀLCULS DE BENEFICI I ROI
+    pct_profit_assolit = 0.0
+    roi_anualitzat_restant = 0.0
+    
+    # Estimació de col·lateral conservador (Cash-Secured: Strike * 100)
+    # Nota: Per a la Call usem el mateix com a base equivalent de capital de control
+    col·lateral_estimat = strike * 100 
+
+    if prima_entrada and prima_entrada > 0:
+        # % de la prima inicial que ja tenim a la butxaca
+        pct_profit_assolit = ((prima_entrada - prima_mid) / prima_entrada) * 100
+        
+        # Rendiment que ens queda per guanyar si aguantem la posició fins al final
+        premi_restant_total = prima_mid * 100
+        roi_restant_absolut = (premi_restant_total / col·lateral_estimat) * 100
+        
+        # Anualitzem el ROI restant per veure si val la pena el pas del temps (Theta)
+        if dte > 0:
+            roi_anualitzat_restant = (roi_restant_absolut / dte) * 365
+        else:
+            roi_anualitzat_restant = 0.0
+
     return {
         "preu_subjacent": round(preu_subjacent, 2),
         "dte": dte,
         "iv_pure": iv_pure,
         "prima_mid": round(prima_mid, 2),
-        "delta": delta
+        "delta": delta,
+        "valor_extrinsec": round(valor_extrinsec, 2),
+        "pct_profit_assolit": round(pct_profit_assolit, 1),
+        "roi_anualitzat_restant": round(roi_anualitzat_restant, 1)
     }
 
 
@@ -768,9 +796,9 @@ def processar_actiu(actiu):
     global ULTIMA_ALERTA
 
     # 1) Saltar actius si el mercat està tancat
-    if not es_cripto(actiu['ticker']) and not mercat_obert():
-       print(f"Saltant {actiu['ticker']} (mercat tancat)")
-       return
+    #if not es_cripto(actiu['ticker']) and not mercat_obert():
+    #   print(f"Saltant {actiu['ticker']} (mercat tancat)")
+    #   return
 
     # Determinar subjacent real
     if actiu["capa"] == "Options":
@@ -814,24 +842,28 @@ def processar_actiu(actiu):
         dte = put["daysToExpiry"]
         dies_fins_venciment = dte
         T = dies_fins_venciment / 365.0
-        r = 0.04  # mateix tipus que uses al Black–Scholes
+        r = 0.04  # mateix tipus que uses al Black–Scholes      
         
         if tipus == "PUT":
             # --- PUT / CSP / BullPut (igual que abans) ---
-            prima = put["lastPrice"]
+            prima = actiu.get("prima", None)
+            if prima is None:
+                prima = put["lastPrice"]
             dist = distancia_assignacio(preu_subjacent, strike)  # strike - preu
             marge = marge_cash_secured(strike)
             semafor = semafor_put(preu_subjacent, prima, dte, dist)
 
         elif tipus == "CALL":
             # --- CALL sintètic via put–call parity ---
-            prima = calcular_call_des_de_put(
-                put_price=put["lastPrice"],
-                S=preu_subjacent,
-                K=strike,
-                T=T,
-                r=r
-            )
+            prima = actiu.get("prima", None)
+            if prima is None:        
+                prima = calcular_call_des_de_put(
+                    put_price=put["lastPrice"],
+                    S=preu_subjacent,
+                    K=strike,
+                    T=T,
+                    r=r
+                )
             # distància CC: com de per sobre del strike estàs
             dist = preu_subjacent - strike
             marge = None  # per CC no hi ha marge cash-secured
@@ -839,7 +871,9 @@ def processar_actiu(actiu):
 
         else:
             # de moment, calendar i altres → tractem com PUT
-            prima = put["lastPrice"]
+            prima = actiu.get("prima", None)
+            if prima is None:             
+                prima = put["lastPrice"]
             dist = distancia_assignacio(preu_subjacent, strike)
             marge = marge_cash_secured(strike)
             semafor = semafor_put(preu_subjacent, prima, dte, dist)
@@ -872,14 +906,39 @@ def processar_actiu(actiu):
         # Suposem que iteres sobre les teves posicions actuals extretes d'un JSON:
         # subjacent = "XLK", strike = 207.5, expiry = "2026-10-09", tipus = "CALL"
         
-        metriques = obtenir_metriques_pota_curta(subjacent, strike, expiry, tipus)
+        metriques = obtenir_metriques_pota_curta(subjacent, strike, expiry, tipus, prima)
         
         if metriques:
-            delta_actual = metriques["delta"]
-            preu_sub = metriques["preu_subjacent"]
+            profit_pct = metriques["pct_profit_assolit"]
+            roi_anual_restant = metriques["roi_anual_restant"]
             dte = metriques["dte"]
-            prima = metriques["prima_mid"]
+            extrinsec = metriques["valor_extrinsec"]
         
+            # 🔄 REGLETA 1: L'ESTÀNDARD DEL 60% (Take Profit Automàtic)
+            # Si ja has capturat el 60% del valor, el risc de squeeze supera el benefici restant.
+            if profit_pct >= 60.0:
+                enviar_missatge(
+                    f"🎯 SENTINELLA: LLINDAR DE GUANY ASSOLIT (60%)\n"
+                    f"{subjacent} {strike} {tipus} (DTE: {dte})\n"
+                    f"Has capturat el {profit_pct}% de la prima. Tanca i protegeix el capital de la Double Diagonal."
+                )
+        
+            # ⏳ REGLETA 2: L'EFICIÈNCIA DEL CAPITAL (ROI Anualitzat restant baix)
+            # Si el ROI anualitzat del que queda per cobrar cau per sota del 10%, 
+            # els teus diners estan bloquejats treballant a canvi de moltes poques Dynamic Primes.
+            elif profit_pct > 40.0 and roi_anual_restant < 10.0 and dte < 10:
+                enviar_missatge(
+                    f"📉 SENTINELLA: EFICIÈNCIA DE CAPITAL BAIXA\n"
+                    f"{subjacent} {strike} {tipus} (DTE: {dte})\n"
+                    f"El ROI anualitzat restant és només del {roi_anual_restant}%.\n"
+                    f"Queda molt poc extrínsec ({extrinsec} USD). Rola la weekly per activar un nou cicle."
+                )
+        
+            # ⚡ REGLETA 3: ALERTA DE SUBMISSÍÓ RÀPIDA (El millor escenari)
+            # Si en menys de 48 hores d'obrir l'opció ja vas guanyant un 30-40% per un col·lapse de la IV.
+            # (Això ho pots calcular si guardes la data d'obertura, si no, opcional).
+
+            
             if tipus == "PUT":
                 # Alerta preventiva: la Delta de la Put es torna perillosa quan cau de -0.32 cap avall (ex: -0.35)
                 if delta_actual <= -0.32:
