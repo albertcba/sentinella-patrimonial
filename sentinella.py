@@ -909,11 +909,14 @@ def processar_actiu(actiu):
         metriques = obtenir_metriques_pota_curta(subjacent, strike, expiry, tipus, prima)
         
         if metriques:
+            delta_actual = metriques["delta"]
+            preu_sub = metriques["preu_subjacent"]            
             roi_anual_restant = metriques.get("roi_anual_restant", 0.0)
             profit_pct = metriques.get("pct_profit_assolit", 0.0)
             dte = metriques["dte"]
             extrinsec = metriques["valor_extrinsec"]
             prima_mid = metriques.get("prima_mid", 0.0)
+            
             
         
             # 🔄 REGLETA 1: L'ESTÀNDARD DEL 60% (Take Profit Automàtic)
