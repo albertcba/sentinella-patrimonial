@@ -702,9 +702,9 @@ def calcular_delta(tipus, preu_subjacent, strike, dte, iv_pure, r=0.045):
     T = dte / 365.0
     d1 = (math.log(preu_subjacent / strike) + (r + (iv_pure ** 2) / 2) * T) / (iv_pure * math.sqrt(T))
     
-    if tipus.upper() == "CALL":
+    if tipus == "CALL":
         return round(normal_cdf_approx(d1), 2)
-    elif tipus.upper() == "PUT":
+    elif tipus == "PUT":
         return round(normal_cdf_approx(d1) - 1.0, 2)
     return 0.0
 
@@ -732,9 +732,9 @@ def obtenir_metriques_pota_curta(underlying, strike, expiry, tipus):
         return None
 
     # 3. Filtrar segons si és PUT o CALL
-    if tipus.upper() == "CALL":
+    if tipus == "CALL":
         df_options = chain.calls
-    elif tipus.upper() == "PUT":
+    elif tipus == "PUT":
         df_options = chain.puts
     else:
         return None
