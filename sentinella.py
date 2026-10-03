@@ -702,9 +702,9 @@ def calcular_delta(tipus, preu_subjacent, strike, dte, iv_pure, r=0.045):
     T = dte / 365.0
     d1 = (math.log(preu_subjacent / strike) + (r + (iv_pure ** 2) / 2) * T) / (iv_pure * math.sqrt(T))
     
-    if tipus == "CALL" or tipus == "LONGCALLSTRANGLE":
+    if tipus == "CALL" or tipus == "LONGCALLSTRANGLE" or tipus == "LEAPCALLCALENDAR":
         return round(normal_cdf_approx(d1), 2)
-    elif tipus == "PUT" or tipus == "LONGPUTSTRANGLE":
+    elif tipus == "PUT" or tipus == "LONGPUTSTRANGLE" or tipus == "LEAPPUTCALENDAR":
         return round(normal_cdf_approx(d1) - 1.0, 2)
     return 0.0
 
@@ -732,9 +732,9 @@ def obtenir_metriques_pota_curta(underlying, strike, expiry, tipus):
         return None
 
     # 3. Filtrar segons si és PUT o CALL
-    if tipus == "CALL" or tipus == "LONGCALLSTRANGLE":
+    if tipus == "CALL" or tipus == "LONGCALLSTRANGLE" or tipus == "LEAPCALLCALENDAR":
         df_options = chain.calls
-    elif tipus == "PUT" or tipus == "LONGPUTSTRANGLE":
+    elif tipus == "PUT" or tipus == "LONGPUTSTRANGLE" or tipus == "LEAPPUTCALENDAR":
         df_options = chain.puts
     else:
         return None
@@ -903,7 +903,7 @@ def processar_actiu(actiu):
                         f"DTE curta: {dte}\n"
                         f"Acció: Recomprar Call, rodar Put amunt i moure Call a setmana vinent."
                     )
-            elif tipus == "LONGPUTSTRANGLE" or tipus == "LONGCALLSTRANGLE" or tipus == "LONGPUTCALENDAR" or tipus == "LONGCALLCALENDAR":
+            elif tipus == "LONGPUTSTRANGLE" or tipus == "LONGCALLSTRANGLE" or tipus == "LEAPPUTCALENDAR" or tipus == "LEAPCALLCALENDAR":
             # 🛡️ GESTIÓ UNIFICADA PER A POTES LLARGUES (DTE > 30)
             # Aplica tant a Calendars Individuals com a les potes del Long Strangle
             #if dte > 30:
