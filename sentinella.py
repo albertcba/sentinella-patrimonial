@@ -6,8 +6,6 @@ import os
 import json
 import math
 import yfinance as yf
-import numpy as np
-from scipy.stats import norm
 
 DADES_ACTIUS = []
 
@@ -681,23 +679,89 @@ def guardar_historic_calendar(registre):
         print(f"Error guardant històric calendar: {e}")
 
 
+def normal_cdf_approx(x):
+    """Aproximació numèrica de la Distribució Normal Estàndard Acumulada (CDF)"""
+    p = 0.2316419
+    b1 = 0.319381530
+    b2 = -0.356563782
+    b3 = 1.781477937
+    b4 = -1.821255978
+    b5 = 1.330274429
+    
+    t = 1.0 / (1.0 + p * abs(x))
+    sigma = 1.0 - (1.0 / math.sqrt(2.0 * math.pi)) * math.exp(-0.5 * x * x) * (
+        b1 * t + b2 * (t**2) + b3 * (t**3) + b4 * (t**4) + b5 * (t**5)
+    )
+    return sigma if x >= 0 else 1.0 - sigma
+
 def calcular_delta(tipus, preu_subjacent, strike, dte, iv_pure, r=0.045):
-    """
-    Calcula la Delta teòrica d'una opció europea/americana (aproximada).
-    r = taxa lliure de risc (ex: 4.5% o 0.045)
-    iv_pure = IV en format decimal (ex: 0.22 per a 22%)
-    """
-    if dte <= 0 or iv_pure <= 0:
+    """Calcula la Delta teòrica sense llibreries externes"""
+    if dte <= 0 or iv_pure <= 0 or preu_subjacent <= 0 or strike <= 0:
         return 0.0
     
     T = dte / 365.0
-    d1 = (np.log(preu_subjacent / strike) + (r + (iv_pure ** 2) / 2) * T) / (iv_pure * np.sqrt(T))
+    d1 = (math.log(preu_subjacent / strike) + (r + (iv_pure ** 2) / 2) * T) / (iv_pure * math.sqrt(T))
     
     if tipus.upper() == "CALL":
-        return float(norm.cdf(d1))
+        return round(normal_cdf_approx(d1), 2)
     elif tipus.upper() == "PUT":
-        return float(norm.cdf(d1) - 1)  # Dona una delta negativa (-0.30)
+        return round(normal_cdf_approx(d1) - 1.0, 2)
     return 0.0
+
+def obtenir_metriques_pota_curta(underlying, strike, expiry, tipus):
+    """
+    Obté el preu del subjacent, calcula el DTE, extreu la IV pura de la cadena 
+    d'opcions i calcula la Delta teòrica per a una pota curta.
+    """
+    t = yf.Ticker(underlying)
+    
+    # 1. Obtenir el preu actual del subjacent (fem servir la info ràpida del ticker)
+    try:
+        preu_subjacent = t.fast_info['lastPrice']
+    except Exception:
+        # Fallback si fast_info no està disponible
+        hist = t.history(period="1d")
+        if hist.empty:
+            return None
+        preu_subjacent = hist['Close'].iloc[-1]
+
+    # 2. Descarregar la cadena d'opcions de l'expiració setmanal
+    try:
+        chain = t.option_chain(expiry)
+    except Exception:
+        return None
+
+    # 3. Filtrar segons si és PUT o CALL
+    if tipus.upper() == "CALL":
+        df_options = chain.calls
+    elif tipus.upper() == "PUT":
+        df_options = chain.puts
+    else:
+        return None
+
+    row_opcio = df_options[df_options["strike"] == strike]
+    if len(row_opcio) == 0:
+        return None
+
+    row = row_opcio.iloc[0]
+    iv_pure = row["impliedVolatility"]
+    prima_mid = (row["bid"] + row["ask"]) / 2 if (row["bid"] > 0 and row["ask"] > 0) else row["lastPrice"]
+
+    # 4. Calcular DTE
+    avui = datetime.utcnow().date()
+    data_venciment = datetime.strptime(expiry, "%Y-%m-%d").date()
+    dte = (data_venciment - avui).days
+
+    # 5. Calcular Delta
+    delta = calcular_delta(tipus, preu_subjacent, strike, dte, iv_pure)
+
+    return {
+        "preu_subjacent": round(preu_subjacent, 2),
+        "dte": dte,
+        "iv_pure": iv_pure,
+        "prima_mid": round(prima_mid, 2),
+        "delta": delta
+    }
 
 
 def processar_actiu(actiu):
@@ -803,32 +867,43 @@ def processar_actiu(actiu):
                     f"Semàfor: {semafor}"
                 )
 
-        # Suposem que extreus 'iv_pure' (dec_row["impliedVolatility"]) i 'dte'
-        delta = calcular_delta(tipus, preu_subjacent, strike, dte, iv_pure)
-        
-        if tipus == "PUT":
-            # El perill a les PUTs és quan la delta es torna més negativa (ex: -0.32, -0.35)
-            if delta <= -0.32:  
-                enviar_missatge(
-                    f"🚨 ALERTA DELTA RISC PUT {subjacent} {strike}\n"
-                    f"Delta actual: {delta:.2f}\n"
-                    f"Preu subjacent: {preu_subjacent:.2f}\n"
-                    f"IV Curta: {iv_pure*100:.1f}%\n"
-                    f"DTE: {dte}\n"
-                    f"Acció: Activar Protocol Baixista (Roll-over)"
-                )
-        elif tipus == "CALL":
-            # El perill a les CALLs és quan la delta puja (ex: 0.32, 0.35)
-            if delta >= 0.32:  
-                enviar_missatge(
-                    f"🚨 ALERTA DELTA RISC CALL {subjacent} {strike}\n"
-                    f"Delta actual: {delta:.2f}\n"
-                    f"Preu subjacent: {preu_subjacent:.2f}\n"
-                    f"IV Curta: {iv_pure*100:.1f}%\n"
-                    f"DTE: {dte}\n"
-                    f"Acció: Activar Protocol Alcista (Roll-over)"
-                )
 
+        # EXEMPLE D'INTEGRACIÓ EN EL TEU BUCLE PRINCIPAL DE LES POTES CURTES
+        # Suposem que iteres sobre les teves posicions actuals extretes d'un JSON:
+        # subjacent = "XLK", strike = 207.5, expiry = "2026-10-09", tipus = "CALL"
+        
+        metriques = obtenir_metriques_pota_curta(subjacent, strike, expiry, tipus)
+        
+        if metriques:
+            delta_actual = metriques["delta"]
+            preu_sub = metriques["preu_subjacent"]
+            dte = metriques["dte"]
+            prima = metriques["prima_mid"]
+        
+            if tipus == "PUT":
+                # Alerta preventiva: la Delta de la Put es torna perillosa quan cau de -0.32 cap avall (ex: -0.35)
+                if delta_actual <= -0.32:
+                    enviar_missatge(
+                        f"🚨 PROTOCOL RISC PUT {subjacent} {strike}\n"
+                        f"Delta actual: {delta_actual:.2f} (🚨 Perill Delta <= -0.32)\n"
+                        f"Prima Mid: {prima:.2f} USD\n"
+                        f"Preu subjacent: {preu_sub:.2f}\n"
+                        f"DTE curta: {dte}\n"
+                        f"Acció: Recomprar Put, rodar Call avall i moure Put a setmana vinent."
+                    )
+                    
+            elif tipus == "CALL":
+                # Alerta preventiva: la Delta de la Call es torna perillosa quan puja de 0.32 cap amunt (ex: 0.35)
+                if delta_actual >= 0.32:
+                    enviar_missatge(
+                        f"🚨 PROTOCOL RISC CALL {subjacent} {strike}\n"
+                        f"Delta actual: {delta_actual:.2f} (🚨 Perill Delta >= 0.32)\n"
+                        f"Prima Mid: {prima:.2f} USD\n"
+                        f"Preu subjacent: {preu_sub:.2f}\n"
+                        f"DTE curta: {dte}\n"
+                        f"Acció: Recomprar Call, rodar Put amunt i moure Call a setmana vinent."
+                    )
+        
 
         if tipus == "CALENDAR":   
             metrics = obtenir_calendar_metrics(
