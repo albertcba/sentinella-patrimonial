@@ -938,7 +938,16 @@ def processar_actiu(actiu):
             # Si en menys de 48 hores d'obrir l'opció ja vas guanyant un 30-40% per un col·lapse de la IV.
             # (Això ho pots calcular si guardes la data d'obertura, si no, opcional).
 
-            
+            # Regla simple i unificada de "Theta Esgotada i Segura"
+            if prima_mid <= 0.05 and dte <= 5:
+                enviar_missatge(
+                    f"⏳ SENTINELLA: PRÈSTEC A ZERO ({subjacent} {strike} {tipus})\n"
+                    f"La prima actual és de {prima_mid:.2f} USD.\n"
+                    f"Acció: Pots tancar-la JA a IBKR sense comissions per evitar el risc de divendres, "
+                    f"o deixar-la expirar si el cap de setmana està controlat."
+                )
+
+
             if tipus == "PUT":
                 # Alerta preventiva: la Delta de la Put es torna perillosa quan cau de -0.32 cap avall (ex: -0.35)
                 if delta_actual <= -0.32:
