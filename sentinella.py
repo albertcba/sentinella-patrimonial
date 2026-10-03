@@ -764,7 +764,7 @@ def obtenir_metriques_pota_curta(underlying, strike, expiry, tipus, prima_entrad
     
     # Estimació de col·lateral conservador (Cash-Secured: Strike * 100)
     # Nota: Per a la Call usem el mateix com a base equivalent de capital de control
-    col·lateral_estimat = strike * 100 
+    collateral_estimat = strike * 100 
 
     if prima_entrada and prima_entrada > 0:
         # % de la prima inicial que ja tenim a la butxaca
@@ -772,7 +772,7 @@ def obtenir_metriques_pota_curta(underlying, strike, expiry, tipus, prima_entrad
         
         # Rendiment que ens queda per guanyar si aguantem la posició fins al final
         premi_restant_total = prima_mid * 100
-        roi_restant_absolut = (premi_restant_total / col·lateral_estimat) * 100
+        roi_restant_absolut = (premi_restant_total / collateral_estimat) * 100
         
         # Anualitzem el ROI restant per veure si val la pena el pas del temps (Theta)
         if dte > 0:
