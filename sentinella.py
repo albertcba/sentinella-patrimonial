@@ -913,6 +913,8 @@ def processar_actiu(actiu):
             profit_pct = metriques.get("pct_profit_assolit", 0.0)
             dte = metriques["dte"]
             extrinsec = metriques["valor_extrinsec"]
+            prima_mid = metriques.get("prima_mid", 0.0)
+            
         
             # 🔄 REGLETA 1: L'ESTÀNDARD DEL 60% (Take Profit Automàtic)
             # Si ja has capturat el 60% del valor, el risc de squeeze supera el benefici restant.
