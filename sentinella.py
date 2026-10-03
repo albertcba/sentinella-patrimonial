@@ -6,6 +6,8 @@ import os
 import json
 import math
 import yfinance as yf
+import numpy as np
+from scipy.stats import norm
 
 DADES_ACTIUS = []
 
@@ -679,6 +681,25 @@ def guardar_historic_calendar(registre):
         print(f"Error guardant històric calendar: {e}")
 
 
+def calcular_delta(tipus, preu_subjacent, strike, dte, iv_pure, r=0.045):
+    """
+    Calcula la Delta teòrica d'una opció europea/americana (aproximada).
+    r = taxa lliure de risc (ex: 4.5% o 0.045)
+    iv_pure = IV en format decimal (ex: 0.22 per a 22%)
+    """
+    if dte <= 0 or iv_pure <= 0:
+        return 0.0
+    
+    T = dte / 365.0
+    d1 = (np.log(preu_subjacent / strike) + (r + (iv_pure ** 2) / 2) * T) / (iv_pure * np.sqrt(T))
+    
+    if tipus.upper() == "CALL":
+        return float(norm.cdf(d1))
+    elif tipus.upper() == "PUT":
+        return float(norm.cdf(d1) - 1)  # Dona una delta negativa (-0.30)
+    return 0.0
+
+
 def processar_actiu(actiu):
     global ULTIMA_ALERTA
 
@@ -782,6 +803,31 @@ def processar_actiu(actiu):
                     f"Semàfor: {semafor}"
                 )
 
+        # Suposem que extreus 'iv_pure' (dec_row["impliedVolatility"]) i 'dte'
+        delta = calcular_delta(tipus, preu_subjacent, strike, dte, iv_pure)
+        
+        if tipus == "PUT":
+            # El perill a les PUTs és quan la delta es torna més negativa (ex: -0.32, -0.35)
+            if delta <= -0.32:  
+                enviar_missatge(
+                    f"🚨 ALERTA DELTA RISC PUT {subjacent} {strike}\n"
+                    f"Delta actual: {delta:.2f}\n"
+                    f"Preu subjacent: {preu_subjacent:.2f}\n"
+                    f"IV Curta: {iv_pure*100:.1f}%\n"
+                    f"DTE: {dte}\n"
+                    f"Acció: Activar Protocol Baixista (Roll-over)"
+                )
+        elif tipus == "CALL":
+            # El perill a les CALLs és quan la delta puja (ex: 0.32, 0.35)
+            if delta >= 0.32:  
+                enviar_missatge(
+                    f"🚨 ALERTA DELTA RISC CALL {subjacent} {strike}\n"
+                    f"Delta actual: {delta:.2f}\n"
+                    f"Preu subjacent: {preu_subjacent:.2f}\n"
+                    f"IV Curta: {iv_pure*100:.1f}%\n"
+                    f"DTE: {dte}\n"
+                    f"Acció: Activar Protocol Alcista (Roll-over)"
+                )
 
 
         if tipus == "CALENDAR":   
