@@ -51,8 +51,8 @@
   { "ticker": "MSFT", "nom": "Microsoft Corporation (MSFT)", "capa": "Single Stock Sentinella" },
   { "ticker": "QCOM", "nom": "QUALCOMM Incorporated (QCOM)", "capa": "Single Stock Sentinella" },
   { "ticker": "GRID-SYNTHETIC170", "nom": "GRID Synthetic 170", "capa": "Options", "underlying": "GRID", "strike": 170, "expiry": "2026-12-18", "type": "PUT" },
-  { "ticker": "KMI-COVEREDCALL33", "nom": "KMI Covered Call 33", "capa": "Options", "underlying": "KMI", "strike": 48, "expiry": "2026-10-16", "type": "CALL" },
-  { "ticker": "WTRG-CSP40", "nom": "COPX Bull Put Spread 40", "capa": "Options", "underlying": "WTRG", "strike": 40, "expiry": "2026-12-18", "type": "PUT" },
+  { "ticker": "KMI-COVEREDCALL33", "nom": "KMI Covered Call 33", "capa": "Options", "underlying": "KMI", "strike": 48, "expiry": "2026-10-16", "type": "CALL", "prima": 0.51 },
+  { "ticker": "WTRG-CSP40", "nom": "COPX Bull Put Spread 40", "capa": "Options", "underlying": "WTRG", "strike": 40, "expiry": "2026-12-18", "type": "PUT", "prima": 1.44 },
   { "ticker": "AIQ-RISKREVERSAL58", "nom": "AIQ Risk Reversal 58", "capa": "Options", "underlying": "AIQ", "strike": 58, "expiry": "2026-10-16" },
   { "ticker": "BUG-CSP38", "nom": "BUG Bull Put Spread 38", "capa": "Options", "underlying": "BUG", "strike": 38, "expiry": "2026-10-16", "type": "PUT" },
   { "ticker": "BAC-BWB60/62.5/67.5", "nom": "BAC BWB 60/62.5/67.5", "capa": "Options", "underlying": "BAC", "strike": 64, "expiry": "2026-10-16" },
@@ -64,7 +64,7 @@
   { "ticker": "VRT-CALENDAR260", "nom": "VRT Calendar 260", "capa": "Options", "underlying": "VRT", "strike": 260, "expiry_short": "2026-12-18", "expiry_long": "2027-01-15", "type": "CALENDAR", "cost": 4.13 },
   { "ticker": "XLK-STRANGLE190/215", "nom": "XLK Strangle 190/215", "capa": "Options", "underlying": "XLK", "strike": 190, "expiry": "2027-03-19", "type": "LONGPUTSTRANGLE" },
   { "ticker": "XLK-STRANGLE190/215", "nom": "XLK Strangle 190/215", "capa": "Options", "underlying": "XLK", "strike": 215, "expiry": "2027-03-19", "type": "LONGCALLSTRANGLE" },  
-  { "ticker": "XLK-CSP192.5", "nom": "XLK Covered Secured Put 192.5", "capa": "Options", "underlying": "XLK", "strike": 192.5, "expiry": "2026-10-09", "type": "PUT" },  
-  { "ticker": "XLK-COVEREDCALL207.5", "nom": "XLK Covered Call 207.5", "capa": "Options", "underlying": "XLK", "strike": 207.5, "expiry": "2026-10-09", "type": "CALL" },
+  { "ticker": "XLK-CSP192.5", "nom": "XLK Covered Secured Put 192.5", "capa": "Options", "underlying": "XLK", "strike": 192.5, "expiry": "2026-10-09", "type": "PUT", "prima": 0.45 },  
+  { "ticker": "XLK-COVEREDCALL207.5", "nom": "XLK Covered Call 207.5", "capa": "Options", "underlying": "XLK", "strike": 207.5, "expiry": "2026-10-09", "type": "CALL", "prima": 0.32 },
   { "ticker": "COPX-CSP80", "nom": "COPX Bull Put Spread 80", "capa": "Options", "underlying": "COPX", "strike": 80, "expiry": "2026-11-20", "type": "PUT" }
 ]
