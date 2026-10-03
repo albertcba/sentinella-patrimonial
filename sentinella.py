@@ -904,7 +904,7 @@ def processar_actiu(actiu):
                         f"Acció: Recomprar Call, rodar Put amunt i moure Call a setmana vinent."
                     )
 
-        if tipus == "CALENDAR" or tipus == "LONGSTRANGLE":
+        if tipus == "LONGSTRANGLE":
             # 🛡️ GESTIÓ UNIFICADA PER A POTES LLARGUES (DTE > 30)
             # Aplica tant a Calendars Individuals com a les potes del Long Strangle
             if dte > 30:
