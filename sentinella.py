@@ -846,26 +846,26 @@ def processar_actiu(actiu):
      
 
         # ALERTES (pots diferenciar PUT vs CALL si vols)
-        if tipus == "PUT":
-            if preu_subjacent < strike:
-                enviar_missatge(
-                    f"⚠️ ALERTA PUT {subjacent} {strike}\n"
-                    f"Prima: {prima:.2f}\n"
-                    f"Preu subjacent: {preu_subjacent:.2f}\n"
-                    f"DTE: {dte}\n"
-                    f"Distància assignació: {dist}\n"
-                    f"Semàfor: {semafor}"
-                )
-        elif tipus == "CALL":
-            if preu_subjacent > strike:
-                enviar_missatge(
-                    f"⚠️ ALERTA CALL {subjacent} {strike}\n"
-                    f"Prima: {prima:.2f}\n"
-                    f"Preu subjacent: {preu_subjacent:.2f}\n"
-                    f"DTE: {dte}\n"
-                    f"Distància sobre strike: {dist}\n"
-                    f"Semàfor: {semafor}"
-                )
+        #if tipus == "PUT":
+        #   if preu_subjacent < strike:
+        #        enviar_missatge(
+        #            f"⚠️ ALERTA PUT {subjacent} {strike}\n"
+        #            f"Prima: {prima:.2f}\n"
+        #            f"Preu subjacent: {preu_subjacent:.2f}\n"
+        #            f"DTE: {dte}\n"
+        #            f"Distància assignació: {dist:.2f}\n"
+        #            f"Semàfor: {semafor}"
+        #        )
+        #elif tipus == "CALL":
+        #    if preu_subjacent > strike:
+        #        enviar_missatge(
+        #            f"⚠️ ALERTA CALL {subjacent} {strike}\n"
+        #            f"Prima: {prima:.2f}\n"
+        #            f"Preu subjacent: {preu_subjacent:.2f}\n"
+        #            f"DTE: {dte}\n"
+        #            f"Distància sobre strike: {dist:.2f}\n"
+        #            f"Semàfor: {semafor}"
+        #        )
 
 
         # EXEMPLE D'INTEGRACIÓ EN EL TEU BUCLE PRINCIPAL DE LES POTES CURTES
@@ -903,7 +903,42 @@ def processar_actiu(actiu):
                         f"DTE curta: {dte}\n"
                         f"Acció: Recomprar Call, rodar Put amunt i moure Call a setmana vinent."
                     )
-        
+
+        if tipus == "CALENDAR" or tipus == "LONGSTRANGLE":
+            # 🛡️ GESTIÓ UNIFICADA PER A POTES LLARGUES (DTE > 30)
+            # Aplica tant a Calendars Individuals com a les potes del Long Strangle
+            if dte > 30:
+                abs_delta = abs(delta)
+                
+                # 1. capturem moviments direccionals forts (Zona de Recollida de Benefici)
+                if abs_delta >= 0.55:
+                    enviar_missatge(
+                        f"💰 COBRAMENT BENEFICIS LONG ({actiu['capa']})\n"
+                        f"Subjacent: {actiu['underlying']} | Strike: {actiu['strike']} ({actiu['type']})\n"
+                        f"Delta actual: {delta:.2f} (🚀 Llindar d'èxit >= 0.55)\n"
+                        f"Distància preu: {dist:.1f}%\n"
+                        f"Preu subjacent: {preu_sub:.2f}\n"
+                        f"Acció: El mercat s'ha mogut a favor de la teva protecció. Avalua tancar/rodar per realitzar guanys."
+                    )
+                    
+                # 2. Capturem devaluacions extremes (Cama Morta per desplaçament de mercat)
+                elif abs_delta <= 0.08:
+                    enviar_missatge(
+                        f"♻️ ALERTA DEVALUACIÓ LONG ({actiu['capa']})\n"
+                        f"Subjacent: {actiu['underlying']} | Strike: {actiu['strike']} ({actiu['type']})\n"
+                        f"Delta actual: {delta:.2f} (📉 Zona d'abandonament <= 0.08)\n"
+                        f"Distància preu: {dist:.1f}%\n"
+                        f"Acció: Aquesta pota ha perdut gairebé tota la seva sensibilitat. Considera reciclar-la o tancar el valor residual."
+                    )
+                    
+                # 3. Control de l'erosió temporal (Theta Decay extrem a partir de ~50 dies)
+                if dte <= 50:
+                    enviar_missatge(
+                        f"⏳ ALERTA TEMPS ESTRUCTURA LLARGA\n"
+                        f"L'opció llarga de {actiu['underlying']} ({actiu['expiry']}) ha entrat en zona d'erosió temporal.\n"
+                        f"DTE restant: {dte}\n"
+                        f"Acció: Planifica el tancament de l'estructura o el roll-over temporal del bloc complet cap al següent cicle."
+                    )       
 
         if tipus == "CALENDAR":   
             metrics = obtenir_calendar_metrics(
