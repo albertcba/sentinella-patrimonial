@@ -903,19 +903,18 @@ def processar_actiu(actiu):
                         f"DTE curta: {dte}\n"
                         f"Acció: Recomprar Call, rodar Put amunt i moure Call a setmana vinent."
                     )
-
-        if tipus == "LONGSTRANGLE":
+            elif tipus == "LONGPUTSTRANGLE" or tipus == "LONGCALLSTRANGLE":
             # 🛡️ GESTIÓ UNIFICADA PER A POTES LLARGUES (DTE > 30)
             # Aplica tant a Calendars Individuals com a les potes del Long Strangle
-            if dte > 30:
-                abs_delta = abs(delta)
+            #if dte > 30:
+                abs_delta = abs(delta_actual)
                 
                 # 1. capturem moviments direccionals forts (Zona de Recollida de Benefici)
                 if abs_delta >= 0.55:
                     enviar_missatge(
                         f"💰 COBRAMENT BENEFICIS LONG ({actiu['capa']})\n"
                         f"Subjacent: {actiu['underlying']} | Strike: {actiu['strike']} ({actiu['type']})\n"
-                        f"Delta actual: {delta:.2f} (🚀 Llindar d'èxit >= 0.55)\n"
+                        f"Delta actual: {delta_actual:.2f} (🚀 Llindar d'èxit >= 0.55)\n"
                         f"Distància preu: {dist:.1f}%\n"
                         f"Preu subjacent: {preu_sub:.2f}\n"
                         f"Acció: El mercat s'ha mogut a favor de la teva protecció. Avalua tancar/rodar per realitzar guanys."
@@ -926,7 +925,7 @@ def processar_actiu(actiu):
                     enviar_missatge(
                         f"♻️ ALERTA DEVALUACIÓ LONG ({actiu['capa']})\n"
                         f"Subjacent: {actiu['underlying']} | Strike: {actiu['strike']} ({actiu['type']})\n"
-                        f"Delta actual: {delta:.2f} (📉 Zona d'abandonament <= 0.08)\n"
+                        f"Delta actual: {delta_actual:.2f} (📉 Zona d'abandonament <= 0.08)\n"
                         f"Distància preu: {dist:.1f}%\n"
                         f"Acció: Aquesta pota ha perdut gairebé tota la seva sensibilitat. Considera reciclar-la o tancar el valor residual."
                     )
@@ -940,6 +939,7 @@ def processar_actiu(actiu):
                         f"Acció: Planifica el tancament de l'estructura o el roll-over temporal del bloc complet cap al següent cicle."
                     )       
 
+        
         if tipus == "CALENDAR":   
             metrics = obtenir_calendar_metrics(
                 underlying=subjacent,
