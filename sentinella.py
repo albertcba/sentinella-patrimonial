@@ -869,9 +869,9 @@ def processar_actiu(actiu):
                 prima = put["lastPrice"]
             dist = distancia_assignacio_PUT(preu_subjacent, strike)  # preu - strike
             # 3. Filtrar segons si és PUT o CALL
-            if tipus in ["CALL", "LEAPCALLCALENDAR"]:
+            if tipus in ["LEAPCALLCALENDAR", "LONGCALLSTRANGLE"]:
                 dist = strike - preu_subjacent
-            elif tipus in ["PUT", "LEAPPUTCALENDAR"]:
+            elif tipus in ["LEAPPUTCALENDAR", "LONGPUTSTRANGLE"]:
                 dist = preu_subjacent - strike
             else:
                 dist = preu_subjacent - strike
