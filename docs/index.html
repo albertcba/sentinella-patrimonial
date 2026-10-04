@@ -393,7 +393,6 @@
                 <th>Prima</th>
                 <th>DTE</th>
                 <th>Distància</th>
-                <th>Semàfor</th>
               </tr>
             </thead>
             <tbody id="taula-csp"></tbody>
@@ -854,10 +853,11 @@
             <td class="mono">${Number(o.preu_subjacent).toFixed(2)}</td>
             <td class="mono">${o.strike}</td>
             <td class="mono">${o.prima.toFixed(2)}</td>
-            <td class="mono">${o.dte}</td>
-            <td class="mono">${o.distancia.toFixed(2)}</td>
-            <td class="mono">${semaforCSP(o.semafor)}</td>
-          `;
+            <td class="mono">${o.semafor.dte} ${o.dte}</td>
+            <td class="mono">${o.semafor.dist} ${o.distancia.toFixed(2)}</td>
+          `;            
+            //<td class="mono">${semaforCSP(o.semafor)}</td>
+
         
           tbCSP.appendChild(tr);
         });
