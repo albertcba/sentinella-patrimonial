@@ -1103,7 +1103,14 @@ def processar_actiu(actiu):
                 
             }
 
-
+            # 3. Filtrar segons si és PUT o CALL
+            if tipus in ["CALL", "LEAPCALLCALENDAR"]:
+                dist = strike - preu_subjacent
+            elif tipus in ["PUT", "LEAPPUTCALENDAR"]:
+                dist = preu_subjacent - strike
+            else:
+                dist = preu_subjacent - strike
+            
             if mercat_obert_USA():
                 guardar_historic_calendar(
                 registre_historic
@@ -1124,7 +1131,7 @@ def processar_actiu(actiu):
                     "preu_subjacent": preu_subjacent,
                     "prima": prima,
                     "dte": dte,
-                    "distancia": preu_subjacent - strike,
+                    "distancia": dist,
                     "marge": marge,
                     "vol_hist": vol_hist,
                     "oi": None,
