@@ -268,8 +268,8 @@ def calcular_dte(expiry):
     venc = datetime.strptime(expiry, "%Y-%m-%d").date()
     return (venc - avui).days
 
-def distancia_assignacio(preu, strike):
-    return strike - preu
+def distancia_assignacio_PUT(preu, strike):
+    return preu - strike
 
 def marge_cash_secured(strike):
     return strike * 100
@@ -339,9 +339,9 @@ def semafor_put(preu_subjacent, prima, dte, dist):
         s_prima = "🔴"
 
     # DTE
-    if dte >= 3:
+    if dte >= 7:
         s_dte = "🟢"
-    elif 1 <= dte < 3:
+    elif 3 <= dte < 7:
         s_dte = "🟡"
     else:
         s_dte = "🔴"
@@ -363,21 +363,14 @@ def semafor_put(preu_subjacent, prima, dte, dist):
 
 
 def semafor_call(preu_subjacent, prima, dte, dist):
-    # Preu subjacient vs strike
-    if preu_subjacent < dist + preu_subjacent:  # no ens cal, usem directament dist
-        pass
 
-    # Preu (relació amb strike)
-    if preu_subjacent < dist + preu_subjacent:
-        pass
-
-    # Distància: per CC, dist = preu_subjacent - strike
-    if dist < 0:
-        s_dist = "🟢"   # lluny d’assignació
-    elif 0 <= dist <= 2:
-        s_dist = "🟡"   # zona de vigilància
+    # Distància assignació
+    if dist > 3:
+        s_dist = "🟢"
+    elif 1 <= dist <= 3:
+        s_dist = "🟡"
     else:
-        s_dist = "🔴"   # molt a prop / per sobre
+        s_dist = "🔴"
 
     # Prima (exemple senzill)
     if prima >= 0.5:
@@ -849,7 +842,7 @@ def processar_actiu(actiu):
             prima = actiu.get("prima", None)
             if prima is None:
                 prima = put["lastPrice"]
-            dist = distancia_assignacio(preu_subjacent, strike)  # strike - preu
+            dist = distancia_assignacio_PUT(preu_subjacent, strike)  # preu - strike
             marge = marge_cash_secured(strike)
             semafor = semafor_put(preu_subjacent, prima, dte, dist)
 
@@ -865,7 +858,7 @@ def processar_actiu(actiu):
                     r=r
                 )
             # distància CC: com de per sobre del strike estàs
-            dist = preu_subjacent - strike
+            dist =  strike - preu_subjacent
             marge = None  # per CC no hi ha marge cash-secured
             semafor = semafor_call(preu_subjacent, prima, dte, dist)
 
@@ -874,7 +867,7 @@ def processar_actiu(actiu):
             prima = actiu.get("prima", None)
             if prima is None:             
                 prima = put["lastPrice"]
-            dist = distancia_assignacio(preu_subjacent, strike)
+            dist = distancia_assignacio_PUT(preu_subjacent, strike)  # preu - strike
             marge = marge_cash_secured(strike)
             semafor = semafor_put(preu_subjacent, prima, dte, dist)
      
