@@ -868,6 +868,13 @@ def processar_actiu(actiu):
             if prima is None:             
                 prima = put["lastPrice"]
             dist = distancia_assignacio_PUT(preu_subjacent, strike)  # preu - strike
+            # 3. Filtrar segons si és PUT o CALL
+            if tipus in ["CALL", "LEAPCALLCALENDAR"]:
+                dist = strike - preu_subjacent
+            elif tipus in ["PUT", "LEAPPUTCALENDAR"]:
+                dist = preu_subjacent - strike
+            else:
+                dist = preu_subjacent - strike
             marge = marge_cash_secured(strike)
             semafor = semafor_put(preu_subjacent, prima, dte, dist)
      
@@ -1102,14 +1109,6 @@ def processar_actiu(actiu):
                 )                
                 
             }
-
-            # 3. Filtrar segons si és PUT o CALL
-            if tipus in ["CALL", "LEAPCALLCALENDAR"]:
-                dist = strike - preu_subjacent
-            elif tipus in ["PUT", "LEAPPUTCALENDAR"]:
-                dist = preu_subjacent - strike
-            else:
-                dist = preu_subjacent - strike
             
             if mercat_obert_USA():
                 guardar_historic_calendar(
