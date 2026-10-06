@@ -907,6 +907,14 @@ def processar_actiu(actiu):
         # subjacent = "XLK", strike = 207.5, expiry = "2026-10-09", tipus = "CALL"
         
         metriques = obtenir_metriques_pota_curta(subjacent, strike, expiry, tipus, prima)
+
+        # 1. Definim variables de control amb valors per defecte buits/segurs
+        delta_actual = 0.0
+        preu_sub = preu_subjacent
+        roi_anual_restant = 0.0
+        profit_pct = 0.0
+        extrinsec = 0.0
+        prima_mid = 0.0
         
         if metriques:
             delta_actual = metriques["delta"]
@@ -1163,7 +1171,7 @@ def processar_actiu(actiu):
                     "oi": None,
                     "vol": None,
                     "semafor": semafor,
-                    "delta": metriques["delta"],
+                    "delta": delta_actual,
                     "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
             })              
     
