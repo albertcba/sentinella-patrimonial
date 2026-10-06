@@ -1142,6 +1142,7 @@ def processar_actiu(actiu):
                     "iv_long": metrics["iv_long"],
                     "dist_pct": round(((preu_subjacent - strike) / strike * 100), 1),
                     "iv_spread": round(metrics["iv_short"] - metrics["iv_long"]),
+                    "delta": delta_actual,
                     "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
             })          
         else:
@@ -1162,6 +1163,7 @@ def processar_actiu(actiu):
                     "oi": None,
                     "vol": None,
                     "semafor": semafor,
+                    "delta": delta_actual,
                     "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
             })              
     
