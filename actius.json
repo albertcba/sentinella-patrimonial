@@ -60,7 +60,7 @@
   { "ticker": "DRAM-RISKREVERSAL51", "nom": "DRAM Risk Reversal 51", "capa": "Options", "underlying": "DRAM", "strike": 51, "expiry": "2027-01-15", "type": "PUT" },
   { "ticker": "XLK-STRANGLE190/215", "nom": "XLK Strangle 190/215", "capa": "Options", "underlying": "XLK", "strike": 190, "expiry": "2027-03-19", "type": "LONGPUTSTRANGLE" },
   { "ticker": "XLK-STRANGLE190/215", "nom": "XLK Strangle 190/215", "capa": "Options", "underlying": "XLK", "strike": 215, "expiry": "2027-03-19", "type": "LONGCALLSTRANGLE" },  
-  { "ticker": "XLK-CSP193", "nom": "XLK Covered Secured Put 193", "capa": "Options", "underlying": "XLK", "strike": 193, "expiry": "2026-10-16", "type": "PUT", "prima": 0.84 },  
-  { "ticker": "XLK-COVEREDCALL210", "nom": "XLK Covered Call 210", "capa": "Options", "underlying": "XLK", "strike": 210, "expiry": "2026-10-16", "type": "CALL", "prima": 0.40 },
+  { "ticker": "XLK-CSP193", "nom": "XLK Covered Secured Put 193", "capa": "Options", "underlying": "XLK", "strike": 193, "expiry": "2026-10-16", "type": "SHORTPUTSTRANGLE", "prima": 0.84 },  
+  { "ticker": "XLK-COVEREDCALL210", "nom": "XLK Covered Call 210", "capa": "Options", "underlying": "XLK", "strike": 210, "expiry": "2026-10-16", "type": "SHORTCALLSTRANGLE", "prima": 0.40 },
   { "ticker": "COPX-CSP80", "nom": "COPX Bull Put Spread 80", "capa": "Options", "underlying": "COPX", "strike": 80, "expiry": "2026-11-20", "type": "PUT" }
 ]
