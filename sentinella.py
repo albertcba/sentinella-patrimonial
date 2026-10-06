@@ -1145,9 +1145,6 @@ def processar_actiu(actiu):
                     "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
             })          
         else:
-
-            if metriques:
-                delta_actual = metriques["delta"]
             
             DADES_ACTIUS.append({
                     "ticker": actiu["ticker"],          # mantenim el ticker de l’estratègia
@@ -1166,7 +1163,7 @@ def processar_actiu(actiu):
                     "oi": None,
                     "vol": None,
                     "semafor": semafor,
-                    "delta": delta_actual,
+                    "delta": metriques["delta"],
                     "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
             })              
     
