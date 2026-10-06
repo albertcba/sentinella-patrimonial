@@ -984,7 +984,7 @@ def processar_actiu(actiu):
                         f"DTE curta: {dte}\n"
                         f"Acció: Recomprar Call, rodar Put amunt i moure Call a setmana vinent."
                     )
-            elif tipus == "LONGPUTSTRANGLE" or tipus == "SHORTPUTSTRANGLE" or tipus == "LONGCALLSTRANGLE" or tipus == "SHORTCALLSTRANGLE" or tipus == "LEAPPUTCALENDAR" or tipus == "LEAPCALLCALENDAR":
+            elif tipus == "LONGPUTSTRANGLE" or tipus == "LONGCALLSTRANGLE" or tipus == "LEAPPUTCALENDAR" or tipus == "LEAPCALLCALENDAR":
             # 🛡️ GESTIÓ UNIFICADA PER A POTES LLARGUES (DTE > 30)
             # Aplica tant a Calendars Individuals com a les potes del Long Strangle
             #if dte > 30:
