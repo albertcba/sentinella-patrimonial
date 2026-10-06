@@ -933,7 +933,7 @@ def processar_actiu(actiu):
                 enviar_missatge(
                     f"🎯 SENTINELLA: LLINDAR DE GUANY ASSOLIT (60%)\n"
                     f"{subjacent} {strike} {tipus} (DTE: {dte})\n"
-                    f"Has capturat el {profit_pct}% de la prima. Tanca i protegeix el capital de la Double Diagonal."
+                    f"Has capturat el {profit_pct}% de la prima. Tanca i protegeix el capital."
                 )
         
             # ⏳ REGLETA 2: L'EFICIÈNCIA DEL CAPITAL (ROI Anualitzat restant baix)
