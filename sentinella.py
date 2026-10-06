@@ -695,9 +695,9 @@ def calcular_delta(tipus, preu_subjacent, strike, dte, iv_pure, r=0.045):
     T = dte / 365.0
     d1 = (math.log(preu_subjacent / strike) + (r + (iv_pure ** 2) / 2) * T) / (iv_pure * math.sqrt(T))
     
-    if tipus == "CALL" or tipus == "LONGCALLSTRANGLE" or tipus == "LEAPCALLCALENDAR":
+    if tipus == "CALL" or tipus == "SHORTCALLSTRANGLE" or tipus == "LONGCALLSTRANGLE" or tipus == "LEAPCALLCALENDAR":
         return round(normal_cdf_approx(d1), 2)
-    elif tipus == "PUT" or tipus == "LONGPUTSTRANGLE" or tipus == "LEAPPUTCALENDAR":
+    elif tipus == "PUT" or tipus == "SHORTPUTSTRANGLE" or tipus == "LONGPUTSTRANGLE" or tipus == "LEAPPUTCALENDAR":
         return round(normal_cdf_approx(d1) - 1.0, 2)
     return 0.0
 
@@ -721,9 +721,9 @@ def obtenir_metriques_pota_curta(underlying, strike, expiry, tipus, prima_entrad
         return None
 
     # 3. Filtrar segons si és PUT o CALL
-    if tipus in ["CALL", "LONGCALLSTRANGLE", "LEAPCALLCALENDAR"]:
+    if tipus in ["CALL", "SHORTCALLSTRANGLE", "LONGCALLSTRANGLE", "LEAPCALLCALENDAR"]:
         df_options = chain.calls
-    elif tipus in ["PUT", "LONGPUTSTRANGLE", "LEAPPUTCALENDAR"]:
+    elif tipus in ["PUT", "SHORTPUTSTRANGLE", "LONGPUTSTRANGLE", "LEAPPUTCALENDAR"]:
         df_options = chain.puts
     else:
         return None
@@ -746,9 +746,9 @@ def obtenir_metriques_pota_curta(underlying, strike, expiry, tipus, prima_entrad
 
     # 6. Calcular valor extrínsec restant
     valor_extrinsec = prima_mid
-    if tipus in ["CALL", "LONGCALLSTRANGLE", "LEAPCALLCALENDAR"] and preu_subjacent > strike:
+    if tipus in ["CALL", "SHORTCALLSTRANGLE", "LONGCALLSTRANGLE", "LEAPCALLCALENDAR"] and preu_subjacent > strike:
         valor_extrinsec = max(0.0, prima_mid - (preu_subjacent - strike))
-    elif tipus in ["PUT", "LONGPUTSTRANGLE", "LEAPPUTCALENDAR"] and preu_subjacent < strike:
+    elif tipus in ["PUT", "SHORTPUTSTRANGLE", "LONGPUTSTRANGLE", "LEAPPUTCALENDAR"] and preu_subjacent < strike:
         valor_extrinsec = max(0.0, prima_mid - (strike - preu_subjacent))
 
     # 7. 🛠️ NOUS CÀLCULS DE BENEFICI I ROI
@@ -869,9 +869,9 @@ def processar_actiu(actiu):
                 prima = put["lastPrice"]
             dist = distancia_assignacio_PUT(preu_subjacent, strike)  # preu - strike
             # 3. Filtrar segons si és PUT o CALL
-            if tipus in ["LEAPCALLCALENDAR", "LONGCALLSTRANGLE"]:
+            if tipus in ["LEAPCALLCALENDAR", "SHORTCALLSTRANGLE, "LONGCALLSTRANGLE"]:
                 dist = strike - preu_subjacent
-            elif tipus in ["LEAPPUTCALENDAR", "LONGPUTSTRANGLE"]:
+            elif tipus in ["LEAPPUTCALENDAR", "SHORTPUTSTRANGLE", "LONGPUTSTRANGLE"]:
                 dist = preu_subjacent - strike
             else:
                 dist = preu_subjacent - strike
@@ -984,7 +984,7 @@ def processar_actiu(actiu):
                         f"DTE curta: {dte}\n"
                         f"Acció: Recomprar Call, rodar Put amunt i moure Call a setmana vinent."
                     )
-            elif tipus == "LONGPUTSTRANGLE" or tipus == "LONGCALLSTRANGLE" or tipus == "LEAPPUTCALENDAR" or tipus == "LEAPCALLCALENDAR":
+            elif tipus == "LONGPUTSTRANGLE" or tipus == "SHORTPUTSTRANGLE" or tipus == "LONGCALLSTRANGLE" or tipus == "SHORTCALLSTRANGLE" or tipus == "LEAPPUTCALENDAR" or tipus == "LEAPCALLCALENDAR":
             # 🛡️ GESTIÓ UNIFICADA PER A POTES LLARGUES (DTE > 30)
             # Aplica tant a Calendars Individuals com a les potes del Long Strangle
             #if dte > 30:
