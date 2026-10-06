@@ -1142,10 +1142,13 @@ def processar_actiu(actiu):
                     "iv_long": metrics["iv_long"],
                     "dist_pct": round(((preu_subjacent - strike) / strike * 100), 1),
                     "iv_spread": round(metrics["iv_short"] - metrics["iv_long"]),
-                    "delta": delta_actual,
                     "hora": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
             })          
         else:
+
+            if metriques:
+                delta_actual = metriques["delta"]
+            
             DADES_ACTIUS.append({
                     "ticker": actiu["ticker"],          # mantenim el ticker de l’estratègia
                     "nom": actiu["nom"],
