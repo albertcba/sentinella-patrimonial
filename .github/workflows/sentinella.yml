@@ -3,7 +3,9 @@ name: sentinella
 on:
   workflow_dispatch:
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: '47 13,16 * * 1-5'
+    - cron: '13 15,18 * * 1-5'
+    - cron: '37 19 * * 1-5'    
 
 jobs:
   run-and-update:
