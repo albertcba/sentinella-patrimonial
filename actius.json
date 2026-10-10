@@ -66,8 +66,7 @@
   { "ticker": "DIA-BWB508/514/518", "nom": "DIA BWB 508/514/518", "capa": "Options", "underlying": "DIA", "strike": 514, "expiry": "2026-10-30" },
   { "ticker": "DIA-CSP513", "nom": "DIA Covered Secured Put 513", "capa": "Options", "underlying": "DIA", "strike": 513, "expiry": "2026-10-30", "type": "PUT" },
   { "ticker": "DIA-CALENDAR503", "nom": "DIA Calendar 503", "capa": "Options", "underlying": "DIA", "strike": 503, "expiry_short": "2026-10-30", "expiry_long": "2026-11-06", "type": "CALENDAR", "cost": 0.99 },  
-  { "ticker": "XSP-ROLLINGLONG769", "nom": "XSP Rolling Long Put Diagonal 769", "capa": "Options", "underlying": "^XSP", "strike": 769, "expiry": "2026-10-30", "type": "LONGPUTSTRANGLE" },  
-  { "ticker": "XSP-ROLLINGSHORT777", "nom": "XSP Rolling Short Put Diagonal 777", "capa": "Options", "underlying": "^XSP", "strike": 777, "expiry": "2026-10-09", "type": "SHORTPUTSTRANGLE", "prima": 0.76 },
+  { "ticker": "XSP-ROLLINGLONG769", "nom": "XSP Rolling Long Put Diagonal 769", "capa": "Options", "underlying": "^XSP", "strike": 769, "expiry": "2026-10-30", "type": "LONGPUTSTRANGLE" },
   { "ticker": "QQQ-BWB745/735/715", "nom": "QQQ BWB 745/735/715", "capa": "Options", "underlying": "QQQ", "strike": 514, "expiry": "2026-10-30" },
   { "ticker": "QQQ-CSP733", "nom": "QQQ Covered Secured Put 733", "capa": "Options", "underlying": "QQQ", "strike": 733, "expiry": "2026-10-30", "type": "PUT" }
 ]
