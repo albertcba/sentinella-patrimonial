@@ -508,18 +508,25 @@ def obtenir_put_synthetic(subjacent, strike, expiry_str, dies_hist=90, tipus_int
     """
     Calcula una prima de PUT sintètica o resol el cas d'emergència en 0DTE.
     """
-    closes = obtenir_dades_chart_yahoo(subjacent, dies_hist=dies_hist)
-    preu_actual = closes[-1]
-    sigma = calcular_volatilitat_hist(closes)
-
+    
     avui = datetime.utcnow().date()
     expiry = datetime.strptime(expiry_str, "%Y-%m-%d").date()
     dies_fins_venciment = (expiry - avui).days
     
-    # Si és menor que zero el venciment ja ha passat, si és 0 és AVUI (0DTE)
+    # 🚨 GESTIÓ NETEJA D'OPCIONS CADUCADES
     if dies_fins_venciment < 0:
-        raise ValueError(f"El venciment {expiry_str} ja ha passat fa {-dies_fins_venciment} dies.")
+        msg_expirat = f"ℹ️ AVIS SENTINELLA: L'actiu {subjacent} Strike {strike} amb venciment {expiry_str} ja ha expirat fa {-dies_fins_venciment} dies. Recorda actualitzar o netejar el fitxer actius.json."
+        print(msg_expirat)
+        # Només enviem el missatge a Telegram una vegada (quan fa 1 dia que ha caducat) per no saturar
+        if dies_fins_venciment == -1:
+            enviar_missatge(msg_expirat)
+            
+        # Retornem un diccionari buit/controlat per indicar al flux principal que no s'ha de processar
+        return {"expirat": True, "daysToExpiry": dies_fins_venciment}
 
+    closes = obtenir_dades_chart_yahoo(subjacent, dies_hist=dies_hist)
+    preu_actual = closes[-1]
+    sigma = calcular_volatilitat_hist(closes)    
     T = dies_fins_venciment / 365.0
 
     put_price = calcular_put_black_scholes(
@@ -814,6 +821,8 @@ def processar_actiu(actiu):
         # 1) PUT sintètic (com fins ara)
         try:
             put = obtenir_put_synthetic(subjacent, strike, expiry)
+            if put.get("expirat"): 
+                return            
         except Exception as e:
             txt = f"⚠️ Error obtenint PUT {strike} per {subjacent}:\n{e}"
             print(txt)
