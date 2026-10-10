@@ -6,6 +6,7 @@ import os
 import json
 import math
 import yfinance as yf
+import time
 
 DADES_ACTIUS = []
 
@@ -577,28 +578,25 @@ def llindar_variacio(actiu):
         return -2.5        
     return -4.0
 
-
-
-
-def obtenir_calendar_metrics(
-    underlying,
-    strike,
-    expiry_short,
-    expiry_long,
-    cost
-):
+def obtenir_calendar_metrics(underlying, strike, expiry_short, expiry_long, cost):
     t = yf.Ticker(underlying)
 
-    dec = t.option_chain(expiry_short)
-    jan = t.option_chain(expiry_long)
-
-    call_dec = dec.calls[
-        dec.calls["strike"] == strike
-    ]
-
-    call_jan = jan.calls[
-        jan.calls["strike"] == strike
-    ]
+    # Afegim reintents amb un petit retard per si Yahoo Finance falla per ràfega
+    for intent in range(3):
+        try:
+            dec = t.option_chain(expiry_short)
+            time.sleep(0.5) # un respir per a la API
+            jan = t.option_chain(expiry_long)
+            
+            call_dec = dec.calls[dec.calls["strike"] == strike]
+            call_jan = jan.calls[jan.calls["strike"] == strike]
+            
+            if len(call_dec) > 0 and len(call_jan) > 0:
+                break # Si tenim dades, sortim del bucle de reintents
+        except Exception:
+            if intent == 2: # Si és l'últim intent, fallem
+                return None
+            time.sleep(1)
 
     if len(call_dec) == 0 or len(call_jan) == 0:
         return None
@@ -606,51 +604,29 @@ def obtenir_calendar_metrics(
     dec_row = call_dec.iloc[0]
     jan_row = call_jan.iloc[0]
 
-    mid_dec = (
-        dec_row["bid"] +
-        dec_row["ask"]
-    ) / 2
+    mid_dec = (dec_row["bid"] + dec_row["ask"]) / 2 if dec_row["bid"] > 0 else dec_row["lastPrice"]
+    mid_jan = (jan_row["bid"] + jan_row["ask"]) / 2 if jan_row["bid"] > 0 else jan_row["lastPrice"]
 
-    mid_jan = (
-        jan_row["bid"] +
-        jan_row["ask"]
-    ) / 2
+    calendar_value = mid_jan - mid_dec
+    roi = ((calendar_value - cost) / cost * 100)
 
-    calendar_value = (
-        mid_jan -
-        mid_dec
-    )
-
-    roi = (
-        (calendar_value - cost)
-        / cost
-        * 100
-    )
-
-    # 🛠️ NOVES MÈTRIQUES
-    # 1. Calcular els dies restants fins al venciment de la curta (DTE)
     avui = datetime.utcnow().date()
     data_venciment_curta = datetime.strptime(expiry_short, "%Y-%m-%d").date()
     dte_short = (data_venciment_curta - avui).days
 
-    # 2. Extreure IVs pures (decimals) per calcular l'eficiència Vega sense arrodoniments previs
     iv_s = dec_row["impliedVolatility"]
     iv_l = jan_row["impliedVolatility"]
-    
-    # Evitem divisió per zero per seguretat si no hi hagués dades de IV
     vega_efficiency = round(iv_s / iv_l, 3) if iv_l > 0 else 0.0
 
     return {
         "calendar_value": round(calendar_value, 2),
         "roi": round(roi, 1),
-
         "iv_short": round(iv_s * 100, 2),
         "iv_long": round(iv_l * 100, 2),
-        
-        # Afegim les noves mètriques al diccionari de sortida
         "dte_short": dte_short,
         "vega_efficiency": vega_efficiency
     }
+
     
 
 def guardar_historic_calendar(registre):
