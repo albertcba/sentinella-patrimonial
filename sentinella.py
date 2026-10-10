@@ -488,13 +488,12 @@ def _norm_cdf(x):
 def calcular_put_black_scholes(S, K, T, r, sigma):
     """
     Preu teòric d'un PUT europeu via Black–Scholes.
-    S: preu subjacient
-    K: strike
-    T: temps en anys
-    r: tipus d'interès (p.ex. 0.04)
-    sigma: volatilitat anualitzada
+    Controla el cas de T = 0 (0DTE) per evitar divisions per zero.
     """
-    if T <= 0 or sigma <= 0 or S <= 0 or K <= 0:
+    if T <= 0:
+        return max(0.0, K - S)
+
+    if sigma <= 0 or S <= 0 or K <= 0:
         return None
 
     d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
@@ -506,28 +505,22 @@ def calcular_put_black_scholes(S, K, T, r, sigma):
 
 def obtenir_put_synthetic(subjacent, strike, expiry_str, dies_hist=90, tipus_interes=0.04):
     """
-    Calcula una prima de PUT sintètica a partir de dades de /chart/.
-    subjacent: ticker del subjacient (p.ex. 'WTRG')
-    strike: strike del PUT (p.ex. 40)
-    expiry_str: data de venciment en format 'YYYY-MM-DD'
+    Calcula una prima de PUT sintètica o resol el cas d'emergència en 0DTE.
     """
-    # 1) Dades històriques
     closes = obtenir_dades_chart_yahoo(subjacent, dies_hist=dies_hist)
     preu_actual = closes[-1]
-
-    # 2) Volatilitat històrica
     sigma = calcular_volatilitat_hist(closes)
 
-    # 3) Temps fins venciment (en anys)
     avui = datetime.utcnow().date()
     expiry = datetime.strptime(expiry_str, "%Y-%m-%d").date()
     dies_fins_venciment = (expiry - avui).days
-    if dies_fins_venciment <= 0:
-        raise ValueError(f"El venciment {expiry_str} ja ha passat o és avui")
+    
+    # Si és menor que zero el venciment ja ha passat, si és 0 és AVUI (0DTE)
+    if dies_fins_venciment < 0:
+        raise ValueError(f"El venciment {expiry_str} ja ha passat fa {-dies_fins_venciment} dies.")
 
     T = dies_fins_venciment / 365.0
 
-    # 4) Preu PUT sintètic
     put_price = calcular_put_black_scholes(
         S=preu_actual,
         K=strike,
@@ -539,7 +532,6 @@ def obtenir_put_synthetic(subjacent, strike, expiry_str, dies_hist=90, tipus_int
     if put_price is None:
         raise ValueError("No s'ha pogut calcular el preu sintètic del PUT")
 
-    # Retorn estil “put” perquè el Sentinella el pugui consumir
     return {
         "synthetic": True,
         "underlying": subjacent,
@@ -784,14 +776,35 @@ def obtenir_metriques_pota_curta(underlying, strike, expiry, tipus, prima_entrad
         "roi_anualitzat_restant": round(roi_anualitzat_restant, 1)
     }
 
+def calcular_risc_0dte(preu_actual, strike, vol_anualitzada, tipus="PUT"):
+    """
+    Avalua el risc d'un strike 0DTE basat en la volatilitat històrica diària (Sigmes).
+    """
+    vol_diaria = vol_anualitzada / math.sqrt(252)
+    moviment_esperat_diners = preu_actual * vol_diaria
+    
+    distancia_absoluta = abs(preu_actual - strike)
+    distancia_percentual = (distancia_absoluta / preu_actual) * 100
+    
+    # Quantes desviacions estàndard (sigmes) de moviment diari tenim de marge?
+    sigmes_proteccio = distancia_absoluta / moviment_esperat_diners if moviment_esperat_diners > 0 else 99.0
+    
+    # Llindar institucional: menys d'1.5 sigmes a 0DTE és zona de perill (Gamma Risk)
+    zona_perill = sigmes_proteccio < 1.5
+
+    return {
+        "distancia_pct": round(distancia_percentual, 2),
+        "sigmes": round(sigmes_proteccio, 2),
+        "perill": zona_perill
+    }
 
 def processar_actiu(actiu):
     global ULTIMA_ALERTA
 
     # 1) Saltar actius si el mercat està tancat
-    if not es_cripto(actiu['ticker']) and not mercat_obert():
-       print(f"Saltant {actiu['ticker']} (mercat tancat)")
-       return
+    #if not es_cripto(actiu['ticker']) and not mercat_obert():
+    #   print(f"Saltant {actiu['ticker']} (mercat tancat)")
+    #   return
 
     # Determinar subjacent real
     if actiu["capa"] == "Options":
@@ -812,8 +825,8 @@ def processar_actiu(actiu):
     print(f"{ticker}: {variacio:.2f}%  preu={preu}")
 
     #  { "ticker": "WTRG-PUT40", "nom": "WTRG Cash-Secured Put 40", "capa": "Options", "underlying": "WTRG", "strike": 40, "expiry": "2026-05-15" }      
-    #if actiu["capa"] == "Options":
-    if actiu["capa"] == "Options" and mercat_obert_USA():
+    if actiu["capa"] == "Options":
+    #if actiu["capa"] == "Options" and mercat_obert_USA():
         subjacent = actiu["underlying"]
         strike = actiu["strike"]
         tipus = actiu.get("type")
@@ -878,29 +891,6 @@ def processar_actiu(actiu):
                 dist = preu_subjacent - strike
             marge = marge_cash_secured(strike)
             semafor = semafor_put(preu_subjacent, prima, dte, dist)
-     
-
-        # ALERTES (pots diferenciar PUT vs CALL si vols)
-        #if tipus == "PUT":
-        #   if preu_subjacent < strike:
-        #        enviar_missatge(
-        #            f"⚠️ ALERTA PUT {subjacent} {strike}\n"
-        #            f"Prima: {prima:.2f}\n"
-        #            f"Preu subjacent: {preu_subjacent:.2f}\n"
-        #            f"DTE: {dte}\n"
-        #            f"Distància assignació: {dist:.2f}\n"
-        #            f"Semàfor: {semafor}"
-        #        )
-        #elif tipus == "CALL":
-        #    if preu_subjacent > strike:
-        #        enviar_missatge(
-        #            f"⚠️ ALERTA CALL {subjacent} {strike}\n"
-        #            f"Prima: {prima:.2f}\n"
-        #            f"Preu subjacent: {preu_subjacent:.2f}\n"
-        #            f"DTE: {dte}\n"
-        #            f"Distància sobre strike: {dist:.2f}\n"
-        #            f"Semàfor: {semafor}"
-        #        )
 
 
         # EXEMPLE D'INTEGRACIÓ EN EL TEU BUCLE PRINCIPAL DE LES POTES CURTES
@@ -926,11 +916,24 @@ def processar_actiu(actiu):
             extrinsec = metriques["valor_extrinsec"]
             prima_mid = metriques.get("prima_mid", 0.0)
             
+            # 🔥 AFECTACIÓ ESPECIAL I ALERTA URGENT PER A OPERATIVA 0DTE 🔥
+            if dte == 0:
+                analisi_0dte = calcular_risc_0dte(preu_sub, strike, vol_hist, tipus)
+                
+                # Si el preu crema massa a prop del strike (Menys de 1.5 Sigmes de coixí)
+                if analisi_0dte["perill"]:
+                    enviar_missatge(
+                        f"🚨 ALERTA 0DTE: RISC DE GAMMA EXTREM 🚨\n"
+                        f"Actiu: {subjacent} {strike} {tipus} (AVUI EXPIRA)\n"
+                        f"Preu actual: {preu_sub:.2f} | Distància: {analisi_0dte['distancia_pct']}%\n"
+                        f"Coixí de seguretat: {analisi_0dte['sigmes']} σ (⚠️ Menys d'1.5 sigmes!)\n"
+                        f"Acció: Avalua tancar la posició immediatament o executar un Roll-over abans del tancament."
+                    )
             
         
             # 🔄 REGLETA 1: L'ESTÀNDARD DEL 60% (Take Profit Automàtic)
             # Si ja has capturat el 60% del valor, el risc de squeeze supera el benefici restant.
-            if profit_pct >= 60.0:
+            elif profit_pct >= 60.0:
                 enviar_missatge(
                     f"🎯 SENTINELLA: LLINDAR DE GUANY ASSOLIT (60%)\n"
                     f"{subjacent} {strike} {tipus} (DTE: {dte})\n"
@@ -953,7 +956,7 @@ def processar_actiu(actiu):
             # (Això ho pots calcular si guardes la data d'obertura, si no, opcional).
 
             # Regla simple i unificada de "Theta Esgotada i Segura"
-            if prima_mid <= 0.05 and dte <= 5:
+            if prima_mid <= 0.05 and dte <= 5 and dte > 0:
                 enviar_missatge(
                     f"⏳ SENTINELLA: PRÈSTEC A ZERO ({subjacent} {strike} {tipus})\n"
                     f"La prima actual és de {prima_mid:.2f} USD.\n"
@@ -961,10 +964,10 @@ def processar_actiu(actiu):
                     f"o deixar-la expirar si el cap de setmana està controlat."
                 )
 
-
-            if tipus == "PUT":
+            # Alertes de deltes per a opcions normals (DTE > 0)
+            if dte > 0:
+                if tipus == "PUT" and delta_actual <= -0.32:
                 # Alerta preventiva: la Delta de la Put es torna perillosa quan cau de -0.32 cap avall (ex: -0.35)
-                if delta_actual <= -0.32:
                     enviar_missatge(
                         f"🚨 PROTOCOL RISC PUT {subjacent} {strike}\n"
                         f"Delta actual: {delta_actual:.2f} (🚨 Perill Delta <= -0.32)\n"
@@ -974,9 +977,8 @@ def processar_actiu(actiu):
                         f"Acció: Recomprar Put, rodar Call avall i moure Put a setmana vinent."
                     )
                     
-            elif tipus == "CALL":
+                elif tipus == "CALL" and delta_actual >= 0.32:
                 # Alerta preventiva: la Delta de la Call es torna perillosa quan puja de 0.32 cap amunt (ex: 0.35)
-                if delta_actual >= 0.32:
                     enviar_missatge(
                         f"🚨 PROTOCOL RISC CALL {subjacent} {strike}\n"
                         f"Delta actual: {delta_actual:.2f} (🚨 Perill Delta >= 0.32)\n"
