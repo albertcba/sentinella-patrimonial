@@ -585,23 +585,35 @@ def llindar_variacio(actiu):
         return -2.5        
     return -4.0
 
+
 def obtenir_calendar_metrics(underlying, strike, expiry_short, expiry_long, cost):
     t = yf.Ticker(underlying)
 
-    # Afegim reintents amb un petit retard per si Yahoo Finance falla per ràfega
+    call_dec, call_jan = [], []
+    # Tolerància per evitar problemes de comparació de valors flotants (ex: 742.0 vs 742)
+    tolerance = 1e-4 
+
     for intent in range(3):
         try:
             dec = t.option_chain(expiry_short)
-            time.sleep(0.5) # un respir per a la API
+            time.sleep(0.5)  # Respir per a la API
             jan = t.option_chain(expiry_long)
             
-            call_dec = dec.calls[dec.calls["strike"] == strike]
-            call_jan = jan.calls[jan.calls["strike"] == strike]
+            # 1. Intentem buscar a Calls (comprovant proximitat numèrica)
+            dec_options = dec.calls[abs(dec.calls["strike"] - strike) < tolerance]
+            jan_options = jan.calls[abs(jan.calls["strike"] - strike) < tolerance]
             
-            if len(call_dec) > 0 and len(call_jan) > 0:
-                break # Si tenim dades, sortim del bucle de reintents
+            # 2. Si no es troba a Calls, busquem a Puts
+            if len(dec_options) == 0 or len(jan_options) == 0:
+                dec_options = dec.puts[abs(dec.puts["strike"] - strike) < tolerance]
+                jan_options = jan.puts[abs(jan.puts["strike"] - strike) < tolerance]
+                
+            if len(dec_options) > 0 and len(jan_options) > 0:
+                call_dec = dec_options
+                call_jan = jan_options
+                break 
         except Exception:
-            if intent == 2: # Si és l'últim intent, fallem
+            if intent == 2: 
                 return None
             time.sleep(1)
 
@@ -611,13 +623,15 @@ def obtenir_calendar_metrics(underlying, strike, expiry_short, expiry_long, cost
     dec_row = call_dec.iloc[0]
     jan_row = call_jan.iloc[0]
 
-    mid_dec = (dec_row["bid"] + dec_row["ask"]) / 2 if dec_row["bid"] > 0 else dec_row["lastPrice"]
-    mid_jan = (jan_row["bid"] + jan_row["ask"]) / 2 if jan_row["bid"] > 0 else jan_row["lastPrice"]
+    # Validació de preus Bid/Ask per evitar divisions o Mids erronis si el mercat està tancat
+    mid_dec = (dec_row["bid"] + dec_row["ask"]) / 2 if (dec_row["bid"] > 0 and dec_row["ask"] > 0) else dec_row["lastPrice"]
+    mid_jan = (jan_row["bid"] + jan_row["ask"]) / 2 if (jan_row["bid"] > 0 and jan_row["ask"] > 0) else jan_row["lastPrice"]
 
     calendar_value = mid_jan - mid_dec
     roi = ((calendar_value - cost) / cost * 100)
 
-    avui = datetime.utcnow().date()
+    # datetime.utcnow() està obsolet, fem servir timezone.utc
+    avui = datetime.now(timezone.utc).date()
     data_venciment_curta = datetime.strptime(expiry_short, "%Y-%m-%d").date()
     dte_short = (data_venciment_curta - avui).days
 
@@ -634,7 +648,6 @@ def obtenir_calendar_metrics(underlying, strike, expiry_short, expiry_long, cost
         "vega_efficiency": vega_efficiency
     }
 
-    
 
 def guardar_historic_calendar(registre):
 
