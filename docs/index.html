@@ -833,7 +833,7 @@
           }
         });
 
-        // --- CASH‑SECURED PUTS (CSP) ---
+        // --- CASH‑SECURED PUTS (CSP) / OPTIONS NORMALS ---
         const tbCSP = document.getElementById('taula-csp');
         tbCSP.innerHTML = "";
         
@@ -843,24 +843,29 @@
           return `${s.preu} Preu | ${s.prima} Prima | ${s.dte} DTE | ${s.dist} Distància`;
         }
         
-        // Filtrar només actius d'opcions (synthetic CSP)
+        // Filtrar només actius d'opcions generals (excloem els Calendar Spreads d'aquí)
         const opcions = dades.actius.filter(a => a.capa === "Options");
+        const opcionsNormals = opcions.filter(a => a.calendar_value === undefined);
         
-        opcions.forEach(o => {
+        opcionsNormals.forEach(o => {
           const tr = document.createElement("tr");
+          
+          // Control de seguretat: per si de cas alguna delta no ve calculada des del Python
+          const deltaText = (o.delta !== undefined && o.delta !== null) ? Number(o.delta).toFixed(2) : "-";
+          const distSemafor = (o.semafor && o.semafor.dist) ? o.semafor.dist : "";
+          const dteSemafor = (o.semafor && o.semafor.dte) ? o.semafor.dte : "";
         
           tr.innerHTML = `
             <td class="mono">${o.ticker}</td>
             <td class="mono">${Number(o.preu_subjacent).toFixed(2)}</td>
             <td class="mono">${o.strike}</td>
-            <td class="mono">${o.semafor.dist} ${o.distancia.toFixed(2)}</td>
-            <td class="mono">${o.semafor.dte} ${o.dte}</td>            
+            <td class="mono">${distSemafor} ${o.distancia.toFixed(2)}</td>
+            <td class="mono">${dteSemafor} ${o.dte}</td>            
             <td class="mono">${o.prima.toFixed(2)}</td>
-            <td class="mono">${o.delta.toFixed(2)}</td>
+            <td class="mono">${deltaText}</td>
           `;            
-            //<td class="mono">${semaforCSP(o.semafor)}</td>
+            //<td class="mono">\${semaforCSP(o.semafor)}</td>
 
-        
           tbCSP.appendChild(tr);
         });
 
@@ -899,6 +904,7 @@
                 tbCalendar.appendChild(tr);
             });
         }
+
         
         // --- TARGETES FONAMENTALS GENERIQUES ---
         const grid = document.querySelector(".grid");
