@@ -60,7 +60,7 @@
   { "ticker": "DRAM-RISKREVERSAL51", "nom": "DRAM Risk Reversal 51", "capa": "Options", "underlying": "DRAM", "strike": 51, "expiry": "2027-01-15", "type": "PUT" },
   { "ticker": "XLK-STRANGLE190/215", "nom": "XLK Strangle 190/215", "capa": "Options", "underlying": "XLK", "strike": 190, "expiry": "2027-03-19", "type": "LONGPUTSTRANGLE" },
   { "ticker": "XLK-STRANGLE190/215", "nom": "XLK Strangle 190/215", "capa": "Options", "underlying": "XLK", "strike": 215, "expiry": "2027-03-19", "type": "LONGCALLSTRANGLE" },  
-  { "ticker": "XLK-CSP193", "nom": "XLK Covered Secured Put 193", "capa": "Options", "underlying": "XLK", "strike": 193, "expiry": "2026-10-16", "type": "SHORTPUTSTRANGLE", "prima": 0.84 },
+  { "ticker": "XLK-CSP192.5", "nom": "XLK Covered Secured Put 192.5", "capa": "Options", "underlying": "XLK", "strike": 192.5, "expiry": "2026-10-30", "type": "SHORTPUTSTRANGLE", "prima": 0.88 },
   { "ticker": "XLK-COVEREDCALL210", "nom": "XLK Covered Call 210", "capa": "Options", "underlying": "XLK", "strike": 210, "expiry": "2026-10-16", "type": "SHORTCALLSTRANGLE", "prima": 0.40 },
   { "ticker": "COPX-CSP80", "nom": "COPX Bull Put Spread 80", "capa": "Options", "underlying": "COPX", "strike": 80, "expiry": "2026-11-20", "type": "PUT" },
   { "ticker": "DIA-BWB508/514/518", "nom": "DIA BWB 508/514/518", "capa": "Options", "underlying": "DIA", "strike": 514, "expiry": "2026-10-30" },
@@ -68,5 +68,7 @@
   { "ticker": "DIA-CALENDAR503", "nom": "DIA Calendar 503", "capa": "Options", "underlying": "DIA", "strike": 503, "expiry_short": "2026-10-30", "expiry_long": "2026-11-06", "type": "CALENDAR", "cost": 0.99 },
   { "ticker": "QQQ-BWB745/735/715", "nom": "QQQ BWB 745/735/715", "capa": "Options", "underlying": "QQQ", "strike": 735, "expiry": "2026-10-30", "type": "PUT" },
   { "ticker": "QQQ-CSP733", "nom": "QQQ Covered Secured Put 733", "capa": "Options", "underlying": "QQQ", "strike": 733, "expiry": "2026-10-30", "type": "PUT" },
-  { "ticker": "XSP-BSP772/760", "nom": "XSP Bull Put Spread 772/760", "capa": "Options", "underlying": "^XSP", "strike": 772, "expiry": "2026-10-116", "type": "PUT" }
+  { "ticker": "XSP-BSP768/756", "nom": "XSP Bull Put Spread 768/756", "capa": "Options", "underlying": "^XSP", "strike": 768, "expiry": "2026-10-22", "type": "PUT" },
+  { "ticker": "XSP-BWB768/764/758", "nom": "XSP BWB 768/764/758", "capa": "Options", "underlying": "XSP", "strike": 735, "expiry": "2026-10-23", "type": "PUT" },
+  { "ticker": "XSP-CSP764", "nom": "XSP Covered Secured Put 764", "capa": "Options", "underlying": "XSP", "strike": 733, "expiry": "2026-10-23", "type": "PUT" }  
 ]
