@@ -69,6 +69,6 @@
   { "ticker": "QQQ-BWB745/735/715", "nom": "QQQ BWB 745/735/715", "capa": "Options", "underlying": "QQQ", "strike": 735, "expiry": "2026-10-30", "type": "PUT" },
   { "ticker": "QQQ-CSP733", "nom": "QQQ Covered Secured Put 733", "capa": "Options", "underlying": "QQQ", "strike": 733, "expiry": "2026-10-30", "type": "PUT" },
   { "ticker": "XSP-BSP768/756", "nom": "XSP Bull Put Spread 768/756", "capa": "Options", "underlying": "^XSP", "strike": 768, "expiry": "2026-10-22", "type": "PUT" },
-  { "ticker": "XSP-BWB768/764/758", "nom": "XSP BWB 768/764/758", "capa": "Options", "underlying": "XSP", "strike": 735, "expiry": "2026-10-23", "type": "PUT" },
-  { "ticker": "XSP-CSP764", "nom": "XSP Covered Secured Put 764", "capa": "Options", "underlying": "XSP", "strike": 733, "expiry": "2026-10-23", "type": "PUT" }  
+  { "ticker": "XSP-BWB768/764/758", "nom": "XSP BWB 768/764/758", "capa": "Options", "underlying": "^XSP", "strike": 764, "expiry": "2026-10-23", "type": "PUT" },
+  { "ticker": "XSP-CSP762", "nom": "XSP Covered Secured Put 762", "capa": "Options", "underlying": "^XSP", "strike": 762, "expiry": "2026-10-23", "type": "PUT" }  
 ]
