@@ -9,6 +9,7 @@ import yfinance as yf
 import time
 
 DADES_ACTIUS = []
+ALERTES_ACUMULADES = []  # <--- Llista per al report unificat
 
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
@@ -928,7 +929,7 @@ def processar_actiu(actiu):
                 
                 # Si el preu crema massa a prop del strike (Menys de 1.5 Sigmes de coixí)
                 if analisi_0dte["perill"]:
-                    enviar_missatge(
+                    ALERTES_ACUMULADES.append(
                         f"🚨 ALERTA 0DTE: RISC DE GAMMA EXTREM 🚨\n"
                         f"Actiu: {subjacent} {strike} {tipus} (AVUI EXPIRA)\n"
                         f"Preu actual: {preu_sub:.2f} | Distància: {analisi_0dte['distancia_pct']}%\n"
@@ -940,7 +941,7 @@ def processar_actiu(actiu):
             # 🔄 REGLETA 1: L'ESTÀNDARD DEL 60% (Take Profit Automàtic)
             # Si ja has capturat el 60% del valor, el risc de squeeze supera el benefici restant.
             elif profit_pct >= 60.0:
-                enviar_missatge(
+                ALERTES_ACUMULADES.append(
                     f"🎯 SENTINELLA: LLINDAR DE GUANY ASSOLIT (60%)\n"
                     f"{subjacent} {strike} {tipus} (DTE: {dte})\n"
                     f"Has capturat el {profit_pct}% de la prima. Tanca i protegeix el capital."
@@ -950,7 +951,7 @@ def processar_actiu(actiu):
             # Si el ROI anualitzat del que queda per cobrar cau per sota del 10%, 
             # els teus diners estan bloquejats treballant a canvi de moltes poques Dynamic Primes.
             elif profit_pct > 40.0 and roi_anual_restant < 10.0 and dte < 10:
-                enviar_missatge(
+                ALERTES_ACUMULADES.append(
                     f"📉 SENTINELLA: EFICIÈNCIA DE CAPITAL BAIXA\n"
                     f"{subjacent} {strike} {tipus} (DTE: {dte})\n"
                     f"El ROI anualitzat restant és només del {roi_anual_restant}%.\n"
@@ -963,7 +964,7 @@ def processar_actiu(actiu):
 
             # Regla simple i unificada de "Theta Esgotada i Segura"
             if prima_mid <= 0.05 and dte <= 5 and dte > 0:
-                enviar_missatge(
+                ALERTES_ACUMULADES.append(
                     f"⏳ SENTINELLA: PRÈSTEC A ZERO ({subjacent} {strike} {tipus})\n"
                     f"La prima actual és de {prima_mid:.2f} USD.\n"
                     f"Acció: Pots tancar-la JA a IBKR sense comissions per evitar el risc de divendres, "
@@ -974,7 +975,7 @@ def processar_actiu(actiu):
             if dte > 0:
                 if tipus == "PUT" and delta_actual <= -0.32:
                 # Alerta preventiva: la Delta de la Put es torna perillosa quan cau de -0.32 cap avall (ex: -0.35)
-                    enviar_missatge(
+                    ALERTES_ACUMULADES.append(
                         f"🚨 PROTOCOL RISC PUT {subjacent} {strike}\n"
                         f"Delta actual: {delta_actual:.2f} (🚨 Perill Delta <= -0.32)\n"
                         f"Prima Mid: {prima:.2f} USD\n"
@@ -985,7 +986,7 @@ def processar_actiu(actiu):
                     
                 elif tipus == "CALL" and delta_actual >= 0.32:
                 # Alerta preventiva: la Delta de la Call es torna perillosa quan puja de 0.32 cap amunt (ex: 0.35)
-                    enviar_missatge(
+                    ALERTES_ACUMULADES.append(
                         f"🚨 PROTOCOL RISC CALL {subjacent} {strike}\n"
                         f"Delta actual: {delta_actual:.2f} (🚨 Perill Delta >= 0.32)\n"
                         f"Prima Mid: {prima:.2f} USD\n"
@@ -1001,7 +1002,7 @@ def processar_actiu(actiu):
                 
                 # 1. capturem moviments direccionals forts (Zona de Recollida de Benefici)
                 if abs_delta >= 0.55:
-                    enviar_missatge(
+                    ALERTES_ACUMULADES.append(
                         f"💰 COBRAMENT BENEFICIS LONG ({actiu['capa']})\n"
                         f"Subjacent: {actiu['underlying']} | Strike: {actiu['strike']} ({actiu['type']})\n"
                         f"Delta actual: {delta_actual:.2f} (🚀 Llindar d'èxit >= 0.55)\n"
@@ -1012,7 +1013,7 @@ def processar_actiu(actiu):
                     
                 # 2. Capturem devaluacions extremes (Cama Morta per desplaçament de mercat)
                 elif abs_delta <= 0.08:
-                    enviar_missatge(
+                    ALERTES_ACUMULADES.append(
                         f"♻️ ALERTA DEVALUACIÓ LONG ({actiu['capa']})\n"
                         f"Subjacent: {actiu['underlying']} | Strike: {actiu['strike']} ({actiu['type']})\n"
                         f"Delta actual: {delta_actual:.2f} (📉 Zona d'abandonament <= 0.08)\n"
@@ -1022,7 +1023,7 @@ def processar_actiu(actiu):
                     
                 # 3. Control de l'erosió temporal (Theta Decay extrem a partir de ~50 dies)
                 if dte <= 50:
-                    enviar_missatge(
+                    ALERTES_ACUMULADES.append(
                         f"⏳ ALERTA TEMPS ESTRUCTURA LLARGA\n"
                         f"L'opció llarga de {actiu['underlying']} ({actiu['expiry']}) ha entrat en zona d'erosió temporal.\n"
                         f"DTE restant: {dte}\n"
@@ -1049,7 +1050,7 @@ def processar_actiu(actiu):
             
             #if metrics["roi"] <= -25: 
             if metrics["roi"] <= -5:                
-                enviar_missatge(
+                ALERTES_ACUMULADES.append(
                     f"⚠️ CALENDAR {subjacent} {strike}\n"
                     f"Valor: {metrics['calendar_value']:.2f}\n"
                     f"ROI: {metrics['roi']:.1f}%\n"
@@ -1059,7 +1060,7 @@ def processar_actiu(actiu):
 
             #if metrics["roi"] >= 50:
             if metrics["roi"] >= 10:                
-                enviar_missatge(
+                ALERTES_ACUMULADES.append(
                     f"✅ CALENDAR {subjacent} {strike}\n"
                     f"Valor: {metrics['calendar_value']:.2f}\n"
                     f"ROI: +{metrics['roi']:.1f}%\n"
@@ -1075,39 +1076,24 @@ def processar_actiu(actiu):
             )
 
             registre_historic = {
-                "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),
-            
-                "calendar_id": calendar_id,
-            
-                "ticker": subjacent,
-            
-                "strike": strike,
-            
-                "expiry_short": actiu["expiry_short"],
-            
+                "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),            
+                "calendar_id": calendar_id,          
+                "ticker": subjacent,      
+                "strike": strike,            
+                "expiry_short": actiu["expiry_short"],       
                 "expiry_long": actiu["expiry_long"],
-            
                 "spot": round(preu_subjacent, 2),
-            
                 "calendar_value": metrics["calendar_value"],
-            
-                "roi": metrics["roi"],
-            
-                "iv_short": metrics["iv_short"],
-            
+                "roi": metrics["roi"], 
+                "iv_short": metrics["iv_short"],       
                 "iv_long": metrics["iv_long"],
-
-                # 🆕 Afegeix aquestes dues línies aquí:
-                "dte_short": metrics["dte_short"],
-                
-                "vega_efficiency": metrics["vega_efficiency"],
-                
+                "dte_short": metrics["dte_short"],            
+                "vega_efficiency": metrics["vega_efficiency"],      
                 "iv_spread": round(
                     metrics["iv_short"] -
                     metrics["iv_long"],
                     2
-                ),
-            
+                ),      
                 "dist_pct": round(
                     (
                         (preu_subjacent - strike)
@@ -1115,9 +1101,7 @@ def processar_actiu(actiu):
                     ) * 100,
                     2
                 ),
-                
                 "cost": actiu["cost"],
-
                 "profit_dollars":
                 round(
                     metrics["calendar_value"] -
@@ -1213,7 +1197,7 @@ def processar_actiu(actiu):
     
         if variacio <= llindar:
             missatge = format_missatge(actiu, preu, variacio)
-            enviar_missatge(missatge)
+            ALERTES_ACUMULADES.append(missatge)
     
             ULTIMA_ALERTA = {
                 "actiu": actiu["nom"],
@@ -1232,6 +1216,30 @@ def main():
         processar_actiu(actiu)
     print("Fi sentinella.")
 
+
+    # ---------------------------------------------------------
+    #   LOGICA DE CONTROL DEL REPORT UNIFICAT (TELEGRAM)
+    # ---------------------------------------------------------
+    if ALERTES_ACUMULADES:
+        # Afegim una capçalera informativa agradable al Report
+        hora_report = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+        capçalera = f"📋 **REPORT UNIFICAT SENTINELLA**\n📅 Hora: {hora_report}\n"
+        capçalera += f"🔔 Alertes actives detectades: {len(ALERTES_ACUMULADES)}\n"
+        capçalera += "===================================\n\n"
+        
+        # Unim totes les alertes de la llista utilitzant un separador visual clar
+        separador = "\n\n-----------------------------------\n\n"
+        cos_del_missatge = separador.join(ALERTES_ACUMULADES)
+        
+        missatge_final = capçalera + cos_del_missatge
+        
+        # Enviem un sol missatge al Telegram
+        enviar_missatge(missatge_final)
+    else:
+        # Si la llista està buida, es compleix el booleà/lògica i no s'envia res
+        print("Silent Mode: No hi ha alertes per notificar en aquesta execució.")    
+
+    
     resultat = {}
 
     if ULTIMA_ALERTA:
