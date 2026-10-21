@@ -68,5 +68,6 @@
   { "ticker": "TLT-ROLLINGLONG77", "nom": "TLT Rolling Long Put Diagonal 77", "capa": "Options", "underlying": "TLT", "strike": 77, "expiry": "2026-11-30", "type": "LONGPUTSTRANGLE" },
   { "ticker": "TLT-CSP79.5", "nom": "TLT Bull Put Spread 79.5", "capa": "Options", "underlying": "TLT", "strike": 79.5, "expiry": "2026-10-21", "type": "PUT" },
   { "ticker": "GLD-ROLLINGLONG370", "nom": "GLD Rolling Long Put Diagonal 370", "capa": "Options", "underlying": "GLD", "strike": 370, "expiry": "2026-11-13", "type": "LONGPUTSTRANGLE" },
-  { "ticker": "GLD-CSP375", "nom": "GLD Bull Put Spread 375", "capa": "Options", "underlying": "GLD", "strike": 375, "expiry": "2026-10-21", "type": "PUT" }
+  { "ticker": "GLD-CSP375", "nom": "GLD Bull Put Spread 375", "capa": "Options", "underlying": "GLD", "strike": 375, "expiry": "2026-10-21", "type": "PUT" },
+  { "ticker": "RUT-ROLLINGLONG2700", "nom": "RUT Rolling Long Put Diagonal 2700", "capa": "Options", "underlying": "RUT", "strike": 2700, "expiry": "2026-11-27", "type": "LONGPUTSTRANGLE" }
 ]
