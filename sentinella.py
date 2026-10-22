@@ -804,9 +804,9 @@ def processar_actiu(actiu):
 
     #########################################################    
     # 1) Saltar actius si el mercat està tancat
-    if not es_cripto(actiu['ticker']) and not mercat_obert():
-       print(f"Saltant {actiu['ticker']} (mercat tancat)")
-       return
+    #if not es_cripto(actiu['ticker']) and not mercat_obert():
+    #   print(f"Saltant {actiu['ticker']} (mercat tancat)")
+    #   return
     #########################################################
 
     # Determinar subjacent real
@@ -829,8 +829,8 @@ def processar_actiu(actiu):
 
     #########################################################
     #  { "ticker": "WTRG-PUT40", "nom": "WTRG Cash-Secured Put 40", "capa": "Options", "underlying": "WTRG", "strike": 40, "expiry": "2026-05-15" }      
-    #if actiu["capa"] == "Options":
-    if actiu["capa"] == "Options" and mercat_obert_USA():
+    if actiu["capa"] == "Options":
+    #if actiu["capa"] == "Options" and mercat_obert_USA():
     #########################################################
         subjacent = actiu["underlying"]
         strike = actiu["strike"]
