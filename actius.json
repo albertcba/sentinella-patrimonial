@@ -69,5 +69,8 @@
   { "ticker": "TLT-CSP79.5", "nom": "TLT Bull Put Spread 79.5", "capa": "Options", "underlying": "TLT", "strike": 79.5, "expiry": "2026-10-21", "type": "PUT" },
   { "ticker": "GLD-ROLLINGLONG370", "nom": "GLD Rolling Long Put Diagonal 370", "capa": "Options", "underlying": "GLD", "strike": 370, "expiry": "2026-11-13", "type": "LONGPUTSTRANGLE" },
   { "ticker": "GLD-CSP375", "nom": "GLD Bull Put Spread 375", "capa": "Options", "underlying": "GLD", "strike": 375, "expiry": "2026-10-21", "type": "PUT" },
-  { "ticker": "RUT-ROLLINGLONG2700", "nom": "RUT Rolling Long Put Diagonal 2700", "capa": "Options", "underlying": "RUT", "strike": 2700, "expiry": "2026-11-27", "type": "LONGPUTSTRANGLE" }
+  { "ticker": "TLT-BCS81/81.5", "nom": "TLT Bear Call Spread 81/81.5", "capa": "Options", "underlying": "TLT", "strike": 81, "expiry": "2026-10-23", "type": "CALL" },
+  { "ticker": "RUTW-ROLLINGLONG2700", "nom": "RUTW Rolling Long Put Diagonal 2700", "capa": "Options", "underlying": "RUTW", "strike": 2700, "expiry": "2026-11-27", "type": "LONGPUTSTRANGLE" },
+  { "ticker": "XLV-BWB180/183/190", "nom": "XLV BWB 180/183/190", "capa": "Options", "underlying": "XLV", "strike": 183, "expiry": "2026-11-27", "type": "CALL" },
+  { "ticker": "XLV-CC185", "nom": "XLV Covered Call 185", "capa": "Options", "underlying": "XLV", "strike": 185, "expiry": "2026-11-27", "type": "CALL" }
 ]
