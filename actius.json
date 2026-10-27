@@ -50,6 +50,7 @@
   { "ticker": "GOOG", "nom": "Alphabet Inc. (GOOG)", "capa": "Single Stock Sentinella" },
   { "ticker": "MSFT", "nom": "Microsoft Corporation (MSFT)", "capa": "Single Stock Sentinella" },
   { "ticker": "QCOM", "nom": "QUALCOMM Incorporated (QCOM)", "capa": "Single Stock Sentinella" },
+  { "ticker": "NVT", "nom": "nVent Electric plc (NVT)", "capa": "Single Stock Sentinella" },  
   { "ticker": "GRID-SYNTHETIC170", "nom": "GRID Synthetic 170", "capa": "Options", "underlying": "GRID", "strike": 170, "expiry": "2026-12-18", "type": "PUT" },
   { "ticker": "WTRG-CSP40", "nom": "COPX Bull Put Spread 40", "capa": "Options", "underlying": "WTRG", "strike": 40, "expiry": "2026-12-18", "type": "PUT", "prima": 1.44 },
   { "ticker": "BUG-CSP40", "nom": "BUG Bull Put Spread 40", "capa": "Options", "underlying": "BUG", "strike": 40, "expiry": "2026-11-20", "type": "PUT" },
@@ -59,9 +60,6 @@
   { "ticker": "XLK-CSP188", "nom": "XLK Covered Secured Put 188", "capa": "Options", "underlying": "XLK", "strike": 188, "expiry": "2026-12-04", "type": "SHORTPUTSTRANGLE" },
   { "ticker": "XLK-COVEREDCALL195", "nom": "XLK Covered Call 195", "capa": "Options", "underlying": "XLK", "strike": 195, "expiry": "2026-11-13", "type": "SHORTCALLSTRANGLE" },
   { "ticker": "COPX-CSP80", "nom": "COPX Bull Put Spread 80", "capa": "Options", "underlying": "COPX", "strike": 80, "expiry": "2026-11-20", "type": "PUT" },
-  { "ticker": "DIA-BWB508/514/518", "nom": "DIA BWB 508/514/518", "capa": "Options", "underlying": "DIA", "strike": 514, "expiry": "2026-10-30" },
-  { "ticker": "DIA-CSP513", "nom": "DIA Covered Secured Put 513", "capa": "Options", "underlying": "DIA", "strike": 513, "expiry": "2026-10-30", "type": "PUT" },
-  { "ticker": "DIA-CALENDAR503", "nom": "DIA Calendar 503", "capa": "Options", "underlying": "DIA", "strike": 503, "expiry_short": "2026-10-30", "expiry_long": "2026-11-06", "type": "CALENDAR", "cost": 0.99 },
   { "ticker": "QQQ-BWB725/705/660", "nom": "QQQ BWB 725/705/660", "capa": "Options", "underlying": "QQQ", "strike": 705, "expiry": "2027-01-15", "type": "PUT" },
   { "ticker": "QQQ-CSP703", "nom": "QQQ Covered Secured Put 703", "capa": "Options", "underlying": "QQQ", "strike": 703, "expiry": "2027-01-15", "type": "PUT" },
   { "ticker": "XSP-BSP737/721", "nom": "XSP Bull Put Spread 737/721", "capa": "Options", "underlying": "^XSP", "strike": 737, "expiry": "2027-01-29", "type": "PUT" },
@@ -70,5 +68,7 @@
   { "ticker": "RUTW-ROLLINGLONG2700", "nom": "RUTW Rolling Long Put Diagonal 2500", "capa": "Options", "underlying": "^RUT", "strike": 2700, "expiry": "2027-06-30", "type": "LONGPUTSTRANGLE" },
   { "ticker": "XLV-BWB180/183/190", "nom": "XLV BWB 180/183/190", "capa": "Options", "underlying": "XLV", "strike": 183, "expiry": "2026-11-27", "type": "CALL" },
   { "ticker": "XLV-CC185", "nom": "XLV Covered Call 185", "capa": "Options", "underlying": "XLV", "strike": 185, "expiry": "2026-11-27", "type": "CALL" },
-  { "ticker": "TLT-CSP82", "nom": "TLT Covered Secured Put 82", "capa": "Options", "underlying": "TLT", "strike": 82, "expiry": "2026-10-30", "type": "PUT" }
+  { "ticker": "TLT-CSP82", "nom": "TLT Covered Secured Put 82", "capa": "Options", "underlying": "TLT", "strike": 82, "expiry": "2026-10-30", "type": "PUT" },
+  { "ticker": "XBI-BWB154/157.5/162.5", "nom": "XBI BWB 154/157.5/162.5", "capa": "Options", "underlying": "XBI", "strike": 157.5, "expiry": "2026-11-13", "type": "CALL" },
+  { "ticker": "XBI-CC160", "nom": "XBI Covered Call 160", "capa": "Options", "underlying": "XBI", "strike": 160, "expiry": "2026-11-13", "type": "CALL" }
 ]
