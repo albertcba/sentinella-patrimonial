@@ -70,7 +70,7 @@
   { "ticker": "XLP-CC96", "nom": "XLP Covered Call 96", "capa": "Options", "underlying": "XLP", "strike": 96, "expiry": "2027-01-15", "type": "CALL" },
   { "ticker": "XLV-BCS200/205", "nom": "XLV Bearish Call Spread 200/205", "capa": "Options", "underlying": "XLV", "strike": 200, "expiry": "2027-01-15", "type": "CALL" },
   { "ticker": "GLD-ROLLINGLONG350", "nom": "GLD Rolling Long Put Diagonal 350", "capa": "Options", "underlying": "GLD", "strike": 350, "expiry": "2026-12-31", "type": "LONGPUTSTRANGLE" },
-  { "ticker": "GLD-ROLLINGSHORT360", "nom": "GLD Rolling Short Put Diagonal 360", "capa": "Options", "underlying": "GLD", "strike": 360, "expiry": "2026-11-27", "type": "SHORTPUTSTRANGLE" },
+  { "ticker": "GLD-ROLLINGSHORT355", "nom": "GLD Rolling Short Put Diagonal 355", "capa": "Options", "underlying": "GLD", "strike": 355, "expiry": "2026-12-11", "type": "SHORTPUTSTRANGLE" },
   { "ticker": "URNM-BCS53/58", "nom": "URNM Bearish Call Spread 53/58", "capa": "Options", "underlying": "URNM", "strike": 53, "expiry": "2027-04-16", "type": "CALL" },
   { "ticker": "REMX-COVEREDCALL68", "nom": "REMX Covered Call 68", "capa": "Options", "underlying": "REMX", "strike": 68, "expiry": "2027-05-21", "type": "CALL" },
   { "ticker": "XLV-STRANGLE179/205", "nom": "XLV Strangle 179/205", "capa": "Options", "underlying": "XLV", "strike": 179, "expiry": "2027-01-15", "type": "LONGPUTSTRANGLE" },
@@ -80,5 +80,6 @@
   { "ticker": "XLI-STRANGLE160/180", "nom": "XLI Strangle 160/180", "capa": "Options", "underlying": "XLI", "strike": 160, "expiry": "2027-01-15", "type": "LONGPUTSTRANGLE" },
   { "ticker": "XLI-STRANGLE160/180", "nom": "XLI Strangle 160/180", "capa": "Options", "underlying": "XLI", "strike": 180, "expiry": "2027-01-15", "type": "LONGCALLSTRANGLE" },
   { "ticker": "XLI-CSP160", "nom": "XLI Covered Secured Put 160", "capa": "Options", "underlying": "XLI", "strike": 164, "expiry": "2026-12-18", "type": "SHORTPUTSTRANGLE" },
-  { "ticker": "XLI-COVEREDCALL176", "nom": "XLI Covered Call 176", "capa": "Options", "underlying": "XLI", "strike": 176, "expiry": "2026-11-20", "type": "SHORTCALLSTRANGLE" }
+  { "ticker": "XLI-COVEREDCALL176", "nom": "XLI Covered Call 176", "capa": "Options", "underlying": "XLI", "strike": 176, "expiry": "2026-11-20", "type": "SHORTCALLSTRANGLE" },
+  { "ticker": "TLT-ROLLINGSHORT79.5", "nom": "TLT Rolling Short Put Diagonal 79.5", "capa": "Options", "underlying": "TLT", "strike": 79.5, "expiry": "2026-11-27", "type": "SHORTPUTSTRANGLE" }
 ]
