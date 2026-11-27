@@ -70,6 +70,6 @@
   { "ticker": "XLV-STRANGLE170/205", "nom": "XLV Strangle 170/205", "capa": "Options", "underlying": "XLV", "strike": 205, "expiry": "2027-01-15", "type": "LONGCALLSTRANGLE" },
   { "ticker": "XLV-CSP", "nom": "XLV Covered Secured Put 179", "capa": "Options", "underlying": "XLV", "strike": 179, "expiry": "2026-12-11", "type": "SHORTPUTSTRANGLE" },
   { "ticker": "XLV-COVEREDCALL195", "nom": "XLV Covered Call 195", "capa": "Options", "underlying": "XLV", "strike": 195, "expiry": "2026-12-18", "type": "SHORTCALLSTRANGLE" },
-  { "ticker": "MESH27.CME-BSP6825/6800", "nom": "MESH27.CME Bull Put Spread 6825/6800", "capa": "Options", "underlying": "MESH27.CME", "strike": 6825, "expiry": "2026-18-12", "type": "PUT" },
+  { "ticker": "MESH27.CME-BSP6825/6800", "nom": "MESH27.CME Bull Put Spread 6825/6800", "capa": "Options", "underlying": "MESH27.CME", "strike": 6825, "expiry": "2026-12-18", "type": "PUT" },
   { "ticker": "6EH27.CME-BSP1.07500/1.07000", "nom": "6EH27.CME Bull Put Spread 1.07500/1.07000", "capa": "Options", "underlying": "6EH27.CME", "strike": 1.07500, "expiry": "2026-12-24", "type": "PUT" }
 ]
