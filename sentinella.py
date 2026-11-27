@@ -944,7 +944,7 @@ def processar_actiu(actiu):
                 ALERTES_ACUMULADES.append(
                     f"🎯 SENTINELLA: LLINDAR DE GUANY ASSOLIT (60%)\n"
                     f"{subjacent} {strike} {tipus} (DTE: {dte})\n"
-                    f"Preu actual: {preu_sub:.2f} | Distància: {analisi_0dte['distancia_pct']}%\n"                    
+                    f"Preu actual: {preu_sub:.2f}\n"                    
                     f"Has capturat el {profit_pct}% de la prima. Tanca i protegeix el capital."
                 )
         
@@ -955,7 +955,7 @@ def processar_actiu(actiu):
                 ALERTES_ACUMULADES.append(
                     f"📉 SENTINELLA: EFICIÈNCIA DE CAPITAL BAIXA\n"
                     f"{subjacent} {strike} {tipus} (DTE: {dte})\n"
-                    f"Preu actual: {preu_sub:.2f} | Distància: {analisi_0dte['distancia_pct']}%\n"                    
+                    f"Preu actual: {preu_sub:.2f}\n"                    
                     f"El ROI anualitzat restant és només del {roi_anual_restant}%.\n"
                     f"Queda molt poc extrínsec ({extrinsec} USD). Rola la weekly per activar un nou cicle."
                 )
@@ -969,7 +969,7 @@ def processar_actiu(actiu):
                 ALERTES_ACUMULADES.append(
                     f"⏳ SENTINELLA: PRÈSTEC A ZERO ({subjacent} {strike} {tipus})\n"
                     f"La prima actual és de {prima_mid:.2f} USD.\n"
-                    f"Preu actual: {preu_sub:.2f} | Distància: {analisi_0dte['distancia_pct']}%\n"                    
+                    f"Preu actual: {preu_sub:.2f}\n"                    
                     f"Acció: Pots tancar-la JA a IBKR sense comissions per evitar el risc de divendres, "
                     f"o deixar-la expirar si el cap de setmana està controlat."
                 )
@@ -1008,7 +1008,6 @@ def processar_actiu(actiu):
                     ALERTES_ACUMULADES.append(
                         f"💰 COBRAMENT BENEFICIS LONG ({actiu['capa']})\n"
                         f"Subjacent: {actiu['underlying']} | Strike: {actiu['strike']} ({actiu['type']})\n"
-                        f"Preu actual: {preu_sub:.2f} | Distància: {analisi_0dte['distancia_pct']}%\n"                        
                         f"Delta actual: {delta_actual:.2f} (🚀 Llindar d'èxit >= 0.55)\n"
                         f"Distància preu: {dist:.1f}%\n"
                         f"Preu subjacent: {preu_sub:.2f}\n"
@@ -1020,7 +1019,7 @@ def processar_actiu(actiu):
                     ALERTES_ACUMULADES.append(
                         f"♻️ ALERTA DEVALUACIÓ LONG ({actiu['capa']})\n"
                         f"Subjacent: {actiu['underlying']} | Strike: {actiu['strike']} ({actiu['type']})\n"
-                        f"Preu actual: {preu_sub:.2f} | Distància: {analisi_0dte['distancia_pct']}%\n"                        
+                        f"Preu actual: {preu_sub:.2f}\n"                   
                         f"Delta actual: {delta_actual:.2f} (📉 Zona d'abandonament <= 0.08)\n"
                         f"Distància preu: {dist:.1f}%\n"
                         f"Acció: Aquesta pota ha perdut gairebé tota la seva sensibilitat. Considera reciclar-la o tancar el valor residual."
@@ -1031,7 +1030,7 @@ def processar_actiu(actiu):
                     ALERTES_ACUMULADES.append(
                         f"⏳ ALERTA TEMPS ESTRUCTURA LLARGA\n"
                         f"L'opció llarga de {actiu['underlying']} ({actiu['expiry']}) ha entrat en zona d'erosió temporal.\n"
-                        f"Preu actual: {preu_sub:.2f} | Distància: {analisi_0dte['distancia_pct']}%\n"                        
+                        f"Preu actual: {preu_sub:.2f}\n"                        
                         f"DTE restant: {dte}\n"
                         f"Acció: Planifica el tancament de l'estructura o el roll-over temporal del bloc complet cap al següent cicle."
                     )       
